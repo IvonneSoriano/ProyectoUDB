@@ -23,6 +23,7 @@
 hs_err_pid*
 
 **/nbproject/private/
+/nbproject/private/
 **/build/
 /ProyectWeb/dist/
 /Backend/dist
@@ -33,3 +34,4 @@ private.xml
 config.properties
 nblibraries.properties
 private.properties
+genfiles.properties

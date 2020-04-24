@@ -6,8 +6,10 @@
 package sv.edu.udb.util;
 
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.sql.*;
 import java.util.Properties;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -20,36 +22,42 @@ public class Connect {
     private ResultSet rs = null;
     private String query = "";
 
+    private static final Logger logger = Logger.getLogger(Connect.class);
+
     public Connect() throws SQLException {
         try {
             //obtenemos el driver de para mysql
             Class.forName("com.mysql.jdbc.Driver");
-            // Se obtiene una conexión con la base de datos.
-            Properties prop = new Properties();
-            FileInputStream ip = new FileInputStream("nbproject/config.properties");
-            prop.load(ip);
 
+            ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+            InputStream input = classLoader.getResourceAsStream("config.properties");
+            //FileInputStream ip = new FileInputStream("nbproject/config.properties");
+
+            Properties prop = new Properties();
+            prop.load(input);
+
+            // Se obtiene una conexión con la base de datos.
             conexion = DriverManager.getConnection(prop.getProperty("db_url"), prop.getProperty("db_user"), prop.getProperty("db_pswd"));
 
             // Permite ejecutar sentencias SQL sin parámetros
             s = conexion.createStatement();
             //  System.err.println("exito");
         } catch (Exception e1) {
-            System.out.println("ERROR:No encuentro el driver de la BD:" + e1.getMessage());
+            logger.error("ERROR:No encuentro el driver de la BD: " + e1.getMessage());
         }
     }
 
     public ResultSet getRs() {
         return rs;
     }
+    
     //Metodo que permite fijar la tabla resultado de la pregunta
     //SQL realizada
-
     public void setRs(String consulta) {
         try {
             this.rs = s.executeQuery(consulta);
         } catch (SQLException e2) {
-            System.out.println("ERROR:Fallo en SQL: " + e2.getMessage() + " Sql: " + consulta);
+            logger.error("ERROR:No encuentro el driver de la BD: " + e2.getMessage() + " Sql: " + consulta);
         }
     }
     //Metodo que recibe un sql como parametro que sea un update,insert.delete

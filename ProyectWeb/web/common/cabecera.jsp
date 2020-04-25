@@ -10,8 +10,5 @@
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/bootstrap.min.css">
 
-<!-- Optional theme -->
-<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/bootstrap-theme.min.css">
-
 <!-- Latest compiled and minified JavaScript -->
 <script src="${pageContext.request.contextPath}/assets/js/bootstrap.min.js"></script>

@@ -3,76 +3,93 @@
     Created on : Apr 23, 2020, 11:11:26 PM
     Author     : Rick
 --%>
-<nav class="navbar navbar-inverse">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" 
-                    data-toggle="collapse" data-target="#navbar" 
-                    aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Desplegar navegación</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#">SGPI</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="${pageContext.request.contextPath}/index.jsp">Inicio</a></li> 
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" 
-                       role="button" aria-haspopup="true" 
-                       aria-expanded="false">Tickets <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="${pageContext.request.contextPath}/autores.do?op=nuevo">Registrar autor</a></li>
-                        <li><a href="${pageContext.request.contextPath}/autores.do?op=listar">Ver lista de autores</a></li>
-                    </ul>
-                </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" 
-                       role="button" aria-haspopup="true" 
-                       aria-expanded="false">Empleados <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="${pageContext.request.contextPath}/empleados.do?op=crear">Crear empleado</a></li>
-                        <li><a href="${pageContext.request.contextPath}/empleados.do?op=ver">Ver lista de empleados</a></li>                        
-                        <li><a href="${pageContext.request.contextPath}/empleados.do?op=modificar">Modificar empleado</a></li>
-                        <li><a href="${pageContext.request.contextPath}/empleados.do?op=eliminar">Eliminar empleado</a></li>
-                    </ul>
-                </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" 
-                       role="button" aria-haspopup="true" 
-                       aria-expanded="false">Proyectos <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="${pageContext.request.contextPath}/proyectos.do?op=crear">Crear proyecto</a></li>
-                        <li><a href="${pageContext.request.contextPath}/proyectos.do?op=ver">Ver proyectos</a></li>
-                        <li><a href="${pageContext.request.contextPath}/proyectos.do?op=modificar">Modificar proyecto</a></li>
-                        <li><a href="${pageContext.request.contextPath}/proyectos.do?op=eliminar">Eliminar proyecto</a></li>
-                    </ul>
-                </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" 
-                       role="button" aria-haspopup="true" 
-                       aria-expanded="false">Peticiones<span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="${pageContext.request.contextPath}/editoriales.do?op=nuevo">Registrar editorial</a></li>
-                        <li><a href="${pageContext.request.contextPath}/editoriales.do?op=listar">Ver lista de editoriales</a></li>
-                    </ul>
-                </li>
-                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" 
-                       role="button" aria-haspopup="true" 
-                       aria-expanded="false">Reportes<span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="${pageContext.request.contextPath}/editoriales.do?op=nuevo">Ver reporte A</a></li>
-                        <li><a href="${pageContext.request.contextPath}/editoriales.do?op=listar">Ver reporte B</a></li>                        
-                        <li><a href="${pageContext.request.contextPath}/editoriales.do?op=listar">Ver lista de reportes</a></li>
-                    </ul>
-                </li>                
-                <li class="inactive"><a href="${pageContext.request.contextPath}/">Cerrar Sesion</a></li> 
-            </ul>
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">SGPI</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
 
-        </div>
+    <div id="navbarSupportedContent" class="collapse navbar-collapse">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="${pageContext.request.contextPath}/index.jsp">
+                    Inicio <span class="sr-only">(current)</span>
+                </a>
+            </li> 
+
+            <!-- Ticket Dropdown -->
+            <li class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle" id="navbarTicketDropdown" data-toggle="dropdown" 
+                   role="button" aria-haspopup="true" 
+                   aria-expanded="false">Tickets <span class="caret"></span>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarTicketDropdown">
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/tickets.do?op=nuevo">Crear ticket</a>
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/tickets.do?op=listar">Ver lista de tickets</a>                    
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/tickets.do?op=modificar">Modificar ticket</a>
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/tickets.do?op=eliminar">Borrar ticket</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Something else here</a>
+                </div>
+            </li>
+
+            <!-- Empleado Dropdown -->
+            <li class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle" id="navbarEmpleadoDropdown" data-toggle="dropdown" 
+                   role="button" aria-haspopup="true" 
+                   aria-expanded="false">Empleados <span class="caret"></span>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarEmpleadoDropdown">
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/empleados.do?op=crear">Crear empleado</a>
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/empleados.do?op=ver">Ver lista de empleados</a>                      
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/empleados.do?op=modificar">Modificar empleado</a>
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/empleados.do?op=eliminar">Eliminar empleado</a>
+                </div>
+            </li>
+
+            <!-- Proyecto Dropdown -->
+            <li class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle" id="navbarProyectosDropdown" data-toggle="dropdown" 
+                   role="button" aria-haspopup="true" 
+                   aria-expanded="false">Proyectos <span class="caret"></span>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarProyectosDropdown">
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/proyectos.do?op=crear">Crear proyecto</a>
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/proyectos.do?op=ver">Ver lista de proyectos</a>                      
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/proyectos.do?op=modificar">Modificar proyecto</a>
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/proyectos.do?op=eliminar">Eliminar proyecto</a>
+                </div>
+            </li>
+
+            <!-- Peticiones Dropdown -->
+            <li class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle" id="navbarPeticionesDropdown" data-toggle="dropdown" 
+                   role="button" aria-haspopup="true" 
+                   aria-expanded="false">Peticiones<span class="caret"></span></a>
+                <div class="dropdown-menu" aria-labelledby="navbarPeticionesDropdown">
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/peticiones.do?op=crear">Crear peticiones</a>
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/peticiones.do?op=ver">Ver lista de peticiones</a>                      
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/peticiones.do?op=modificar">Modificar peticion</a>
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/peticiones.do?op=eliminar">Eliminar peticion</a>
+                </div>
+            </li>
+
+            <!-- Reportes Dropdown -->
+            <li class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle" id="navbarReportesDropdown" data-toggle="dropdown" 
+                   role="button" aria-haspopup="true" 
+                   aria-expanded="false">Reportes<span class="caret"></span></a>
+                <div class="dropdown-menu" aria-labelledby="navbarPeticionesDropdown">
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/reportes.do?">Ver reporte A</a>
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/reportes.do?">Ver reporte B</a>
+                </div>
+            </li>                
+
+            <!-- Opcion cerrar sesion -->
+            <a href="${pageContext.request.contextPath}/" class="btn bt-link active pull-right text-light" type="button" aria-pressed="true">Cerrar Sesion</a>
+        </ul>
+
     </div>
+
 </nav>
 

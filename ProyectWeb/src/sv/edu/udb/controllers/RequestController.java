@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -15,6 +17,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import sv.edu.udb.models.Comment;
 import sv.edu.udb.models.Request;
 import sv.edu.udb.models.RequestDAO;
 
@@ -28,7 +31,11 @@ public class RequestController extends HttpServlet {
     ArrayList<String> listaErrores = new ArrayList<>();
     Request modelRequest = new Request();
     RequestDAO rqDAO = new RequestDAO();
+    int id, typeId, projectId, departmentId;
+    String description, status;
+    Timestamp requestDate;
     
+    List<Comment> commentsList = new ArrayList<>();
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException{
     
@@ -127,12 +134,16 @@ public class RequestController extends HttpServlet {
     private void insert(HttpServletRequest request, HttpServletResponse response){
         try {
             listaErrores.clear();
-            modelRequest.setIdTypeRequest(0);
-            modelRequest.setDepartmentId(0);
-            modelRequest.setProjectId(0);
+            typeId = Integer.parseInt(request.getParameter("typeid"));
+            departmentId = Integer.parseInt(request.getParameter("departementid"));
+            projectId = Integer.parseInt(request.getParameter("projectid"));
+            requestDate = Timestamp.valueOf(request.getParameter("requestDate"));
+            modelRequest.setIdTypeRequest(typeId);
+            modelRequest.setDepartmentId(departmentId);
+            modelRequest.setProjectId(projectId);
             modelRequest.setRequestDate(requestDate);
-            modelRequest.setRequestStatus(requestStatus);
-            modelRequest.setRequestDescription(requestDescription);
+            modelRequest.setRequestStatus(request.getParameter("status"));
+            modelRequest.setRequestDescription(request.getParameter("description"));
             request.setAttribute("request", rqDAO.save(modelRequest) );
             request.getRequestDispatcher("").forward(request, response);
         } catch (IOException | ServletException ex) {
@@ -156,12 +167,16 @@ public class RequestController extends HttpServlet {
     private void update(HttpServletRequest request, HttpServletResponse response){
         try {
             listaErrores.clear();
-            modelRequest.setIdTypeRequest(0);
-            modelRequest.setDepartmentId(0);
-            modelRequest.setProjectId(0);
+            typeId = Integer.parseInt(request.getParameter("typeid"));
+            departmentId = Integer.parseInt(request.getParameter("departementid"));
+            projectId = Integer.parseInt(request.getParameter("projectid"));
+            requestDate = Timestamp.valueOf(request.getParameter("requestDate"));
+            modelRequest.setIdTypeRequest(typeId);
+            modelRequest.setDepartmentId(departmentId);
+            modelRequest.setProjectId(projectId);
             modelRequest.setRequestDate(requestDate);
-            modelRequest.setRequestStatus(requestStatus);
-            modelRequest.setRequestDescription(requestDescription);
+            modelRequest.setRequestStatus(request.getParameter("status"));
+            modelRequest.setRequestDescription(request.getParameter("description"));
             request.setAttribute("request", rqDAO.updateStatus(modelRequest) );
             request.getRequestDispatcher("").forward(request, response);
         } catch (IOException | ServletException ex) {

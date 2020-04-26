@@ -57,15 +57,42 @@ public class DepartmentController extends HttpServlet {
 
     public void showDeparment(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
-            int id = Integer.parseInt(request.getParameter("id"));
             DeparmentDAO dao = new DeparmentDAO();
-            Deparment depto = dao.getOne(id);
-            if (depto != null) {
-                request.setAttribute("department", depto);
-            request.getRequestDispatcher(request.getContextPath()+"/department.do?op=listar");
-            } else {
-                response.sendRedirect(request.getContextPath() + "/error404.jsp");
-            }
+ 
+                int id = Integer.parseInt(request.getParameter("id"));
+
+                request.setAttribute("department", dao.getOne(id));
+                request.getRequestDispatcher(request.getContextPath() + "/department.do?op=listar");
+            
+        } catch (Error e) {
+// Logger.getLogger(DepartmentController.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error("Error in logIn method. Message: " + e.getMessage());
+        }
+
+    }
+
+    public void showDeparments(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        try {
+            DeparmentDAO dao = new DeparmentDAO();
+            request.setAttribute("departamentos", dao.getAll());
+            request.getRequestDispatcher(request.getContextPath() + "/department.do?op=listar");
+
+        } catch (Error e) {
+// Logger.getLogger(DepartmentController.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error("Error in logIn method. Message: " + e.getMessage());
+        }
+
+    }
+
+    public void showDeparmentByName(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        try {
+            DeparmentDAO dao = new DeparmentDAO();
+
+            String name = request.getParameter("name");
+
+            request.setAttribute("department", dao.getOneByName(name));
+            request.getRequestDispatcher(request.getContextPath() + "/department.do?op=listar");
+
         } catch (Error e) {
 // Logger.getLogger(DepartmentController.class.getName()).log(Level.SEVERE, null, ex);
             logger.error("Error in logIn method. Message: " + e.getMessage());

@@ -3,7 +3,7 @@
     Created on : Apr 23, 2020, 1:44:19 PM
     Author     : Rick
 --%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page session="true" language="java" import="java.util.*" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>

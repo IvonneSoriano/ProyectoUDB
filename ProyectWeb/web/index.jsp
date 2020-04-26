@@ -5,6 +5,13 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<c:if test="${param['locale'] != null}">
+    <fmt:setLocale value="${param['locale']}" scope="session" />
+</c:if>
+<fmt:setBundle basename="AplicationResource"/>
+
 <jsp:include page="/common/validarSesion.jsp"/>
 <!DOCTYPE html>
 <html>
@@ -14,12 +21,11 @@
     </head>
     <body>
         <jsp:include page="/common/navbar.jsp"/>
+        <br><br>
         <div class="container">
             <div class="row">
-                <h2>Bienvenido <%=request.getSession().getAttribute("fullName")%> !</h2>
+                <h2><fmt:message key="label.saludo" /> <%=request.getSession().getAttribute("fullName")%> !</h2>
             </div>
-            <br>
-            <br>
             <br>
             <div class="card-deck mb-3 text-center">
                 <div class="card mb-4 shadow-sm">
@@ -41,7 +47,7 @@
                             <li>Email support</li>
                             <li>Help center access</li>
                         </ul-->
-                        <button type="button" class="btn btn-lg btn-block btn-primary">Ver tickets ...</button>
+                        <button type="button" class="btn btn-lg btn-block btn-primary"><fmt:message key="label.verTickets" /> ...</button>
                     </div>
                 </div>
                 <div class="card mb-4 shadow-sm">
@@ -51,11 +57,11 @@
                         <path fill-rule="evenodd" d="M8 9a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/>
                         <path fill-rule="evenodd" d="M8 1a7 7 0 100 14A7 7 0 008 1zM0 8a8 8 0 1116 0A8 8 0 010 8z" clip-rule="evenodd"/>
                         </svg>
-                        <h4 class="my-0 font-weight-normal">Empleados</h4>
+                        <h4 class="my-0 font-weight-normal"><fmt:message key="label.wordEmpleados" /></h4>
                         </svg>
                     </div>
                     <div class="card-body">
-                        <button type="button" class="btn btn-lg btn-block btn-primary">Ver empleados ...</button>
+                        <button type="button" class="btn btn-lg btn-block btn-primary"><fmt:message key="label.verEmpleados" /> ...</button>
                     </div>
                 </div>
                 <div class="card mb-4 shadow-sm">
@@ -64,10 +70,10 @@
                         <path fill-rule="evenodd" d="M0 12.5A1.5 1.5 0 001.5 14h13a1.5 1.5 0 001.5-1.5V6.85L8.129 8.947a.5.5 0 01-.258 0L0 6.85v5.65z" clip-rule="evenodd"/>
                         <path fill-rule="evenodd" d="M0 4.5A1.5 1.5 0 011.5 3h13A1.5 1.5 0 0116 4.5v1.384l-7.614 2.03a1.5 1.5 0 01-.772 0L0 5.884V4.5zm5-2A1.5 1.5 0 016.5 1h3A1.5 1.5 0 0111 2.5V3h-1v-.5a.5.5 0 00-.5-.5h-3a.5.5 0 00-.5.5V3H5v-.5z" clip-rule="evenodd"/>
                         </svg>
-                        <h4 class="my-0 font-weight-normal">Proyectos</h4>
+                        <h4 class="my-0 font-weight-normal"><fmt:message key="label.wordProyectos" /></h4>
                     </div>
                     <div class="card-body">
-                        <button type="button" class="btn btn-lg btn-block btn-primary">Ver proyectos...</button>
+                        <button type="button" class="btn btn-lg btn-block btn-primary"><fmt:message key="label.verProyectos" /> ...</button>
                     </div>
                 </div>
             </div>

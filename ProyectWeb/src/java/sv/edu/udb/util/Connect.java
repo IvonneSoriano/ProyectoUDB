@@ -41,7 +41,6 @@ public class Connect {
 
             // Permite ejecutar sentencias SQL sin parámetros
             s = conexion.createStatement();
-            //  System.err.println("exito");
         } catch (Exception e1) {
             logger.error("ERROR:No encuentro el driver de la BD: " + e1.getMessage());
         }

@@ -6,10 +6,12 @@
             <file>file:/C:/Users/kiss_/Documents/ProyectoUDB/ProyectWeb/src/java/sv/edu/udb/models/Project.java</file>
             <file>file:/C:/Users/kiss_/Documents/ProyectoUDB/ProyectWeb/src/java/sv/edu/udb/models/ProjectDAO.java</file>
             <file>file:/C:/Users/kiss_/Documents/ProyectoUDB/ProyectWeb/src/java/sv/edu/udb/controllers/ProjectController.java</file>
-            <file>file:/C:/Users/kiss_/Documents/ProyectoUDB/ProyectWeb/src/java/sv/edu/udb/controllers/LoginController.java</file>
+            <file>file:/C:/Users/kiss_/Documents/ProyectoUDB/ProyectWeb/src/java/sv/edu/udb/controllers/ProjectsController.java</file>
             <file>file:/C:/Users/kiss_/Documents/ProyectoUDB/ProyectWeb/web/login/login.jsp</file>
             <file>file:/C:/Users/kiss_/Documents/ProyectoUDB/ProyectWeb/web/projects/projectsList.jsp</file>
+            <file>file:/C:/Users/kiss_/Documents/ProyectoUDB/ProyectWeb/web/index.jsp</file>
             <file>file:/C:/Users/kiss_/Documents/ProyectoUDB/ProyectWeb/web/common/navbar.jsp</file>
+            <file>file:/C:/Users/kiss_/Documents/ProyectoUDB/ProyectWeb/web/projects/newProject.jsp</file>
         </group>
     </open-files>
 </project-private>

@@ -15,8 +15,38 @@
         <jsp:include page="/common/navbar.jsp"/>
         <div class="container mt-5">
             <h1>Nuevo proyecto</h1>
-            <form></form>
+            <form class="form mt-5" role="form" action="${contextPath}/proyectos.do" method="POST">
+                <input type="hidden" name="op" value="insertar">
+                
+                <div class="form-group">
+                    <label for="name">
+                        Nombre de Proyecto
+                    </label>
+                    <input type="text" name="name" id="name" class="form-control"/>
+                </div>
+
+                <div class="form-group">
+                    <label for="depto">
+                        Departamento:
+                    </label>
+                    <select name="pdepto" class="form-control" name="depto" id="depto" >
+                        <c:forEach var="genero" items="${requestScope.showDeparment()}" var="dpto">
+                            <option value="${dpto.getDepartmentId()}">${dpto.getDepartmentName()}</option>
+                        </c:forEach>
+                    </select>
+                </div>
+
+   <div class="form-group">
+                    <label for="description">
+                        Descripción:
+                    </label>
+       <textarea class="form-control" id="description"  name="description"></textarea>
+                </div>
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-primary" value="Guardar" name="Guardar">
+                        </div>
+            </form>
         </div>
     </body>
-    
+
 </html>

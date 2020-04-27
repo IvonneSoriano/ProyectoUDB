@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import sv.edu.udb.models.Project;
 import sv.edu.udb.models.ProjectDAO;
+import sv.edu.udb.models.DeparmentDAO;
 
 /**
  *
@@ -52,6 +54,9 @@ ProjectDAO dao = new ProjectDAO();
                break;
                case "crear":
                    insertProject(request, response);
+                   break;
+                     case "eliminar":
+                   deleteProject(request, response);
                    break;
            }
         }
@@ -107,6 +112,19 @@ ProjectDAO dao = new ProjectDAO();
         
     }
     
+    public void obtener(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        try {        
+            
+            DeparmentDAO pc = new DeparmentDAO();
+            Optional<Project> project = dao.get(Integer.parseInt(request.getParameter("id")));
+            request.setAttribute("proyecto", project);
+            request.setAttribute("departamentos", pc.getAll());
+            request.getRequestDispatcher("/projects/editProject.jsp").forward(request, response);
+        } catch (IOException | ServletException e) {
+            logger.error("Error in logIn method. Message: " + e.getMessage());
+        }
+        
+    }
     
      public void insertProject(HttpServletRequest request, HttpServletResponse response) throws IOException {
          try{

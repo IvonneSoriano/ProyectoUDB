@@ -26,8 +26,10 @@ import sv.edu.udb.models.DeparmentDAO;
  */
 @WebServlet(name = "ProjectController", urlPatterns = {"/proyectos.do"})
 public class ProjectController extends HttpServlet {
-private static Logger logger = Logger.getLogger(ProjectController.class);
-ProjectDAO dao = new ProjectDAO();
+
+    private static Logger logger = Logger.getLogger(ProjectController.class);
+    ProjectDAO dao = new ProjectDAO();
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -42,23 +44,26 @@ ProjectDAO dao = new ProjectDAO();
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
-           if(request.getParameter("op") == null){
-               listarProjects(request, response);
-               return;
-           }
+            if (request.getParameter("op") == null) {
+                listarProjects(request, response);
+                return;
+            }
 
-           String ope = request.getParameter("op");
-           switch(ope){
-               case "ver":
-                   listarProjects(request, response);
-               break;
-               case "crear":
-                   insertProject(request, response);
-                   break;
-                     case "eliminar":
-                   deleteProject(request, response);
-                   break;
-           }
+            String ope = request.getParameter("op");
+            switch (ope) {
+                case "ver":
+                    listarProjects(request, response);
+                    break;
+                case "crear":
+                    nuevo(request, response);
+                    break;
+                     case "insertar":
+                    insertProject(request, response);
+                    break;
+                case "eliminar":
+                    deleteProject(request, response);
+                    break;
+            }
         }
     }
 
@@ -101,20 +106,19 @@ ProjectDAO dao = new ProjectDAO();
         return "Short description";
     }// </editor-fold>
 
-    
     public void listarProjects(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        try {            
+        try {
             request.setAttribute("listaProyectos", dao.getAll());
             request.getRequestDispatcher("/projects/projectsList.jsp").forward(request, response);
         } catch (IOException | ServletException e) {
             logger.error("Error in logIn method. Message: " + e.getMessage());
         }
-        
+
     }
-    
+
     public void obtener(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        try {        
-            
+        try {
+
             DeparmentDAO pc = new DeparmentDAO();
             Optional<Project> project = dao.get(Integer.parseInt(request.getParameter("id")));
             request.setAttribute("proyecto", project);
@@ -123,44 +127,51 @@ ProjectDAO dao = new ProjectDAO();
         } catch (IOException | ServletException e) {
             logger.error("Error in logIn method. Message: " + e.getMessage());
         }
-        
-    }
-    
-     public void insertProject(HttpServletRequest request, HttpServletResponse response) throws IOException {
-         try{
-         Project miProject = new Project();
-         miProject.setProjectName(request.getParameter("name"));
-         miProject.setProjectDescription(request.getParameter("description"));
-         miProject.setDepartmentId(Integer.parseInt(request.getParameter("depto")));
-         
-         request.setAttribute("exito", "Proyecto ingresado exitosamente");
-         response.sendRedirect(request.getContextPath() + "/proyectos.do?op=listar");
-        dao.save(miProject);
-         }
-         catch(IOException e){
-          logger.error("Error in logIn method. Message: " + e.getMessage());   
-         }
-    }
-     
-      public void deleteProject(HttpServletRequest request, HttpServletResponse response) {
-          try {
-              int id = Integer.parseInt(request.getParameter("id"));
-              Project p = new Project();
-              p.setProjectsId(id);
-              if(dao.delete(p)){
-              request.setAttribute("exito", "Proyecto eliminado");    
-              }
-              else{
-                  request.setAttribute("fracaso", "Proyecto no eliminado");    
-              }
-              
 
-               request.getRequestDispatcher("/proyectos.do?op=listar").forward(request, response);
+    }
 
-          } 
-          catch (Exception e) {
-              logger.error("Error in logIn method. Message: " + e.getMessage());   
-          }
-        
+    public void insertProject(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        try {
+            Project miProject = new Project();
+            miProject.setProjectName(request.getParameter("name"));
+            miProject.setProjectDescription(request.getParameter("description"));
+            miProject.setDepartmentId(Integer.parseInt(request.getParameter("depto")));
+
+            request.setAttribute("exito", "Proyecto ingresado exitosamente");
+            response.sendRedirect(request.getContextPath() + "/proyectos.do?op=listar");
+            dao.save(miProject);
+        } catch (IOException e) {
+            logger.error("Error in logIn method. Message: " + e.getMessage());
+        }
+    }
+
+    public void deleteProject(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            int id = Integer.parseInt(request.getParameter("id"));
+            Project p = new Project();
+            p.setProjectsId(id);
+            if (dao.delete(p)) {
+                request.setAttribute("exito", "Proyecto eliminado");
+            } else {
+                request.setAttribute("fracaso", "Proyecto no eliminado");
+            }
+
+            request.getRequestDispatcher("/proyectos.do?op=listar").forward(request, response);
+
+        } catch (Exception e) {
+            logger.error("Error in logIn method. Message: " + e.getMessage());
+        }
+
+    }
+
+    private void nuevo(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            DeparmentDAO pc = new DeparmentDAO();
+
+            request.setAttribute("departamentos", pc.getAll());
+            request.getRequestDispatcher("/projects/newProject.jsp").forward(request, response);
+        } catch (IOException | ServletException e) {
+            logger.error("Error in logIn method. Message: " + e.getMessage());
+        }
     }
 }

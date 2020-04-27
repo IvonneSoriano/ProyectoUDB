@@ -29,8 +29,8 @@
                     <label for="depto">
                         Departamento:
                     </label>
-                    <select name="pdepto" class="form-control" name="depto" id="depto" >
-                        <c:forEach var="genero" items="${requestScope.showDeparment()}" var="dpto">
+                    <select class="form-control" name="depto" id="depto" >
+                        <c:forEach items="${requestScope.showDeparment()}" var="dpto">
                             <option value="${dpto.getDepartmentId()}">${dpto.getDepartmentName()}</option>
                         </c:forEach>
                     </select>

@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package sv.edu.udb.controllers;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -17,8 +16,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author kiss_
  */
-@WebServlet(name = "DepartmentController", urlPatterns = {"/DepartmentController"})
-public class DepartmentController extends HttpServlet {
+@WebServlet(name= "ProjectsController", urlPatterns = {"/ProjectsController"})
+public class ProjectsController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,29 +36,49 @@ public class DepartmentController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet DepartmentController</title>");            
+            out.println("<title>Servlet ProjectsController</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet DepartmentController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ProjectsController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
     }
     
-//    public Deparment showDeparment(int id) {
-//        DeparmentDAO dao = new DeparmentDAO();
-//        return dao.getOne(id);
+//     public List<Project> projectsByDepto() {
+//        ProjectDAO dao = new ProjectDAO();
+//        List<Project> projectsByDepto = dao.getProjbyDepto();
+//
+//        return projectsByDepto;
 //    }
-//      public Deparment showDepartment(String nombre){
-//        DeparmentDAO dao = new DeparmentDAO();
-//        return dao.getOneByName(nombre);
+//
+//    public List<Project> getProjects() {
+//        ProjectDAO dao = new ProjectDAO();
+//        List<Project> projects = dao.getAll();
+//
+//        return projects;
 //    }
-//      
-//      public List<Deparment> showDeparment() {
-//        DeparmentDAO dao = new DeparmentDAO();
-//        return dao.getAll();
+//   
+//    public boolean insertProject(Project p) {
+//        ProjectDAO dao = new ProjectDAO();
+//        return dao.save(p);
 //    }
-    
+//
+//    public boolean deleteProject(Project p) {
+//        ProjectDAO dao = new ProjectDAO();
+//        return dao.delete(p);
+//    }
+//
+//    public Project findById(int id) {
+//        ProjectDAO dao = new ProjectDAO();
+//        Optional<Project> projectFound = dao.get(id);
+//        return projectFound.orElseGet(() -> new Project(DAODefaults.NO_PROJECT_FOUND.getDefaultValue()));
+//    }
+//
+//    public Project getProjectName(int id){
+//        ProjectDAO dao = new ProjectDAO();
+//        return  dao.getProjectName(id);
+//    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

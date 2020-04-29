@@ -42,7 +42,7 @@
                                     <td>${employee.getEmployeeLastname()}</td>
                                     <td>
                                         <a class="btn btn-primary"
-                                           href="${pageContext.request.contextPath}/empleado.do?op=list&id=${employee.getEmployeeId()}"><span
+                                           href="${pageContext.request.contextPath}/empleado.do?op=get&id=${employee.getEmployeeId()}"><span
                                                 class="glyphicon glyphicon-edit"></span> Editar</a>
                                         <a class="btn btn-danger"
                                            href="javascript:delete('${employee.getEmployeeId()}')"><span class="glyphicon glyphicontrash"></span> Eliminar</a>

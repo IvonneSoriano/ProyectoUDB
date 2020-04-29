@@ -17,7 +17,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import sv.edu.udb.models.Employee;
 import sv.edu.udb.models.EmployeeDAO;
-
+import sv.edu.udb.models.Deparment;
+import sv.edu.udb.models.DeparmentDAO;
+import sv.edu.udb.models.Rol;
+import sv.edu.udb.models.RolDAO;
 /**
  *
  * @author Imer Palma
@@ -28,6 +31,11 @@ public class EmployeeController extends HttpServlet {
     ArrayList<String> listaErrores = new ArrayList<>();
     Employee modelEmployee = new Employee();
     EmployeeDAO empDAO = new EmployeeDAO();
+    Deparment modelDeparment = new Deparment();
+    DeparmentDAO depDao = new DeparmentDAO();
+    Rol modelRol = new Rol();
+    RolDAO rolDAO = new RolDAO();
+    
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException{
@@ -44,7 +52,7 @@ public class EmployeeController extends HttpServlet {
                     list(request,response);
                     break;
                 case "new":
-                    request.getRequestDispatcher("/employeeView/NewEmployee.jsp").forward(request, response);
+                    newEmployee(request, response);
                     break;
                 case "insert":
                     insert(request,response);
@@ -124,9 +132,23 @@ public class EmployeeController extends HttpServlet {
             modelEmployee.setRolId(Integer.parseInt(request.getParameter("rol")));
             modelEmployee.setPassword(request.getParameter("password"));
             modelEmployee.setUsername(request.getParameter("username"));
-            request.setAttribute("employee", empDAO.save(modelEmployee));
-            request.getRequestDispatcher("").forward(request, response);
+            if(listaErrores.size() > 0){
+                request.setAttribute("employee", modelEmployee);
+                request.setAttribute("listaErrores", listaErrores);
+                request.getRequestDispatcher("empleado.do?op=nuevo").forward(request, response);
+            }else{
+                if(empDAO.save(modelEmployee)){
+                    request.getSession().setAttribute("exito", "Empleado registrado exitosamente");
+                    response.sendRedirect(request.getContextPath() + "/employee.do?op=list");
+                }
+                else{
+                    request.getSession().setAttribute("fracaso", "Empleado no ha sido ingresado");
+                    response.sendRedirect(request.getContextPath() + "/employee.do?op=list");
+                }
+            }
+            
         }catch(IOException | ServletException ex){
+             Logger.getLogger(EmployeeController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     private void getEmployee(HttpServletRequest request, HttpServletResponse response){
@@ -135,7 +157,9 @@ public class EmployeeController extends HttpServlet {
             int id = Integer.parseInt(idemp);
             if (empDAO.getEmployeeById(id) != null) {
                 request.setAttribute("employee", empDAO.getEmployeeById(id));
-                request.getRequestDispatcher("").forward(request, response);
+                request.setAttribute("listRol", rolDAO.getAll());
+                request.setAttribute("listDeparment", depDao.getAll());               
+                request.getRequestDispatcher("/EmployeeView/EditEmployee.jsp").forward(request, response);
             }else{
                 response.sendRedirect("");
             }
@@ -152,12 +176,36 @@ public class EmployeeController extends HttpServlet {
             modelEmployee.setRolId(Integer.parseInt(request.getParameter("rol")));
             modelEmployee.setPassword(request.getParameter("password"));
             modelEmployee.setUsername(request.getParameter("username"));
-            request.setAttribute("employee", empDAO.updateUser(modelEmployee, modelEmployee.getPassword()));
-            request.getRequestDispatcher("").forward(request, response);
+            if(listaErrores.size() > 0){
+                request.setAttribute("employee", modelEmployee);
+                request.setAttribute("listaErrores", listaErrores);
+                request.getRequestDispatcher("empleado.do?op=get").forward(request, response);
+            }else{
+                if(empDAO.updateUser(modelEmployee, request.getParameter("newPasword"))){
+                    request.getSession().setAttribute("exito", "Empleado modificado");
+                    response.sendRedirect(request.getContextPath() + "/employee.do?op=list");
+                }
+                else{
+                    request.getSession().setAttribute("fracaso", "Empleado no ha sido modificado");
+                    response.sendRedirect(request.getContextPath() + "/employee.do?op=list");
+                }
+            }
+       
         } catch (IOException | ServletException ex) {
             Logger.getLogger(EmployeeController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+    private void newEmployee(HttpServletRequest request, HttpServletResponse response){
+        try{
+            
+                request.setAttribute("listRol", rolDAO.getAll());
+                request.setAttribute("listDeparment", depDao.getAll());               
+                request.getRequestDispatcher("/EmployeeView/NewEmployee.jsp").forward(request, response);
+            
+        }catch(IOException | ServletException ex){
+            Logger.getLogger(EmployeeController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     private void delete(HttpServletRequest request, HttpServletResponse response){
         try{
@@ -169,12 +217,13 @@ public class EmployeeController extends HttpServlet {
             modelEmployee.setRolId(Integer.parseInt(request.getParameter("rol")));
             modelEmployee.setPassword(request.getParameter("password"));
             modelEmployee.setUsername(request.getParameter("username"));
-            if (empDAO.getEmployeeById(id) != null) {
-                request.setAttribute("employee", empDAO.delete(modelEmployee));
-                request.getRequestDispatcher("").forward(request, response);
+            if (empDAO.delete(modelEmployee)) {
+                request.setAttribute("exito","Empleado eliminado");
+                
             }else{
-                response.sendRedirect("");
+                request.setAttribute("fracaso","No se ha podido eliminado");
             }
+            request.getRequestDispatcher("/employee.do?op=list").forward(request, response);
         }catch(IOException | ServletException ex){
             Logger.getLogger(EmployeeController.class.getName()).log(Level.SEVERE, null, ex);
         }

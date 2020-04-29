@@ -3,14 +3,14 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Nuevo autor</title>
+        <title>Nuevo empleado</title>
         <%@ include file='/cabecera.jsp' %>
     </head>
  <body>
  <jsp:include page="/navbar.jsp"/>
  <div class="container">
     <div class="row">
-        <h3>Nuevo autor</h3>
+        <h3>Nuevo empleado</h3>
     </div>
     <div class="row">
         <div class=" col-md-7">
@@ -43,23 +43,44 @@
                 <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
             </div>
             </div>
+            <div class="form-group">
+                <label for="rol">Rol</label>
+                <div class="input-group">
+                    <select name="rol" id="rol" class="form-control">
+                        <c:forEach items="${requestScope.listRol}" var="rol">
+                            <option value="${rol.getRolId()}">${rol.getRolName()}</option>
+                        </c:forEach>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="department">Departamento</label>
+                <div class="input-group">
+                    <select name="department" id="department" class="form-control">
+                        <c:forEach items="${requestScope.listDepartment}" var="department">
+                            <option value="${deparment.getDepartmentId()}">${department.getDepartmentName()}</option>
+                        </c:forEach>
+                    </select>
+                </div>
+            </div>
            <div class="form-group">
-            <label for="contacto">Username</label>
+            <label for="username">Username</label>
             <div class="input-group">
                 <input type="text" class="form-control" id="username" value="${employee.username}" name="username" placeholder="Ingrese el username">
                 <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
             </div>
             </div>
             <div class="form-group">
-            <label for="contacto">Contraseña</label>
+            <label for="contraseña">Contraseña</label>
             <div class="input-group">
                 <input type="password" class="form-control" id="password" value="${employee.password}" name="password" placeholder="Ingrese la contraseña">
                 <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
             </div>
             </div>
+            
             <input type="submit" class="btn btn-info" value="Guardar" name="Guardar">
             <a class="btn btn-danger"
-           href="${contextPath}/empleado.do?op=list">Cancelar</a>
+           href="${pageContext.request.contextPath}/empleado.do?op=list">Cancelar</a>
         </form>
         </div>
     </div>

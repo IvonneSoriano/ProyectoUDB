@@ -21,16 +21,20 @@
             <div class="row">
                 <div class="col-md-10">
                     <a type="button" class="btn btn-primary btn-md"
-                       href="${pageContext.request.contextPath}/empleado.do?op=new"> Nuevo empleado</a>
+                       href="${pageContext.request.contextPath}/empleado.do?op=new"><fmt:message key="label.nEmpleado"/></a>
                     <br/><br/>
                     <table class="table table-striped table-bordered table-hover"
                            id="tabla">
                         <thead>
                             <tr>
-                                <th>Codigo del empleado</th>
-                                <th>Nombre</th>
-                                <th>Apellido</th>
-                                <th>Operaciones</th>
+                                <th><fmt:message key="label.codigoEmpleado"/></th>
+                                <th><fmt:message key="label.nombre"/></th>
+                                <th><fmt:message key="label.apellido"/></th>
+                                <th><fmt:message key="label.nombreUsuario"/></th>
+                                <th><fmt:message key="label.pass"/></th>
+                                <th><fmt:message key="label.departaento"/></th>
+                                <th><fmt:message key="label.rol"/></th>
+                                <th><fmt:message key="label.operaciones"/></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -40,6 +44,10 @@
                                     <td>${employee.getEmployeeId()}</td>
                                     <td>${employee.getEmployeeName()}</td>
                                     <td>${employee.getEmployeeLastname()}</td>
+                                    <td>${employee.getUsername()}</td>
+                                    <td>${employee.getPassword()}</td>
+                                    <td>${employee.getDepartmentId()}</td>
+                                    <td>${employee.getRolId()}</td>
                                     <td>
                                         <a class="btn btn-primary"
                                            href="${pageContext.request.contextPath}/empleado.do?op=get&id=${employee.getEmployeeId()}"><span

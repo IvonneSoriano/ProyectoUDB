@@ -1,6 +1,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
+<c:if test="${param['locale'] != null}">
+    <fmt:setLocale value="${param['locale']}" scope="session"/>
+</c:if>
 <html>
     <head>
         <title>Modificar empleado</title>
@@ -27,24 +31,24 @@
        </c:if>
        <form role="form" action="${pageContext.request.contextPath}/empleados.do" method="POST">
             <input type="hidden" name="op" value="insert">
-            <div class="well well-sm"><strong><span class="glyphicon glyphicon-asterisk"></span>Campos requeridos</strong></div>
+            <div class="well well-sm"><strong><span class="glyphicon glyphicon-asterisk"></span><fmt:menssage key="label.campos"></strong></div>
             <div class="form-group">
 
-           <label for="nombre">Nombre</label>
+            <td><fmt:message key="label.nombre"/></td>
             <div class="input-group">
                 <input type="text" class="form-control" name="name" id="name" value="${employee.getEmployeeName()}" placeholder="Ingresa el nombre" >
                 <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
             </div>
             </div>
            <div class="form-group">
-            <label for="apellido">Apellido</label>
+            <td><fmt:message key="label.apellidos"/></td> 
             <div class="input-group">
                 <input type="text" class="form-control" name="lastname" id="lastname" value="${employee.getEmployeeLastName()}" placeholder="Ingresa el apellido" >
                 <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
             </div>
             </div>
             <div class="form-group">
-                <label for="rol">Rol</label>
+                 <td><fmt:message key="label.rol"/></td> 
                 <div class="input-group">
                     <select name="rol" id="rol" class="form-control">
                         <c:forEach items="${requestScope.listRol}" var="rol">
@@ -54,7 +58,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <label for="department">Departamento</label>
+                 <td><fmt:message key="label.departamento"/></td> 
                 <div class="input-group">
                     <select name="department" id="department" class="form-control">
                         <c:forEach items="${requestScope.listDeparment}" var="department">
@@ -64,21 +68,21 @@
                 </div>
             </div>
            <div class="form-group">
-            <label for="username">Username</label>
+           <td><fmt:message key="label.nombreUsuario"/></td> 
             <div class="input-group">
                 <input type="text" class="form-control" id="username" value="${employee.getUsername()}" name="username" placeholder="Ingrese el username">
                 <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
             </div>
             </div>
             <div class="form-group">
-            <label for="password">Contraseña</label>
+            <td><fmt:message key="label.pass"/></td> 
             <div class="input-group">
                 <input type="password" class="form-control" id="password" value="${employee.password}" name="password" placeholder="Ingrese la contraseña">
                 <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
             </div>
             </div>
              <div class="form-group">
-            <label for="newPassword">Contraseña Nueva</label>
+            <td><fmt:message key="label.Npass"/></td> 
             <div class="input-group">
                 <input type="password" class="form-control" id="newPassword" value="${employee.newPassword}" name="password" placeholder="Ingrese la contraseña nueva">
                 <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>

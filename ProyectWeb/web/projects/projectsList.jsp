@@ -36,7 +36,7 @@
                                     <td>${project.getDepartmentId()}</td>
                                     <td>${project.getCreationDate()}</td>
                                    
-                                    <td><a href="javascript:eliminar('${project.getProjectsId}')"><button class="btn btn-danger" >Eliminar</button></a></td>
+                                    <td><a href="javascript:eliminar('${project.getProjectsId()}')"><button class="btn btn-danger" >Eliminar</button></a></td>
 
                                 </tr>
                             </c:forEach>

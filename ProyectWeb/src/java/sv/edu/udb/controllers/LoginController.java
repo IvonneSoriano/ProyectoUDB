@@ -122,15 +122,15 @@ public class LoginController extends HttpServlet {
 
                     // welcome message
                     request.getSession().setAttribute("exito", "login exitoso");
-                    response.sendRedirect(request.getContextPath() + "/index.jsp");
+                    response.sendRedirect(request.getContextPath()+"/index.jsp");
                     return;
                 }
                 request.setAttribute("error", "Password Incorrecto");
-                request.getRequestDispatcher(request.getContextPath() + "/login.do").forward(request, response);
+                request.getRequestDispatcher("/login.do").forward(request, response);
                 return;
             }
             request.setAttribute("error", "Usuario Incorrecto");
-            request.getRequestDispatcher(request.getContextPath() + "/login.do").forward(request, response);
+            request.getRequestDispatcher("/login.do").forward(request, response);
         } catch (Exception e) {
             logger.error("Error in logIn method. Message: " + e.getMessage());
         }

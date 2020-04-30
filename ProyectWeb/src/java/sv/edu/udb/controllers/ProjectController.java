@@ -16,6 +16,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import sv.edu.udb.models.Deparment;
 import sv.edu.udb.models.Project;
 import sv.edu.udb.models.ProjectDAO;
 import sv.edu.udb.models.DeparmentDAO;
@@ -57,7 +58,7 @@ public class ProjectController extends HttpServlet {
                 case "crear":
                     nuevo(request, response);
                     break;
-                     case "insertar":
+                case "insertar":
                     insertProject(request, response);
                     break;
                 case "eliminar":
@@ -108,10 +109,11 @@ public class ProjectController extends HttpServlet {
 
     public void listarProjects(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         try {
-            request.setAttribute("listaProyectos", dao.getAll());
+            List<Project> pr = dao.getAll();
+            request.setAttribute("listaProyectos", pr);
             request.getRequestDispatcher("/projects/projectsList.jsp").forward(request, response);
         } catch (IOException | ServletException e) {
-            logger.error("Error in logIn method. Message: " + e.getMessage());
+            logger.error("Error in ListarProjects method. Message: " + e.getMessage());
         }
 
     }
@@ -125,7 +127,7 @@ public class ProjectController extends HttpServlet {
             request.setAttribute("departamentos", pc.getAll());
             request.getRequestDispatcher("/projects/editProject.jsp").forward(request, response);
         } catch (IOException | ServletException e) {
-            logger.error("Error in logIn method. Message: " + e.getMessage());
+            logger.error("Error in Obtener method. Message: " + e.getMessage());
         }
 
     }
@@ -141,7 +143,7 @@ public class ProjectController extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/proyectos.do?op=listar");
             dao.save(miProject);
         } catch (IOException e) {
-            logger.error("Error in logIn method. Message: " + e.getMessage());
+            logger.error("Error insertProject method. Message: " + e.getMessage());
         }
     }
 
@@ -159,7 +161,7 @@ public class ProjectController extends HttpServlet {
             request.getRequestDispatcher("/proyectos.do?op=listar").forward(request, response);
 
         } catch (Exception e) {
-            logger.error("Error in logIn method. Message: " + e.getMessage());
+            logger.error("Error in deleteProject method. Message: " + e.getMessage());
         }
 
     }
@@ -167,8 +169,8 @@ public class ProjectController extends HttpServlet {
     private void nuevo(HttpServletRequest request, HttpServletResponse response) {
         try {
             DeparmentDAO pc = new DeparmentDAO();
-
-            request.setAttribute("departamentos", pc.getAll());
+            List<Deparment> dep = pc.getAll();
+            request.setAttribute("departamentos", dep);
             request.getRequestDispatcher("/projects/newProject.jsp").forward(request, response);
         } catch (IOException | ServletException e) {
             logger.error("Error in logIn method. Message: " + e.getMessage());

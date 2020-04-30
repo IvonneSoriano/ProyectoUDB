@@ -15,8 +15,7 @@
         <jsp:include page="/common/navbar.jsp"/>
         <div class="container mt-5">
             <h1>Nuevo proyecto</h1>
-            <form class="form mt-5" role="form" action="${contextPath}/proyectos.do" method="POST">
-                <input type="hidden" name="op" value="insertar">
+            <form class="form mt-5" role="form" action="${pageContext.request.contextPath}/proyectos.do?op=insertar" method="POST">
                 
                 <div class="form-group">
                     <label for="name">
@@ -30,7 +29,7 @@
                         Departamento:
                     </label>
                     <select class="form-control" name="depto" id="depto" >
-                        <c:forEach items="${requestScope.showDeparment()}" var="dpto">
+                        <c:forEach items="${departamentos}" var="dpto">
                             <option value="${dpto.getDepartmentId()}">${dpto.getDepartmentName()}</option>
                         </c:forEach>
                     </select>

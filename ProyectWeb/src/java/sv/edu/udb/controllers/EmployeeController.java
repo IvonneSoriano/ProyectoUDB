@@ -135,7 +135,7 @@ public class EmployeeController extends HttpServlet {
             if(listaErrores.size() > 0){
                 request.setAttribute("employee", modelEmployee);
                 request.setAttribute("listaErrores", listaErrores);
-                request.getRequestDispatcher("empleado.do?op=nuevo").forward(request, response);
+                request.getRequestDispatcher("empleado.do?op=list").forward(request, response);
             }else{
                 if(empDAO.save(modelEmployee)){
                     request.getSession().setAttribute("exito", "Empleado registrado exitosamente");

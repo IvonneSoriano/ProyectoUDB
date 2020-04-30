@@ -114,7 +114,7 @@ public class RequestController extends HttpServlet {
     private void list(HttpServletRequest request, HttpServletResponse response){
         try {
             request.setAttribute("listRequest", rqDAO.getAll());
-            request.getRequestDispatcher("").forward(request, response);
+            request.getRequestDispatcher("/requestView/ListRequest.jsp").forward(request, response);
         } catch (ServletException | IOException ex) {
             Logger.getLogger(RequestController.class.getName()).log(Level.SEVERE,null,ex);
         }
@@ -132,8 +132,20 @@ public class RequestController extends HttpServlet {
             modelRequest.setRequestDate(requestDate);
             modelRequest.setRequestStatus(request.getParameter("status"));
             modelRequest.setRequestDescription(request.getParameter("description"));
-            request.setAttribute("request", rqDAO.save(modelRequest) );
-            request.getRequestDispatcher("").forward(request, response);
+            if(listaErrores.size() > 0){
+                request.setAttribute("request", modelRequest);
+                request.setAttribute("listaErrores", listaErrores);
+                request.getRequestDispatcher("request.do?op=list").forward(request, response);
+            }else{
+                if(rqDAO.save(modelRequest)){
+                    request.getSession().setAttribute("exito", "Solicitud registrado exitosamente");
+                    response.sendRedirect(request.getContextPath() + "/request.do?op=list");
+                }else{
+                    request.getSession().setAttribute("fracaso", "Solicitud no ha sido ingresado");
+                    response.sendRedirect(request.getContextPath() + "/request.do?op=list");
+                }
+            }
+            
         } catch (IOException | ServletException ex) {
             Logger.getLogger(RequestController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -173,6 +185,26 @@ public class RequestController extends HttpServlet {
 
     }
     private void delete(HttpServletRequest request, HttpServletResponse response){
-        
+         try {
+            listaErrores.clear();
+            typeId = Integer.parseInt(request.getParameter("typeid"));
+            departmentId = Integer.parseInt(request.getParameter("departementid"));
+            projectId = Integer.parseInt(request.getParameter("projectid"));
+            requestDate = Timestamp.valueOf(request.getParameter("requestDate"));
+            modelRequest.setIdTypeRequest(typeId);
+            modelRequest.setDepartmentId(departmentId);
+            modelRequest.setProjectId(projectId);
+            modelRequest.setRequestDate(requestDate);
+            modelRequest.setRequestStatus(request.getParameter("status"));
+            modelRequest.setRequestDescription(request.getParameter("description"));
+            if(rqDAO.delete(modelRequest)){
+                request.setAttribute("exito","Solicitud eliminada");
+            }else{
+                request.setAttribute("fracaso","No se ha podido eliminar");
+            }
+             request.getRequestDispatcher("/request.do?op=list").forward(request, response);
+        } catch (IOException | ServletException ex) {
+            Logger.getLogger(RequestController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

@@ -22,7 +22,7 @@ import sv.edu.udb.models.EmployeeDAO;
  *
  * @author Imer Palma
  */
-@WebServlet(name = "EmployeeController", urlPatterns = {"/employee.do"})
+@WebServlet(name = "EmployeeController", urlPatterns = {"/empleado.do"})
 public class EmployeeController extends HttpServlet {
 
     ArrayList<String> listaErrores = new ArrayList<>();
@@ -44,7 +44,7 @@ public class EmployeeController extends HttpServlet {
                     list(request,response);
                     break;
                 case "new":
-                    request.getRequestDispatcher("").forward(request, response);
+                    request.getRequestDispatcher("/employeeView/NewEmployee.jsp").forward(request, response);
                     break;
                 case "insert":
                     insert(request,response);
@@ -83,12 +83,7 @@ public class EmployeeController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
+   
     /**
      * Handles the HTTP <code>POST</code> method.
      *
@@ -97,11 +92,7 @@ public class EmployeeController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
+    
 
     /**
      * Returns a short description of the servlet.
@@ -119,7 +110,7 @@ public class EmployeeController extends HttpServlet {
     private void list(HttpServletRequest request, HttpServletResponse response){
         try {
             request.setAttribute("listEmployees", empDAO.getAll());
-            request.getRequestDispatcher("").forward(request, response);
+            request.getRequestDispatcher("/employeeView/ListEmployee.jsp").forward(request, response);
         } catch (ServletException | IOException ex) {
             Logger.getLogger(EmployeeController.class.getName()).log(Level.SEVERE,null,ex);
         }

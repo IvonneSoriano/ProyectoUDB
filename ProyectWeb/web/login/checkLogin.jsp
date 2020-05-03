@@ -17,8 +17,8 @@
         if (!e.getPassword().equals(DAODefaults.NON_EXISTING_USER.getDefaultValue())) {
             // welcome message
             // start session
-//            HttpSession sesionOk = request.getSession();
-//sesionOk.setAttribute("empleado",e); 
+            HttpSession sesionOk = request.getSession();
+            sesionOk.setAttribute("empleado",e); 
 %>
 <jsp:forward page="../index.jsp" />
 <%} else {

@@ -152,13 +152,14 @@ public class ProjectController extends HttpServlet {
             int id = Integer.parseInt(request.getParameter("id"));
             Project p = new Project();
             p.setProjectsId(id);
-            if (dao.delete(p)) {
+            boolean r = dao.delete(p);
+            if (r) {
                 request.setAttribute("exito", "Proyecto eliminado");
             } else {
                 request.setAttribute("fracaso", "Proyecto no eliminado");
             }
 
-            request.getRequestDispatcher("/proyectos.do?op=listar").forward(request, response);
+            request.getRequestDispatcher("/proyectos.do?op=ver").forward(request, response);
 
         } catch (Exception e) {
             logger.error("Error in deleteProject method. Message: " + e.getMessage());

@@ -116,7 +116,7 @@ public class EmployeeDAO implements Dao<Employee> {
         }
     }
 
-    public boolean updateUser(Employee t, String[] params, String pass) {
+    public boolean updateUser(Employee t, String pass) {
         try {
             Connect connection = new Connect();
 

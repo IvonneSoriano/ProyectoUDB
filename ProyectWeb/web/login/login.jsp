@@ -42,11 +42,11 @@
                     <fmt:message key="label.msjInicio" />
                 </h1>
 
-                <label for="clave"class="sr-only"><fmt:message key="label.nombreUsuario" /></label>
+                <label for="clave" class="sr-only"><fmt:message key="label.nombreUsuario" /></label>
                 <input type="text" class="form-control" id="usuario" placeholder="<fmt:message key="label.nombreUsuario" />" name="usuario" required autofocus>
 
 
-                <label for="clave"class="sr-only">Password:</label>
+                <label for="clave" class="sr-only">Password:</label>
                 <input type="password" class="form-control" id="clave" placeholder="<fmt:message key="label.pass" />" name="clave" required>
 
 

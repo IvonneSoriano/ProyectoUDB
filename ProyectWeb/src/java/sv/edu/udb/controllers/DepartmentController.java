@@ -54,6 +54,21 @@ public class DepartmentController extends HttpServlet {
             out.println("</html>");
         }
     }
+    
+//    public Deparment showDeparment(int id) {
+//        DeparmentDAO dao = new DeparmentDAO();
+//        return dao.getOne(id);
+//    }
+//      public Deparment showDepartment(String nombre){
+//        DeparmentDAO dao = new DeparmentDAO();
+//        return dao.getOneByName(nombre);
+//    }
+//      
+//      public List<Deparment> showDeparment() {
+//        DeparmentDAO dao = new DeparmentDAO();
+//        return dao.getAll();
+//    }
+    
 
     public void showDeparment(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {

@@ -118,19 +118,20 @@ public class LoginController extends HttpServlet {
                     // crear sesion 
                     HttpSession session_actual = request.getSession(true);
                     session_actual.setAttribute("username", e.getUsername());
+                    session_actual.setAttribute("employee", e);
                     session_actual.setAttribute("fullName", e.getFullName());
 
                     // welcome message
-                    request.getSession().setAttribute("exito", "login exitoso");
+                    request.getSession().setAttribute("exito", "Login exitoso");
                     response.sendRedirect(request.getContextPath() + "/index.jsp");
                     return;
                 }
                 request.setAttribute("error", "Password Incorrecto");
-                request.getRequestDispatcher(request.getContextPath() + "/login.do").forward(request, response);
+                request.getRequestDispatcher("/login.do").forward(request, response);
                 return;
             }
             request.setAttribute("error", "Usuario Incorrecto");
-            request.getRequestDispatcher(request.getContextPath() + "/login.do").forward(request, response);
+            request.getRequestDispatcher("/login.do").forward(request, response);
         } catch (Exception e) {
             logger.error("Error in logIn method. Message: " + e.getMessage());
         }
@@ -138,6 +139,8 @@ public class LoginController extends HttpServlet {
 
     public void logOut(HttpServletRequest req, HttpServletResponse res) {
         try {
+            HttpSession sesionOk = req.getSession();
+            sesionOk.invalidate();
             req.getRequestDispatcher("/login/login.jsp").forward(req, res);
         } catch (Exception e) {
             logger.error("Error in logOut method. Message: " + e.getMessage());

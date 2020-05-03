@@ -42,11 +42,11 @@
                    role="button" aria-haspopup="true" 
                    aria-expanded="false"><fmt:message key="label.wordEmpleados" /><span class="caret"></span>
                 </a>
-                <div class="dropdown-menu" aria-labelledby="navbarEmpleadoDropdown">
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/empleado.do?op=new">Crear empleado</a>
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/empleado.do?op=list">Ver lista de empleados</a>                      
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/empleado.do?op=update">Modificar empleado</a>
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/empleado.do?op=delete">Eliminar empleado</a>
+                <div class="dropdown-menu" aria-labelledby="navbarEmpleadoDropdown">	
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/empleados.do?op=crear">Crear empleado</a>	
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/empleados.do?op=ver">Ver lista de empleados</a>                      	
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/empleados.do?op=modificar">Modificar empleado</a>	
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/empleados.do?op=eliminar">Eliminar empleado</a>	
                 </div>
             </li>
 

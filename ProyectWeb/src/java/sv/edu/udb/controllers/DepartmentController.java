@@ -7,11 +7,15 @@ package sv.edu.udb.controllers;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.log4j.Logger;
+import sv.edu.udb.models.Deparment;
+import sv.edu.udb.models.DeparmentDAO;
 
 /**
  *
@@ -19,6 +23,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "DepartmentController", urlPatterns = {"/DepartmentController"})
 public class DepartmentController extends HttpServlet {
+
+    private static Logger logger = Logger.getLogger(LoginController.class);
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,11 +39,14 @@ public class DepartmentController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+            if (request.getParameter("op") == null) {
+                return;
+            }
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet DepartmentController</title>");            
+            out.println("<title>Servlet DepartmentController</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet DepartmentController at " + request.getContextPath() + "</h1>");
@@ -60,6 +69,51 @@ public class DepartmentController extends HttpServlet {
 //        return dao.getAll();
 //    }
     
+
+    public void showDeparment(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        try {
+            DeparmentDAO dao = new DeparmentDAO();
+ 
+                int id = Integer.parseInt(request.getParameter("id"));
+
+                request.setAttribute("department", dao.getOne(id));
+                request.getRequestDispatcher(request.getContextPath() + "/department.do?op=listar");
+            
+        } catch (Error e) {
+// Logger.getLogger(DepartmentController.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error("Error in logIn method. Message: " + e.getMessage());
+        }
+
+    }
+
+    public void showDeparments(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        try {
+            DeparmentDAO dao = new DeparmentDAO();
+            request.setAttribute("departamentos", dao.getAll());
+            request.getRequestDispatcher(request.getContextPath() + "/department.do?op=listar");
+
+        } catch (Error e) {
+// Logger.getLogger(DepartmentController.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error("Error in logIn method. Message: " + e.getMessage());
+        }
+
+    }
+
+    public void showDeparmentByName(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        try {
+            DeparmentDAO dao = new DeparmentDAO();
+
+            String name = request.getParameter("name");
+
+            request.setAttribute("department", dao.getOneByName(name));
+            request.getRequestDispatcher(request.getContextPath() + "/department.do?op=listar");
+
+        } catch (Error e) {
+// Logger.getLogger(DepartmentController.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error("Error in logIn method. Message: " + e.getMessage());
+        }
+
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -87,6 +141,7 @@ public class DepartmentController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         processRequest(request, response);
     }
 

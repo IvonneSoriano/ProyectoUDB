@@ -120,16 +120,18 @@ public class LoginController extends HttpServlet {
                     session_actual.setAttribute("sessionEmpType", e.getRolId());
                     session_actual.setAttribute("sessionEmpDeparmentId", e.getDepartmentId());
                     session_actual.setAttribute("username", e.getUsername());
+                    session_actual.setAttribute("employee", e);
                     session_actual.setAttribute("fullName", e.getFullName());
 
-                    // welcome message                    
-                    request.getSession().setAttribute("exito", "login exitoso");
+                    // welcome message
+                    request.getSession().setAttribute("exito", "Login exitoso");
+
                     response.sendRedirect(request.getContextPath() + "/index.jsp");
                     return;
                 }
                 request.setAttribute("error", "Password Incorrecto");
                 request.getRequestDispatcher("/login.do").forward(request, response);
-                return;
+                return; 
             }
             request.setAttribute("error", "Usuario Incorrecto");
             request.getRequestDispatcher("/login.do").forward(request, response);
@@ -140,6 +142,8 @@ public class LoginController extends HttpServlet {
 
     public void logOut(HttpServletRequest req, HttpServletResponse res) {
         try {
+            HttpSession sesionOk = req.getSession();
+            sesionOk.invalidate();
             req.getRequestDispatcher("/login/login.jsp").forward(req, res);
         } catch (Exception e) {
             logger.error("Error in logOut method. Message: " + e.getMessage());

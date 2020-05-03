@@ -9,6 +9,9 @@
 
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/bootstrap.min.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/alertify.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/bootstrapTheme.css">
 
 <!-- Latest compiled and minified JavaScript -->
 <script src="${pageContext.request.contextPath}/assets/js/bootstrap.min.js"></script>
+<script src="${pageContext.request.contextPath}/assets/js/alertify.js"></script>

@@ -4,9 +4,25 @@
     Author     : kiss_
 --%>
 
+<%@page import="sv.edu.udb.models.Employee"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ pagesession="true" %>
+<%
+ Employee empleado;
+ HttpSession sesionOk = request.getSession();
+ empleado = (Employee) sesionOk.getAttribute("employee");
+ if (empleado == null) {
+%>
+<jsp:forwardpage="login/login.jsp">
+<jsp:paramname="error" value="Es obligatorio identificarse"/>
+</jsp:forward>
+<%
+ } else {
+ empleado = (Employee) sesionOk.getAttribute("empleado");
+ }
+%>
 <c:if test="${param['locale'] != null}">
     <fmt:setLocale value="${param['locale']}" scope="session" />
 </c:if>

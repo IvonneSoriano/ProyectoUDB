@@ -46,6 +46,7 @@ public class TicketDAO implements Dao<Ticket> {
                 ticket.setInternalCode(ticketSet.getString("INTERNALCODE"));
                 ticket.setStartDate(ticketSet.getTimestamp("STARTDATE"));
                 ticket.setEndDate(ticketSet.getTimestamp("ENDDATE"));
+                ticket.setAvance(ticketSet.getFloat("AVANCE"));
                 ticketFound.add(ticket);
             }
         } catch (Exception e) {
@@ -111,7 +112,7 @@ public class TicketDAO implements Dao<Ticket> {
                 foundTicket.setInternalCode(ticket.getString("INTERNALCODE"));
                 foundTicket.setStartDate(ticket.getTimestamp("STARTDATE"));
                 foundTicket.setEndDate(ticket.getTimestamp("ENDDATE"));
-
+                foundTicket.setAvance(ticket.getFloat("AVANCE"));
             }
         } catch (Exception e) {
             logger.error("Error processing ResultSet in getOne() method. Message: " + e.getMessage());
@@ -325,7 +326,8 @@ public class TicketDAO implements Dao<Ticket> {
                 ticket.setTicketStatus(ticketSet.getString("TICKET_STATUS"));
                 ticket.setInternalCode(ticketSet.getString("INTERNALCODE"));
                 ticket.setStartDate(ticketSet.getTimestamp("STARTDATE"));
-                ticket.setEndDate(ticketSet.getTimestamp("ENDDATE"));
+                ticket.setEndDate(ticketSet.getTimestamp("ENDDATE"));                
+                ticket.setAvance(ticketSet.getFloat("AVANCE"));                
                 ticketFound.add(ticket);
             }
         } catch (Exception e) {
@@ -333,5 +335,4 @@ public class TicketDAO implements Dao<Ticket> {
         }
         return ticketFound;
     }
-
 }

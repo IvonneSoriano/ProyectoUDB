@@ -47,7 +47,7 @@
                             <li>Email support</li>
                             <li>Help center access</li>
                         </ul-->
-                        <button type="button" class="btn btn-lg btn-block btn-primary"><fmt:message key="label.verTickets" /> ...</button>
+                        <a class="btn btn-lg btn-block btn-primary" href="${pageContext.request.contextPath}/tickets.do?op=listar"><fmt:message key="label.verTickets" /> ...</a>
                     </div>
                 </div>
                 <div class="card mb-4 shadow-sm">

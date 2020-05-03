@@ -31,17 +31,17 @@ public class CommentDAO implements Dao<Comment> {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public List<Comment> getAllid(int id) {
+    public List<Comment> getAllByRequest(int requestID) {
 
         Connect connection = null;
         List<Comment> employeesFound = new ArrayList<>();
         try {
             connection = new Connect();
         } catch (SQLException ex) {
-            logger.error("Error creating conecction in getAll() method. Message: " + ex.getMessage());
+            logger.error("Error creating conecction in getAllByRequest() method. Message: " + ex.getMessage());
         }
         try {
-            connection.setRs("SELECT * FROM COMMENTS WHERE REQUESTID=" + id + ";");
+            connection.setRs("SELECT * FROM COMMENTS WHERE REQUESTID=" + requestID + ";");
             ResultSet employees = (ResultSet) connection.getRs();
 
             while (employees.next()) {
@@ -103,5 +103,31 @@ public class CommentDAO implements Dao<Comment> {
     public boolean delete(Comment t) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+// SELECT * FROM comments where requestid=2 ORDER BY commentId DESC LIMIT 1;
+//    public Comment getLastCommentFromTicket() {
+//         try {
+//            Connect connection = new Connect();
+//
+//            String sql = "INSERT INTO `gestion_tickets`.`comments` "
+//                    + "(`EMPLOYEEID`, `DEPARTMENTID`, `REQUESTID`, `COMMENTTEXT`, "
+//                    + "`COMMENTDATE`) VALUES (" + c.getEmployeeId() + ", "
+//                    + c.getDepartmentId() + " , " + c.getRequestId()
+//                    + ", '" + c.getCommentText() + "', '" + c.getCommentDate() + "');";
+//
+//            int result = connection.setQuery(sql);
+//
+//            if (result <= 0) {
+//                logger.warn("INSERT query in Comments table has failed.");
+//                return false;
+//            } else {
+//                return true;
+//            }
+//
+//        } catch (Exception e) {
+//            logger.error("Error processing INSERT query in save method. Message: " + e.getMessage());
+//            return false;
+//        }
+//    }
 
 }

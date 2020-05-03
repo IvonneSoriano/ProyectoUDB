@@ -4,6 +4,8 @@
     Author     : Rick
 --%>
 
+<%@page import="sv.edu.udb.models.Ticket"%>
+<%@page import="sv.edu.udb.util.RequestStatus"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -69,6 +71,10 @@
     </head>
     <body>
         <jsp:include page="/common/navbar.jsp"/>
+        <c:set var="ticket" value="${requestScope.ticketEntity}"/>
+        <c:set var="request" value="${ticket.getRequest()}" />
+        <c:set var="comments" value="${request.getCommentsList()}" />
+        <c:set var="programmersAvailable" value="${requestScope.programmersList}"/>
         <br>
         <div class="container">
 
@@ -76,48 +82,55 @@
                 <div class="col-md-4 order-md-2 mb-4">
                     <h4 class="d-flex justify-content-between align-items-center mb-3">
                         <span class="text-muted">Comentarios</span>
-                        <span class="badge badge-secondary badge-pill">3</span>
+                        <span class="badge badge-secondary badge-pill"><c:out value="${request.getCommentsList().size()}" default="0"/></span>
                     </h4>
+
                     <ul class="list-group mb-3">
-                        <li class="list-group-item d-flex justify-content-between lh-condensed">
-                            <div>
-                                <h6 class="my-0">Comentario #1</h6>
-                                <small class="text-muted">Brief description</small>
-                            </div>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between lh-condensed">
-                            <div>
-                                <h6 class="my-0">Comentario #2</h6>
-                                <small class="text-muted">Brief description</small>
-                            </div>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between lh-condensed">
-                            <div>
-                                <h6 class="my-0">Comentario #3</h6>
-                                <small class="text-muted">Brief description</small>
-                            </div>
-                        </li>
+                        <c:set var="commentCount" value="0" scope="page" />
+                        <c:forEach items="${comments}" var="comment">
+                            <c:set var="commentCount" value="${commentCount + 1}" scope="page"/>
+                            <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                <div>
+                                    <h6 class="my-0">Comentario #<c:out value="${commentCount}"/></h6>
+                                    <small class="text-muted"><c:out value="${comment.getCommentText()}"/></small>
+                                </div>
+                            </li>
+                        </c:forEach>
                     </ul>
 
-                    <form class="card p-2">
+                    <form class="card p-2" id="addCommentForm" name="addCommentForm" 
+                          role="form" method="post" enctype="multipart/form-data"
+                          action="${pageContext.request.contextPath}/tickets.do?op=agregarComentario&reqId=${ticket.getRequestId()}">
                         <div class="mb-3">
-                            <textarea class="form-control" id="ticketDescription" rows="3"  placeholder="" value="" required></textarea>
+                            <!-- hidden fields that contain values for query -->
+                            <input id="reqId" name="reqId" value="<c:out value="${ticket.getRequestId()}"/>" hidden/>                            
+                            <input id="ticketId" name="ticketId" value="<c:out value="${ticket.getIdTicket()}"/>" hidden/>
+
+                            <div class="custom-file">
+                                <label class="custom-file-label" for="attachment">Seleccionar Archivo</label>
+                                <input type="file" class="custom-file-input" id="attachment" name="attachment" lang="es">
+                            </div>
+                            <br><br>
+                            <textarea method="post" class="form-control" id="ticketDescription" name="ticketDescription" rows="3" form="addCommentForm" placeholder="" value="" required></textarea>
                             <div class="invalid-feedback">
                                 Valid project description is required.
                             </div>
                         </div>
                         <button type="submit" class="btn btn-secondary btn-block">Agregar</button>
                     </form>
+
                 </div>
 
                 <div class="col-md-8 order-md-1">
-                    <h4 class="mb-3">Ticket - FIN20431</h4>
-                    <hr class="mb-4">
-                    <form class="needs-validation" novalidate>
+                    <h4 class="mb-3">Ticket - <c:out value="${ticket.getInternalCode()}" default="########"></c:out></h4>
+                        <hr class="mb-4">
+                        <form class="needs-validation" novalidate>
 
-                        <div class="mb-3">
-                            <label for="ticketDescription">Descripcion:</label>
-                            <textarea class="form-control" id="ticketDescription" rows="3"  placeholder="" value="" required></textarea>
+                            <div class="mb-3">
+                                <label for="ticketDescription">Descripcion:</label>
+                                <textarea class="form-control" id="ticketDescription" rows="3"  
+                                          placeholder="<c:out value="${request.getRequestDescription()}" default="########"/>" 
+                                value="<c:out value="${request.getRequestDescription()}" default="########"/>" required disabled></textarea>
                             <div class="invalid-feedback">
                                 Valid project description is required.
                             </div>
@@ -126,8 +139,8 @@
 
                         <div class="mb-3">
                             <div class="input-group">   
-                                <span id="ex6CurrentRangePickerValLabel">Avance: <span id="ex6RangePickerVal">3%</span></span>
-                                <input type="range" class="custom-range" min="0" max="5" step="0.5" id="customRange3">
+                                <span id="ex6CurrentRangePickerValLabel">Avance: <span id="ex6RangePickerVal">${ticket.getAvance()}%</span></span>
+                                <input type="range" class="custom-range" min="0" max="100" step="5" id="customRange3" value="${ticket.getAvance()}">
 
                                 <div class="invalid-feedback" style="width: 100%;">
                                     Your username is required.
@@ -140,32 +153,52 @@
                         <div class="row">
                             <div class="col-md-5 mb-3">
                                 <label for="country">Estado:</label>
-                                <select class="custom-select d-block w-100" id="country" required>
-                                    <option value="">Choose...</option>
-                                    <option>United States</option>
+                                <select class="custom-select d-block w-100" id="country" required >
+
+                                    <option value=""><fmt:message key="label.seleccionarItem"/>...</option>
+                                    <%
+                                        RequestStatus[] list = RequestStatus.values();
+                                        for (RequestStatus status : list) {
+                                    %> 
+                                    <option value="<%= status.name()%>" 
+                                            <%
+                                                Ticket receivedEntity = (Ticket) request.getAttribute("ticketEntity");
+                                                if (status.name().equalsIgnoreCase(receivedEntity.getTicketStatus())) {
+
+                                            %>
+                                            selected="selected"
+                                            <%                                                } // end-if
+%> 
+                                            ><%= status.name()%></option>
+                                    <%
+                                        } // end-for
+%>
                                 </select>
                                 <div class="invalid-feedback">
-                                    Please select a valid country.
+                                    <fmt:message key="label.validacionStatus"/>
                                 </div>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="state">Programador:</label>
                                 <select class="custom-select d-block w-100" id="state" required>
-                                    <option value="">Choose...</option>
-                                    <option>California</option>
+                                    <option value=""><fmt:message key="label.seleccionarItem"/>...</option>
+
+                                    <c:forEach items="${programmersAvailable}" var="programmer">
+                                        <option>${programmer.getFullName()}</option>
+                                    </c:forEach>
                                 </select>
                                 <div class="invalid-feedback">
-                                    Please provide a valid state.
+                                    <fmt:message key="label.validacionProgramador"/>
                                 </div>
                             </div>
                             <div class="col-md-3 mb-3">
-                                <label for="zip">QA</label>
+                                <label for="zip">QA:</label>
                                 <select class="custom-select d-block w-100" id="state" required>
-                                    <option value="">Choose...</option>
+                                    <option value=""><fmt:message key="label.seleccionarItem"/>...</option>
                                     <option>California</option>
                                 </select>
                                 <div class="invalid-feedback">
-                                    Zip code required.
+                                    <fmt:message key="label.validacionQA"/>
                                 </div>
                             </div>
                         </div>
@@ -173,15 +206,15 @@
 
                         <div class="row">
                             <div class="col-md-5 mb-3">
-                                <label for="fechaInicio"> Fecha Inicio </label>
-                                <input id="fechaInicio" width="250" />
+                                <label for="fechaInicio">Fecha Inicio:</label>
+                                <input id="fechaInicio" width="250"  value="${ticket.getFormattedDate("start")}"/>
                                 <div class="invalid-feedback">
                                     Please provide a valid state.
                                 </div>
                             </div>
                             <div class="col-md-3 mb-3">
-                                <label for="fechaFin"> Fecha Fin </label>  
-                                <input id="fechaFin" width="250">
+                                <label for="fechaFin">Fecha Fin:</label>  
+                                <input id="fechaFin" width="250"  value="${ticket.getFormattedDate("end")}">
                                 <div class="invalid-feedback">
                                     Please provide a valid state.
                                 </div>
@@ -196,9 +229,6 @@
                         <hr class="mb-4">
 
                         <!--h4 class="mb-3">Payment</h4-->
-
-
-
                         <button class="btn btn-primary btn-lg btn-block" type="submit">Guardar</button>
                     </form>
                 </div>

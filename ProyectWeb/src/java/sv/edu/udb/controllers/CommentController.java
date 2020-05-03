@@ -19,6 +19,6 @@ public class CommentController {
         return new CommentDAO().save(c);
     }
     public List<Comment> getAllid(int id) {
-        return new CommentDAO().getAllid(id);
+        return new CommentDAO().getAllByRequest(id);
     }
 }

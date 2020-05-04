@@ -6,6 +6,7 @@
 <%@page import="sv.edu.udb.models.Employee"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ pagesession="true" %>
 <%
  Employee empleado;
@@ -37,19 +38,19 @@
     <body>
         <jsp:include page="/common/navbar.jsp"/>
         <div class="container mt-5">
-            <h1 fmt:message key=”label.titleNP”>Nuevo proyecto</h1>
+            <h1 ><fmt:message key="label.titleNP" /></h1>
             <form class="form mt-5" role="form" action="${pageContext.request.contextPath}/proyectos.do?op=insertar" method="POST">
                 
                 <div class="form-group">
-                    <label for="name" fmt:message key=”label.npName”>
-                        Nombre de Proyecto
+                    <label for="name" >
+                        <fmt:message key="label.npName" />
                     </label>
                     <input type="text" name="name" id="name" class="form-control"/>
                 </div>
 
                 <div class="form-group">
-                    <label for="depto" fmt:message key=”label.pvDep”>
-                        Departamento:
+                    <label for="depto" >
+                        <fmt:message key="label.pvDep" />
                     </label>
                     <select class="form-control" name="depto" id="depto" >
                         <c:forEach items="${requestScope.departamentos}" var="dpto">
@@ -59,13 +60,13 @@
                 </div>
 
    <div class="form-group">
-                    <label for="description" fmt:message key=”label.npDesc”>
-                        Descripción:
+                    <label for="description" >
+                        <fmt:message key="label.npDesc" />
                     </label>
        <textarea class="form-control" id="description"  name="description"></textarea>
                 </div>
                         <div class="form-group">
-                            <button type="submit" class="btn btn-primary"  name="Guardar" fmt:message key=”label.titleNP”> Guardar</button>
+                            <button type="submit" class="btn btn-primary"  id="Guardar" > <fmt:message key="label.save" /></button>
                         </div>
             </form>
         </div>

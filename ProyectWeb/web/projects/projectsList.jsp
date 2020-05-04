@@ -6,6 +6,10 @@
 <%@page import="sv.edu.udb.models.Employee"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+
+
 <%@ pagesession="true" %>
 <%
  Employee empleado;
@@ -21,11 +25,12 @@
  empleado = (Employee) sesionOk.getAttribute("empleado");
  }
 %>
+
+
 <c:if test="${param['locale'] != null}">
   <fmt:setLocale value="${param['locale']}" scope="session" />
 </c:if>
 <fmt:setBundle basename="AplicationResource"/>
-<jsp:include page="/common/validarSesion.jsp"/>
 
 <!DOCTYPE html>
 <html>
@@ -41,14 +46,14 @@
 
             <div class="row">
                 <div class="col-12">
-                    <h1 class="mb-5" fmt:message key=”label.tituloLP”>Listado de Proyectos</h1>
+                    <h1 class="mb-5" ><fmt:message key="label.tituloLP" /></h1>
                     <table class="table">
                         <thead class="thead-dark">
                             <tr>
-                                <th fmt:message key=”label.pvId” scope="col">ID</th>
-                                <th scope="col" fmt:message key=”label.pvName”>Proyecto</th>
-                                <th scope="col" fmt:message key=”label.pvDep”>Departamento</th>
-                                <th scope="col" fmt:message key=”label.pvDate”>Creacion</th>
+                                <th scope="col"> <fmt:message key="label.pvId" /> </th>
+                                <th scope="col"> <fmt:message key="label.pvName" /> </th>
+                                <th scope="col"> <fmt:message key="label.pvDep" /> </th>
+                                <th scope="col"> <fmt:message key="label.pvDate" /> </th>
                                 <th scope="col"></th>
                             </tr>
                         </thead>

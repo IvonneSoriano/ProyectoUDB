@@ -101,5 +101,21 @@
                 </div>
             </div>
         </div>
+        <script>
+                            $(document).ready(function(){
+                                $('#tabla').DataTable(); 
+                                });
+                                <c:if test="${not empty exito}">
+                                    alertify.success('${exito}');
+                                    <c:set var="exito" value="" scope="session" />
+                                </c:if>
+                                    <c:if test="${not empty fracaso}">
+                                        alertify.error('${fracaso}');
+                                        <c:set var="fracaso" value="" scope="session" />
+                                    </c:if>
+
+                                
+                            
+                        </script>
     </body>
 </html>

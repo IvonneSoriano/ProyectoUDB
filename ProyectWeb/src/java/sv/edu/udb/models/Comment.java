@@ -20,6 +20,10 @@ public class Comment {
     public Comment() {
     }
 
+    public Comment(String daoDefault) {
+        this.commentText = daoDefault;
+    }
+
     public void setCommentId(int commentId) {
         this.id = commentId;
     }

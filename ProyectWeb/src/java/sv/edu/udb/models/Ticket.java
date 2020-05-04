@@ -118,6 +118,5 @@ public class Ticket {
       public String getFormattedDate(String type) {
         Timestamp dateFromBD = type.equals("start") ? this.getStartDate() : this.getEndDate();
         return new SimpleDateFormat("MM/dd/yyyy").format(new java.sql.Date(dateFromBD.getTime()));
-    }
-    
+    }    
 }

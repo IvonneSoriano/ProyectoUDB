@@ -9,8 +9,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -24,8 +28,11 @@ import sv.edu.udb.models.AttachmentDAO;
 import sv.edu.udb.models.Comment;
 import sv.edu.udb.models.CommentDAO;
 import sv.edu.udb.models.EmployeeDAO;
+import sv.edu.udb.models.RequestType;
 import sv.edu.udb.models.Ticket;
 import sv.edu.udb.models.TicketDAO;
+import sv.edu.udb.util.Connect;
+import sv.edu.udb.util.DAODefaults;
 import sv.edu.udb.util.Roles;
 
 /**
@@ -60,6 +67,7 @@ public class TicketController extends HttpServlet {
             }
 
             String operacion = request.getParameter("op");
+            System.out.println("Operacion seleccionada: " + operacion);
 
             switch (operacion) {
                 case "agregarComentario":
@@ -143,8 +151,6 @@ public class TicketController extends HttpServlet {
             }
 
             // ===== file upload code section =====
-            Attachment a =  new Attachment();
-            a.setCommentId(depId);
             InputStream inputStream = null; // input stream of the upload file            
             Part filePart = request.getPart("attachment"); // // obtains the upload file part in this multipart request
 
@@ -154,16 +160,31 @@ public class TicketController extends HttpServlet {
                 System.out.println(filePart.getSize());
                 System.out.println(filePart.getContentType());
 
-                // obtains input stream of the upload file
-                inputStream = filePart.getInputStream();
+                if (filePart.getSize() != 0L) {
+                    // obtains input stream of the upload file
+                    inputStream = filePart.getInputStream();
+
+                    Optional<Comment> comment = new CommentDAO().getLastCommentFromTicket(Integer.parseInt(reqId));
+                    c = comment.orElseGet(() -> new Comment(DAODefaults.NO_COMMENT_FOUND.getDefaultValue()));
+
+                    if (!c.getCommentText().equals(DAODefaults.NO_COMMENT_FOUND.getDefaultValue())) {
+                        Attachment a = new Attachment();
+                        a.setCommentId(c.getCommentId());
+                        a.setAttachmentName(filePart.getName());
+                        a.setAttachmentSize(filePart.getSize());
+                        a.setContentType(filePart.getContentType());
+                        a.setFileIS(inputStream);
+
+                        new AttachmentDAO().save(a);
+                        request.setAttribute("attachment_info", "Archivo agregado exitosamente!");
+
+                    } else {
+                        logger.warn("There was an error to store the comment! No attachment was added.");
+                        request.setAttribute("attachment_error", "Archivo no fue agregado. Porque hubo un problema previo con el comentario ntente mas tarde!");
+                    }
+                }
             }
 
-//            if (new AttachmentDAO().save(c)) {
-//                request.setAttribute("comment_info", "Archivo agregado exitosamente!");
-//            } else {
-//                request.setAttribute("comment_error", "Archivo no fue agregado. Intente mas tarde!");
-//            }
-            
             request.getRequestDispatcher("/tickets.do?op=verTicket&id=" + ticketId).forward(request, response);
         } catch (IOException | NumberFormatException | ServletException e) {
             logger.error("Error in agregarComentario() method. Message: " + e.getMessage());
@@ -172,6 +193,40 @@ public class TicketController extends HttpServlet {
     }
 
     public void actualizarTicket(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            int ticketId = Integer.parseInt(request.getParameter("ticketId"));
+            float progress = Float.valueOf(request.getParameter("rangeAvance"));
+            String status = (String) request.getParameter("ticketStatus");
+            int programmerId = Integer.parseInt(request.getParameter("programador"));
+            String start = (String) request.getParameter("fechaInicio");
+            String end = (String) request.getParameter("fechaFin");
+
+            dao.updateStatus(ticketId, status);
+            dao.updateProgrammer(ticketId, programmerId);
+            dao.updateAvance(ticketId, progress);
+
+            // tester is optional - check before udpate since it might be null
+            if (null != request.getParameter("tester")) {
+                int testerId = Integer.parseInt(request.getParameter("tester"));
+                dao.updateQA(ticketId, testerId);
+            }
+
+            // dates from UI to DB format
+            try {
+                DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+                Date dateS = formatter.parse(start);
+                Date dateE = formatter.parse(end);
+                dao.updateFechas(ticketId, new Timestamp(dateS.getTime()), new Timestamp(dateE.getTime()));
+
+                // regresar a la vista del ticket
+                request.getRequestDispatcher("/tickets.do?op=verTicket&id=" + ticketId).forward(request, response);
+            } catch (Exception e) {
+                logger.warn("Error en formato al actualizar fechas! Mensaje: " + e.getMessage());
+            }
+        } catch (Exception e) {            
+            e.printStackTrace();
+                logger.warn("Error actualizando ticket! Mensaje: " + e.getMessage());
+        }
 
     }
 
@@ -195,6 +250,9 @@ public class TicketController extends HttpServlet {
             // enviar programadores disponibles            
             request.setAttribute("programmersList", empDao.getAllByRolAndDepto(Roles.PROGRAMADOR.getRolId(), depId));
 
+            // enviar QA disponibles
+            request.setAttribute("testersList", empDao.getAllByRolAndDepto(Roles.EMPLEADO_AREA_FUNCIONAL.getRolId(), depId));
+
             request.getRequestDispatcher("tickets/TicketView.jsp").forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
@@ -202,74 +260,13 @@ public class TicketController extends HttpServlet {
         }
     }
 
-    public boolean saveComment(Comment c) {
-        return new CommentDAO().save(c);
-    }
-
-    public List<Comment> getAllid(int id) {
-        return new CommentDAO().getAllByRequest(id);
-    }
-
-    public List<Ticket> getAllTickets() {
-        TicketDAO dao = new TicketDAO();
-        List<Ticket> tickets = dao.getAll();
-
-        return tickets;
-    }
-
-    public List<Ticket> getAllTickets(int d) {
-        TicketDAO dao = new TicketDAO();
-        List<Ticket> tickets = dao.getAll(d);
-
-        return tickets;
-    }
-
-    public Ticket showTicket(int id) {
-        TicketDAO dao = new TicketDAO();
-        return dao.getOne(id);
-    }
-
     public boolean showStatusTicket(int p, String par) {
         TicketDAO dao = new TicketDAO();
         return dao.checkEmployee(p, par);
     }
 
-    public boolean updateP(int t, int p) {
-        TicketDAO dao = new TicketDAO();
-        return dao.updateProgrammer(t, p);
-    }
-
-    public boolean updateT(int t, int p) {
-        TicketDAO dao = new TicketDAO();
-        return dao.updateQA(t, p);
-    }
-
-    public boolean updateS(int t, String p) {
-        TicketDAO dao = new TicketDAO();
-        return dao.updateStatus(t, p);
-    }
-
-    public List<Ticket> checkTickets(int id) {
-        TicketDAO dao = new TicketDAO();
-        return dao.verifyTesterNeeded(id);
-    }
-
     public int checkIC(String id) {
         TicketDAO dao = new TicketDAO();
         return dao.verifyInternalCode(id);
-    }
-
-    public boolean saveTicket(Ticket t) {
-        return new TicketDAO().save(t);
-    }
-
-    public boolean updateAvance(int idTicket, float a) {
-        TicketDAO dao = new TicketDAO();
-        return dao.updateAvance(idTicket, a);
-    }
-
-    public float getAvance(int id) {
-        TicketDAO dao = new TicketDAO();
-        return dao.getAvance(id);
     }
 }

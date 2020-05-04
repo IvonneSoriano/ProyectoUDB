@@ -5,7 +5,9 @@
  */
 package sv.edu.udb.models;
 
+import java.io.InputStream;
 import java.sql.Blob;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.List;
 import java.util.Optional;
@@ -61,25 +63,40 @@ public class AttachmentDAO implements Dao<Attachment> {
         try {
             Connect connection = new Connect();
 
-            String sql = "INSERT INTO `gestion_tickets`.`attachments`\n"
-                    + "(`CommentId`,\n"
-                    + "`AttachmentName`,\n"
-                    + "`AttachmentSize`,\n"
-                    + "`ContentType`,\n"
-                    + "`Attachment`)\n"
-                    + "VALUES (" + t.getCommentId() + ", '"
-                    + t.getAttachmentName() + "' , " + t.getAttachmentSize()
-                    + ", '" + t.getContentType() + "', " + t.getAttachmentFile() + ");";
+            try {
+                String sql = "INSERT INTO `gestion_tickets`.`attachments` "
+                        + "(`CommentId`, `AttachmentName`, `AttachmentSize`, "
+                        + "`ContentType`, `Attachment`) "
+                        + " VALUES ( ?  , ? , ? , ? , ?); ";
 
-            int result = connection.setQuery(sql);
+                connection.setPreparedStatement(sql, t);
 
-            if (result <= 0) {
-                logger.warn("INSERT query in Attachments table has failed.");
-                return false;
-            } else {
-                return true;
+                ResultSet rs = (ResultSet) connection.getRs();
+                
+
+            } catch (Exception e) {
+                logger.error("Failed in prepared statement SQL! Message: " + e.getMessage());
             }
 
+//            String sql = "INSERT INTO `gestion_tickets`.`attachments`\n"
+//                    + "(`CommentId`,\n"
+//                    + "`AttachmentName`,\n"
+//                    + "`AttachmentSize`,\n"
+//                    + "`ContentType`,\n"
+//                    + "`Attachment`)\n"
+//                    + "VALUES (" + t.getCommentId() + ", '"
+//                    + t.getAttachmentName() + "' , " + t.getAttachmentSize()
+//                    + ", '" + t.getContentType() + "', " + t.getAttachmentFile() + ");";
+//            
+//            System.out.println("SQL para el attachment: " + sql);
+//            int result = connection.setQuery(sql);
+//
+//            if (result <= 0) {
+//                logger.warn("INSERT query in Attachments table has failed.");
+//                return false;
+//            } else {
+//                return true;
+//            }
         } catch (Exception e) {
             logger.error("Error processing INSERT query in save method. Message: " + e.getMessage());
         }
@@ -96,5 +113,4 @@ public class AttachmentDAO implements Dao<Attachment> {
     public boolean delete(Attachment t) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
 }

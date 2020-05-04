@@ -5,6 +5,8 @@
  */
 package sv.edu.udb.models;
 
+import java.io.InputStream;
+
 /**
  *
  * @author Rick
@@ -15,6 +17,7 @@ public class Attachment {
     private float attachmentSize;
     private String contentType;
     private byte[] attachmentFile;
+    private InputStream fileIS;
 
     public int getCommentId() {
         return commentId;
@@ -54,5 +57,13 @@ public class Attachment {
 
     public void setAttachmentFile(byte[] attachmentFile) {
         this.attachmentFile = attachmentFile;
+    }
+
+    public InputStream getFileIS() {
+        return fileIS;
+    }
+
+    public void setFileIS(InputStream fileIS) {
+        this.fileIS = fileIS;
     }
 }

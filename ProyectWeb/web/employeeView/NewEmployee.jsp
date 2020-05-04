@@ -95,5 +95,23 @@
         </div>
     </div>
  </div>
+     $(document).ready(function(){
+                                $('#tabla').DataTable(); 
+                                });
+                                <c:if test="${not empty exito}">
+                                    alertify.success('${exito}');
+                                    <c:set var="exito" value="" scope="session" />
+                                </c:if>
+                                    <c:if test="${not empty fracaso}">
+                                        alertify.error('${fracaso}');
+                                        <c:set var="fracaso" value="" scope="session" />
+                                    </c:if>
+                                function eliminar(id){
+                                    alertify.confirm("¿Realmente decea eliminar este Autor?", function(e){
+                                        if(e){
+                                            location.href="empleados.do?op=eliminar&id="+ id;
+                                        }
+                                    });
+                                }
  </body>
 </html>

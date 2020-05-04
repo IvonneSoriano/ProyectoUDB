@@ -25,13 +25,13 @@
                            id="tabla">
                         <thead>
                             <tr>
-                                <th>Codigo</th>
-                                <th>Tipo</th>
-                                <th>Fecha de solicitud</th>
-                                <th>Descripcion</th>
-                                <th>Estado</th>
-                                <th>Projecto</th>
-                                <th>Departamento</th>
+                                <th> <fmt:message key="label.pvId"/>Codigo</th>
+                                <th> <fmt:message key="label.tituloLR"/>Tipo</th>
+                                <th> <fmt:message key="label.tituloLR"/>Fecha de solicitud</th>
+                                <th> <fmt:message key="label.tituloLR"/>Descripcion</th>
+                                <th> <fmt:message key="label.tituloLR"/>Estado</th>
+                                <th> <fmt:message key="label.tituloLR"/>Projecto</th>
+                                <th> <fmt:message key="label.tituloLR"/>Departamento</th>
                             </tr>
                         </thead>
                         <tbody>

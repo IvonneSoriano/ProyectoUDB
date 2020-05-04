@@ -20,6 +20,7 @@ import sv.edu.udb.models.Deparment;
 import sv.edu.udb.models.Project;
 import sv.edu.udb.models.ProjectDAO;
 import sv.edu.udb.models.DeparmentDAO;
+import java.sql.Timestamp;
 
 /**
  *
@@ -138,10 +139,18 @@ public class ProjectController extends HttpServlet {
             miProject.setProjectName(request.getParameter("name"));
             miProject.setProjectDescription(request.getParameter("description"));
             miProject.setDepartmentId(Integer.parseInt(request.getParameter("depto")));
-
+            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+            miProject.setCreationDate(timestamp);
+            boolean r = dao.save(miProject);
+            if(r){
             request.setAttribute("exito", "Proyecto ingresado exitosamente");
-            response.sendRedirect(request.getContextPath() + "/proyectos.do?op=listar");
-            dao.save(miProject);
+            response.sendRedirect(request.getContextPath() + "/proyectos.do?op=ver");
+            }
+            else{
+                request.setAttribute("fracaso", "Error");
+                 response.sendRedirect(request.getContextPath() + "/proyectos.do?op=ver");
+            }
+            
         } catch (IOException e) {
             logger.error("Error insertProject method. Message: " + e.getMessage());
         }

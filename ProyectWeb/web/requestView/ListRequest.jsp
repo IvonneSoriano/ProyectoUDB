@@ -16,18 +16,16 @@
         <jsp:include page="/common/navbar.jsp"/>
         <div class="container">
             <div class="row">
-                <h3>Lista de solicitudes</h3>
+                <h1 class="my-5"><fmt:message key="label.tituloLR"/></h1>
             </div>
             <div class="row">
-                <div class="col-md-10">
-                    <a type="button" class="btn btn-primary btn-md"
-                       href="${pageContext.request.contextPath}/request.do?op=new"> Nueva solicitud</a>
-                    <br/><br/>
-                    <table class="table table-striped table-bordered table-hover"
+                <div class="col-12">
+                   
+                    <table class="table table-striped table-bordered table-hover table-sm"
                            id="tabla">
                         <thead>
                             <tr>
-                                <th>Codigo de solicitud</th>
+                                <th>Codigo</th>
                                 <th>Tipo</th>
                                 <th>Fecha de solicitud</th>
                                 <th>Descripcion</th>
@@ -48,9 +46,6 @@
                                     <td>${request.getProjectId()}</td>
                                     <td>${request.getDepartmentId()}</td>
                                     <td>
-                                        <a class="btn btn-primary"
-                                           href="${pageContext.request.contextPath}/request.do?op=get&id=${request.getId()}"><span
-                                                class="glyphicon glyphicon-edit"></span> Editar</a>
                                         <a class="btn btn-danger"
                                            href="javascript:delete('${request.getId()}')"><span class="glyphicon glyphicontrash"></span> Eliminar</a>
                                     </td>

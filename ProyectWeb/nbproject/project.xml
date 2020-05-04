@@ -11,10 +11,6 @@
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
-                    <file>${libs.javaee-web-api-6.0.classpath}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
-                </library>
-                <library dirs="200">
                     <file>${file.reference.json-simple-1.1.1.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
@@ -26,22 +22,8 @@
                     <file>${file.reference.jstl-impl.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                  <library dirs="200">
-                    <file>${file.reference.org-apache-commons-codec.jar}</file>
-                    <file>${libs.javaee-endorsed-api-6.0.classpath}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
-                </library>
                 <library dirs="200">
-                    <file>${libs.javaee-endorsed-api-6.0.classpath}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
-                </library>
-                <library dirs="200">
-                    <file>${libs.CopyLibs.classpath}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
-                </library>
-                <library dirs="200">
-                    <file>${file.reference.mysql-connector-java-5.1.45-bin.jar}</file>
-
+                    <file>${file.reference.mysql-connector-java-8.0.19.jar-1}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
             </web-module-libraries>

@@ -7,7 +7,9 @@ package sv.edu.udb.controllers;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import org.apache.log4j.Logger;
 import javax.servlet.ServletException;
@@ -135,29 +137,29 @@ public class EmployeesController extends HttpServlet {
     }
     private void insert(HttpServletRequest request, HttpServletResponse response){
         try{
-            listaErrores.clear();
+            modelEmployee = new Employee();
             modelEmployee.setEmployeeName(request.getParameter("name"));
             modelEmployee.setEmployeeLastname(request.getParameter("lastname"));
-            modelEmployee.setDepartmentId(Integer.parseInt(request.getParameter("deparment")));
+            modelEmployee.setDepartmentId(Integer.parseInt(request.getParameter("department")));
             modelEmployee.setRolId(Integer.parseInt(request.getParameter("rol")));
             modelEmployee.setPassword(request.getParameter("password"));
             modelEmployee.setUsername(request.getParameter("username"));
-            if(listaErrores.size() > 0){
-                request.setAttribute("employee", modelEmployee);
-                request.setAttribute("listaErrores", listaErrores);
-                request.getRequestDispatcher("empleado.do?op=list").forward(request, response);
-            }else{
-                if(empDAO.save(modelEmployee)){
+            //name=troy
+            
+                boolean r = empDAO.save(modelEmployee);
+                if(r){
                     request.getSession().setAttribute("exito", "Empleado registrado exitosamente");
+                    logger.error("Error in insert Employees method. Message: exito");
                     response.sendRedirect(request.getContextPath() + "/empleados.do?op=ver");
                 }
                 else{
                     request.getSession().setAttribute("fracaso", "Empleado no ha sido ingresado");
                     response.sendRedirect(request.getContextPath() + "/empleados.do?op=ver");
+                    logger.error("Error in insert Employees method. Message: Fracaso");
                 }
-            }
             
-        }catch(IOException | ServletException e){
+        }
+        catch(Exception  e){
              logger.error("Error in insert Employees method. Message: " + e.getMessage());
         }
     }
@@ -165,7 +167,8 @@ public class EmployeesController extends HttpServlet {
         try{
             String idemp = request.getParameter("id");
             int id = Integer.parseInt(idemp);
-            if (empDAO.getEmployeeById(id) != null) {
+            Employee emp = empDAO.getEmployeeById(id);
+            if ( emp != null) {
                 request.setAttribute("employee", empDAO.getEmployeeById(id));
                 request.setAttribute("listRol", rolDAO.getAll());
                 request.setAttribute("listDeparment", depDao.getAll());               
@@ -180,18 +183,23 @@ public class EmployeesController extends HttpServlet {
     private void update(HttpServletRequest request, HttpServletResponse response){
         try {
             listaErrores.clear();
+            modelEmployee = new Employee();
+            modelEmployee.setEmployeeId(Integer.parseInt(request.getParameter("id")));
             modelEmployee.setEmployeeName(request.getParameter("name"));
             modelEmployee.setEmployeeLastname(request.getParameter("lastname"));
-            modelEmployee.setDepartmentId(Integer.parseInt(request.getParameter("deparment")));
+            modelEmployee.setDepartmentId(Integer.parseInt(request.getParameter("department")));
             modelEmployee.setRolId(Integer.parseInt(request.getParameter("rol")));
-            modelEmployee.setPassword(request.getParameter("password"));
             modelEmployee.setUsername(request.getParameter("username"));
-            if(listaErrores.size() > 0){
-                request.setAttribute("employee", modelEmployee);
-                request.setAttribute("listaErrores", listaErrores);
-                request.getRequestDispatcher("empleado.do?op=get").forward(request, response);
-            }else{
-                if(empDAO.updateUser(modelEmployee, request.getParameter("newPasword"))){
+            if(request.getParameter("npassword") == ""){
+                modelEmployee.setPassword(request.getParameter("Opassword"));
+            }
+            else{
+            modelEmployee.setPassword(request.getParameter("npassword"));    
+            }
+            String pass = request.getParameter("Opassword");
+            
+           boolean r =empDAO.updateUser(modelEmployee, pass );
+                if(r){
                     request.getSession().setAttribute("exito", "Empleado modificado");
                     response.sendRedirect(request.getContextPath() + "/empleados.do?op=ver");
                 }
@@ -199,18 +207,18 @@ public class EmployeesController extends HttpServlet {
                     request.getSession().setAttribute("fracaso", "Empleado no ha sido modificado");
                     response.sendRedirect(request.getContextPath() + "/empleados.do?op=ver");
                 }
-            }
        
-        } catch (IOException | ServletException e) {
+        } catch (IOException e) {
             logger.error("Error in updateEmployees method. Message: " + e.getMessage());
         }
 
     }
     private void newEmployee(HttpServletRequest request, HttpServletResponse response){
         try{
-            
-                request.setAttribute("listRol", rolDAO.getAll());
-                request.setAttribute("listDeparment", depDao.getAll());               
+            List<Rol> rols = rolDAO.getAll();
+            List<Deparment> deps = depDao.getAll();
+                request.setAttribute("listRol", rols);
+                request.setAttribute("listDepartment", deps );               
                 request.getRequestDispatcher("/employeeView/NewEmployee.jsp").forward(request, response);
             
         }catch(IOException | ServletException e){

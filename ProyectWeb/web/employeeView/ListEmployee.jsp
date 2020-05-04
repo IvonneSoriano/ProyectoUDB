@@ -15,21 +15,23 @@
     <body>
         <jsp:include page="/common/navbar.jsp"/>
         <div class="container">
-                <h1 class="mt-5 mb-2">Lista de empleados</h1>
+            <h1 class="mt-5 mb-2">
+                <fmt:message key="label.tituloLE"/>
+            </h1>
             <div class="row">
                 <div class="col-12 d-flex justify-content-end mb-5">
                     <a type="button" class="btn btn-primary btn-md"
-                       href="${pageContext.request.contextPath}/empleado.do?op=new"><fmt:message key="label.nEmpleado"/></a>
+                       href="${pageContext.request.contextPath}/empleados.do?op=crear"><fmt:message key="label.nEmpleado"/></a>
                 </div>
                 <div class="col-12">
                     
                         <table class="table table-striped table-bordered table-hover table-sm "
                                id="tabla">
-                            <thead>
+                            <thead class="thead-dark">
                                 <tr>
                                     <th><fmt:message key="label.codigoEmpleado"/></th>
                                     <th><fmt:message key="label.nombre"/></th>
-                                    <th><fmt:message key="label.apellido"/></th>
+                                    <th><fmt:message key="label.apellidos"/></th>
                                     <th><fmt:message key="label.nombreUsuario"/></th>
                                     <th><fmt:message key="label.departamento"/></th>
                                     <th><fmt:message key="label.rol"/></th>

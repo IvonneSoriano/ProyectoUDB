@@ -121,9 +121,9 @@ public class EmployeeDAO implements Dao<Employee> {
             Connect connection = new Connect();
 
             int result = connection.setQuery("UPDATE `gestion_tickets`.`employees` SET "
-                    + "`ROLID` = '" + t.getRolId()
-                    + "', `DEPARTMENTID` = '" + t.getDepartmentId()
-                    + "', `EMPLOYEENAME` = '" + t.getEmployeeName()
+                    + "`ROLID` = " + t.getRolId()
+                    + ", `DEPARTMENTID` = " + t.getDepartmentId()
+                    + ", `EMPLOYEENAME` = '" + t.getEmployeeName()
                     + "', `EMPLOYEELASTNAME` = '" + t.getEmployeeLastname()
                     + "', `USERNAME` = '" + t.getUsername()
                     + "', `PASSWORD` = SHA2('" + t.getPassword()

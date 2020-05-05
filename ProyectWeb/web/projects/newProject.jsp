@@ -45,7 +45,7 @@
                     <label for="name" >
                         <fmt:message key="label.npName" />
                     </label>
-                    <input type="text" name="name" id="name" class="form-control"/>
+                    <input type="text" name="name" id="name" class="form-control" required/>
                 </div>
 
                 <div class="form-group">
@@ -63,7 +63,7 @@
                     <label for="description" >
                         <fmt:message key="label.npDesc" />
                     </label>
-       <textarea class="form-control" id="description"  name="description"></textarea>
+       <textarea class="form-control" id="description"  name="description" required></textarea>
                 </div>
                         <div class="form-group">
                             <button type="submit" class="btn btn-primary"  id="Guardar" > <fmt:message key="label.save" /></button>

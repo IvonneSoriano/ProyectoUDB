@@ -113,6 +113,10 @@
                                         alertify.error('${fracaso}');
                                         <c:set var="fracaso" value="" scope="session" />
                                     </c:if>
+            
+                            $("#rol option[value="+ '${employee.getRolId()}' +"]").attr("selected",true);
+                            $("#department option[value="+ '${employee.getDepartmentId()}' +"]").attr("selected",true);
+                            
 
                                 
                             

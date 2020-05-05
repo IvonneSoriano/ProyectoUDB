@@ -32,6 +32,7 @@ import sv.edu.udb.models.RequestTypeDAO;
 import sv.edu.udb.models.FileRequestDAO;
 import sv.edu.udb.util.DAODefaults;
 import sv.edu.udb.util.RequestStatus;
+
 /**
  *
  * @author kiss_
@@ -39,8 +40,9 @@ import sv.edu.udb.util.RequestStatus;
 @WebServlet(name = "RequestsController", urlPatterns = {"/requests.do"})
 @MultipartConfig(maxFileSize = 16177215)
 public class RequestsController extends HttpServlet {
- ArrayList<String> listaErrores = new ArrayList<>();
- RequestTypeDAO rtd = new RequestTypeDAO();
+
+    ArrayList<String> listaErrores = new ArrayList<>();
+    RequestTypeDAO rtd = new RequestTypeDAO();
     Request modelRequest = new Request();
     RequestDAO rqDAO = new RequestDAO();
     int id, typeId, projectId, departmentId;
@@ -48,6 +50,7 @@ public class RequestsController extends HttpServlet {
     String description, status;
     Timestamp requestDate;
     private static Logger logger = Logger.getLogger(RequestsController.class);
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -60,27 +63,30 @@ public class RequestsController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-       try (PrintWriter out = response.getWriter()){
-            if (request.getParameter("op")== null) {
-               list(request, response);
-               return;
+        try (PrintWriter out = response.getWriter()) {
+            if (request.getParameter("op") == null) {
+                list(request, response);
+                return;
             }
             String operacion = request.getParameter("op");
-            switch(operacion){
+            switch (operacion) {
                 case "ver":
-                    list(request,response);
+                    list(request, response);
                     break;
                 case "crear":
                     nuevo(request, response);
                     break;
                 case "insert":
-                    insert(request,response);
+                    insert(request, response);
                     break;
-                    case "modificar":
-                    obtener(request,response);
+                case "modificar":
+                    obtener(request, response);
                     break;
-                case "update":
-                    update(request,response);
+                case "aprobar":
+                    update(request, response);
+                    break;
+                case "reject":
+                    reject(request, response);
                     break;
                 case "delete":
                     delete(request, response);
@@ -129,29 +135,27 @@ public class RequestsController extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    
-    
-     private void list(HttpServletRequest request, HttpServletResponse response ){
-         HttpSession miSesion = (HttpSession) request.getSession();
+    private void list(HttpServletRequest request, HttpServletResponse response) {
+        HttpSession miSesion = (HttpSession) request.getSession();
         try {
-            
+
             Employee actual = (Employee) miSesion.getAttribute("employee");
             departmentId = actual.getDepartmentId();
-            List<Request> re =  rqDAO.getRequestsByDepartmentId(departmentId);
+            List<Request> re = rqDAO.getRequestsByDepartmentId(departmentId);
 //            List<Request> re =  rqDAO.getAll();
-            if(re.size() != 0){
-                request.setAttribute("listRequest", re );
+            if (re.size() != 0) {
+                request.setAttribute("listRequest", re);
+            } else {
+                request.setAttribute("listRequest", re);
             }
-            else{
-                request.setAttribute("listRequest", re );
-            }
-            
+
             request.getRequestDispatcher("/requestView/ListRequest.jsp").forward(request, response);
         } catch (ServletException | IOException ex) {
             logger.error("Error in list Requests method. Message: " + ex.getMessage());
         }
     }
-    private void insert(HttpServletRequest request, HttpServletResponse response) throws IllegalStateException, ServletException{
+
+    private void insert(HttpServletRequest request, HttpServletResponse response) throws IllegalStateException, ServletException {
         try {
             typeId = Integer.parseInt(request.getParameter("tsoli"));
 //            Aqui debe ir el depto del usuario actual
@@ -159,36 +163,36 @@ public class RequestsController extends HttpServlet {
             departmentId = actual.getDepartmentId();
 //            terminar cometn]
             requestDate = new Timestamp(System.currentTimeMillis());
-            
-            modelRequest.setIdTypeRequest(Integer.parseInt(request.getParameter("tsoli")));
-            if(typeId == 1){
+
+            modelRequest.setIdTypeRequest(typeId);
+            if (typeId == 1) {
                 modelRequest.setProjectId(0);
-            }
-            else{
+            } else {
                 modelRequest.setProjectId(Integer.parseInt(request.getParameter("proj")));
             }
-            
+
             modelRequest.setDepartmentId(departmentId);
-            modelRequest.setRequestDate(requestDate);         
+            modelRequest.setRequestDate(requestDate);
             modelRequest.setRequestStatus(RequestStatus.EN_ESPERA.toString());
             modelRequest.setRequestDescription(request.getParameter("description"));
             Part file = request.getPart("file");
-            
-           modelRequest.setFileIS(file.getInputStream());
-            
-                if(rqDAO.save(modelRequest)){
-                    request.getSession().setAttribute("exito", "Solicitud registrado exitosamente");
-                    response.sendRedirect(request.getContextPath() + "/requests.do?op=ver");
-                }else{
-                    request.getSession().setAttribute("fracaso", "Solicitud no ha sido ingresado");
-                    response.sendRedirect(request.getContextPath() + "/requests.do?op=ver");
-                }
-            
+
+            modelRequest.setFileIS(file.getInputStream());
+
+            if (rqDAO.save(modelRequest)) {
+                request.getSession().setAttribute("exito", "Solicitud registrado exitosamente");
+                response.sendRedirect(request.getContextPath() + "/requests.do?op=ver");
+            } else {
+                request.getSession().setAttribute("fracaso", "Solicitud no ha sido ingresado");
+                response.sendRedirect(request.getContextPath() + "/requests.do?op=ver");
+            }
+
         } catch (IOException ex) {
-             logger.error("Error in insert Requests method. Message: " + ex.getMessage());
+            logger.error("Error in insert Requests method. Message: " + ex.getMessage());
         }
     }
-     private void nuevo(HttpServletRequest request, HttpServletResponse response) {
+
+    private void nuevo(HttpServletRequest request, HttpServletResponse response) {
         try {
             List<Project> pro = pd.getAll();
 //            pd.getProjbyDepto(id);
@@ -200,8 +204,8 @@ public class RequestsController extends HttpServlet {
             logger.error("Error in logIn method. Message: " + e.getMessage());
         }
     }
-     
-     public void obtener(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+
+    public void obtener(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         try {
 
             RequestDAO rd = new RequestDAO();
@@ -210,10 +214,10 @@ public class RequestsController extends HttpServlet {
             RequestTypeController c = new RequestTypeController();
             RequestType rto = c.findRequestTypeById(project.getIdTypeRequest());
             request.setAttribute("rType", rto);
-            if(project.getProjectId() != 0){
+            if (project.getProjectId() != 0) {
                 ProjectsController pc = new ProjectsController();
                 Project p = pc.findById(project.getProjectId());
-            request.setAttribute("proj", p);    
+                request.setAttribute("proj", p);
             }
             request.getRequestDispatcher("/requestView/editRequest.jsp").forward(request, response);
         } catch (IOException | ServletException e) {
@@ -221,47 +225,92 @@ public class RequestsController extends HttpServlet {
         }
 
     }
-     
-    private void update(HttpServletRequest request, HttpServletResponse response){
+
+    private void abrirPDF(int id) {
+
+    }
+
+    private void update(HttpServletRequest request, HttpServletResponse response) {
         try {
-            listaErrores.clear();
-            typeId = Integer.parseInt(request.getParameter("typeid"));
-            departmentId = Integer.parseInt(request.getParameter("departementid"));
-            projectId = Integer.parseInt(request.getParameter("projectid"));
-            requestDate = Timestamp.valueOf(request.getParameter("requestDate"));
-            modelRequest.setIdTypeRequest(typeId);
-            modelRequest.setDepartmentId(departmentId);
-            modelRequest.setProjectId(projectId);
+            int id = Integer.parseInt(request.getParameter("id"));
+            modelRequest.setId(id);
+            typeId = Integer.parseInt(request.getParameter("tsoli"));
+            requestDate = new Timestamp(System.currentTimeMillis());
             modelRequest.setRequestDate(requestDate);
-            modelRequest.setRequestStatus(request.getParameter("status"));
-            modelRequest.setRequestDescription(request.getParameter("description"));
-            request.setAttribute("request", rqDAO.updateStatus(modelRequest) );
-            request.getRequestDispatcher("").forward(request, response);
-        } catch (IOException | ServletException ex) {
-             logger.error("Error in update Requests method. Message: " + ex.getMessage());
+            modelRequest.setRequestStatus(RequestStatus.SOLICITUD_ACEPTADA.toString());
+            if (typeId == 1) {
+                ProjectsController np = new ProjectsController();
+                Project p = new Project();
+                p.setCreationDate(requestDate);
+                p.setDepartmentId(departmentId);
+                p.setProjectDescription("Proyecto para el request " + id + ".");
+                p.setProjectName("New Project R" + id);
+                if (np.insertProject(p)) {
+                    Project npid = pd.getLastProjectId();
+                    modelRequest.setProjectId(npid.getProjectsId());
+
+                    if (rqDAO.updateAprobadoP(modelRequest)) {
+                        request.getSession().setAttribute("exito", "Request aprobado");
+                    }
+                } else {
+                    request.setAttribute("error", "Error al guardar el proyecto");
+                }
+
+            } else {
+                if (rqDAO.updateStatusD(modelRequest)) {
+                    request.getSession().setAttribute("exito", "Request aprobado");
+                } else {
+                    request.getSession().setAttribute("Error", "Request no ha podido ser aprobado");
+                }
+            }
+
+            response.sendRedirect(request.getContextPath() + "/requests.do?op=ver");
+        } catch (IOException ex) {
+            logger.error("Error in update Requests method. Message: " + ex.getMessage());
         }
 
     }
-    private void delete(HttpServletRequest request, HttpServletResponse response){
-         try {
+
+    private void reject(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            int id = Integer.parseInt(request.getParameter("id"));
+            modelRequest.setId(id);
+            requestDate = new Timestamp(System.currentTimeMillis());
+            modelRequest.setRequestDate(requestDate);
+            modelRequest.setRequestStatus(RequestStatus.SOLICITUD_RECHAZADA.toString());
+
+            if (rqDAO.updateStatusD(modelRequest)) {
+                request.getSession().setAttribute("exito", "Request rechazado");
+            } else {
+                request.getSession().setAttribute("Error", "Request no ha podido ser rechazado");
+            }
+
+            response.sendRedirect(request.getContextPath() + "/requests.do?op=ver");
+        } catch (IOException ex) {
+            logger.error("Error in update Requests method. Message: " + ex.getMessage());
+        }
+
+    }
+
+    private void delete(HttpServletRequest request, HttpServletResponse response) {
+        try {
             projectId = Integer.parseInt(request.getParameter("id"));
             modelRequest.setProjectId(projectId);
-           boolean r = rqDAO.delete(modelRequest);
-            if(r){
-                request.setAttribute("exito","Solicitud eliminada");
+            boolean r = rqDAO.delete(modelRequest);
+            if (r) {
+                request.setAttribute("exito", "Solicitud eliminada");
                 request.getRequestDispatcher(request.getContextPath() + "/request.do?op=ver").forward(request, response);
-            }else{
-                request.setAttribute("fracaso","No se ha podido eliminar");
+            } else {
+                request.setAttribute("fracaso", "No se ha podido eliminar");
                 request.getRequestDispatcher(request.getContextPath() + "/request.do?op=ver").forward(request, response);
             }
-             
+
         } catch (IOException | ServletException ex) {
-               logger.error("Error in delete Requests method. Message: " + ex.getMessage());
+            logger.error("Error in delete Requests method. Message: " + ex.getMessage());
         }
     }
-    
-    
-       public Request getRequestById(int id) {
+
+    public Request getRequestById(int id) {
         RequestDAO dao = new RequestDAO();
         Optional<Request> req = dao.get(id);
         return req.orElseGet(() -> new Request(DAODefaults.NO_REQUEST_FOUND.getDefaultValue()));

@@ -43,6 +43,22 @@ public class ProjectDAO implements Dao<Project> {
         }
         return Optional.ofNullable(pr);
     }
+       public Project getLastProjectId() {
+        Project last = null;
+        try {
+            Connect connection = new Connect();
+            connection.setRs("SELECT * FROM projects ORDER BY PROJECTID DESC LIMIT 1");
+            ResultSet requests = (ResultSet) connection.getRs();
+
+            while (requests.next()) {
+                last = new Project();
+                last.setProjectsId(requests.getInt("PROJECTID"));
+            }
+        } catch (Exception e) {
+            logger.error("Error processing ResultSet. Message: " + e.getMessage());
+        }
+        return last;
+    }
 
     @Override
     public List<Project> getAll() {

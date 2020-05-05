@@ -131,6 +131,48 @@ public class RequestDAO implements Dao<Request> {
             return false;
         }
     }
+     public boolean updateAprobadoP(Request r) {
+        try {
+            Connect connection = new Connect();
+
+            int result = connection.setQuery("UPDATE `gestion_tickets`.`requests` SET "
+                    + " `REQUESTDATE` = '" + r.getRequestDate()
+                    + "', `REQUESTSTATUS` = '" + r.getRequestStatus()
+                    + "', `PROJECTID` = " + r.getProjectId()
+                    + " WHERE `REQUESTID` = " + r.getId() + ";"
+            );
+            if (result <= 0) {
+                logger.error("UPDATE query in Requests table has failed");
+                return false;
+            } else {
+                return true;
+            }
+        } catch (Exception e) {
+            logger.error("Error processing UPDATE Aprobado P query. Message: " + e.getMessage());
+            return false;
+        }
+    }
+     
+     public boolean updateStatusD(Request r) {
+        try {
+            Connect connection = new Connect();
+
+            int result = connection.setQuery("UPDATE `gestion_tickets`.`requests` SET "
+                    + "`REQUESTDATE` = '" + r.getRequestDate()
+                    + "', `REQUESTSTATUS` = '" + r.getRequestStatus()
+                    + "' WHERE `REQUESTID` = " + r.getId() + ";"
+            );
+            if (result <= 0) {
+                logger.error("UPDATE query in Requests table has failed");
+                return false;
+            } else {
+                return true;
+            }
+        } catch (Exception e) {
+            logger.error("Error processing UPDATE Aprobado P query. Message: " + e.getMessage());
+            return false;
+        }
+    }
 
     @Override
     public boolean delete(Request t) {

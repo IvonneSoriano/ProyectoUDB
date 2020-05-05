@@ -22,8 +22,11 @@
     <body>
         <jsp:include page="/common/navbar.jsp"/>
         <div class="container mt-5">
-            <h1 fmt:message key=”label.titleNP”>Nuevo Requerimiento</h1>
-             <form class="form mt-5" role="form" action="${pageContext.request.contextPath}/requests.do?op=update" method="POST" enctype="multipart/form-data">
+                 <h1>
+                <fmt:message key="label.tituloER"/>
+            </h1>
+            <!--action="${pageContext.request.contextPath}/requests.do?op=update"-->
+             <form class="form mt-5" role="form"  method="POST" enctype="multipart/form-data">
                 <input type="hidden" value="${request.getId()}" name="id" id="id">
                 <div class="form-group">
                     <label for="tsoli" >
@@ -49,27 +52,47 @@
                     </label>
                     <textarea class="form-control" id="description"  name="description">${request.getRequestDescription()}</textarea>
                 </div>
-                    
+                    <c:if test="${request.getFileIS()}">
                 <div class="form-group">
                     <label for="file">
                         <fmt:message key="label.nrArchivo" />
                     </label>
                     <input type="file" class="form-control-file" placeholder="Seleccione el archivo a subir" id="file"  name="file">
                 </div>
+                    </c:if>
                  <div class="form-row mt-5">
                         <div class="mr-5 form-group">
-                            <button type="submit" class="btn btn-primary"  name="Guardar"> 
+                            <a type="submit" class="btn btn-primary" href="javascript:aprobar('${request.getId()}','${rType.getId()}')">
                             <fmt:message key="label.aprobar" />
-                            </button>
+                            </a>
                         </div>
                      <div class=" form-group">
-                            <button type="submit" class="btn btn-danger"  name="Guardar"> 
+                            <a type="submit" class="btn btn-danger" href="javascript:reject('${request.getId()}')">
                             <fmt:message key="label.rechazar" />
-                            </button>
+                            </a>
                         </div>
                      </div>
             </form>
         </div>
+                            
+                            
+                            
+                             <script>
+            function aprobar(id, so) {
+                alertify.confirm("¿Realmente desea aprobar esta solicitud?", function (e) {
+                    if (e) {
+                        location.href = "requests.do?op=aprobar&id=" + id+"&tsoli="+so;
+                    }
+                });
+            }
+            function reject(id) {
+                alertify.confirm("¿Realmente desea rechazar esta solicitud?", function (e) {
+                    if (e) {
+                        location.href = "requests.do?op=reject&id=" + id;
+                    }
+                });
+            }
+        </script>
     </body>
 
 </html>

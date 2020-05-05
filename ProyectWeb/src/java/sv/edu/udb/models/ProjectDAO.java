@@ -152,7 +152,7 @@ public class ProjectDAO implements Dao<Project> {
         return foundName;
     }
 
-    public List<Project> getProjbyDepto() {
+    public List<Project> getProjbyDepto(int id) {
 
         Connect connection = null;
         List<Project> projectFound = new ArrayList<>();
@@ -163,7 +163,7 @@ public class ProjectDAO implements Dao<Project> {
         }
         try {
 
-            connection.setRs("SELECT * FROM PROJECTS WHERE DEPARTMENTID = " + Session.deparmentId + ";");
+            connection.setRs("SELECT * FROM PROJECTS WHERE DEPARTMENTID = " + id+ ";");
             ResultSet projectSet = (ResultSet) connection.getRs();
 
             while (projectSet.next()) {

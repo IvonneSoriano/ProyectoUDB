@@ -5,7 +5,7 @@
 --%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:if test="${param['locale'] != null}">
   <fmt:setLocale value="${param['locale']}" scope="session" />
 </c:if>
@@ -23,45 +23,51 @@
         <jsp:include page="/common/navbar.jsp"/>
         <div class="container mt-5">
             <h1 fmt:message key=”label.titleNP”>Nuevo Requerimiento</h1>
-            <form class="form mt-5" role="form" action="${pageContext.request.contextPath}/request.do?op=insertar" method="POST">
-                
+             <form class="form mt-5" role="form" action="${pageContext.request.contextPath}/requests.do?op=update" method="POST" enctype="multipart/form-data">
+                <input type="hidden" value="${request.getId()}" name="id" id="id">
                 <div class="form-group">
-                    <label for="name" fmt:message key=”label.npName”>
-                        Tipo de solicitud
+                    <label for="tsoli" >
+                        <fmt:message key="label.nrTsoli" />
                     </label>
                     <select class="form-control" name="tsoli" id="tsoli" >
-                        <c:forEach items="${requestScope.trequest}" var="tsol">
-                            <option value="${tsol.getRequestTypeId()}">${dpto.getRequestTypeName}</option>
-                        </c:forEach>
+                            <option value="${rType.getId()}"> ${rType.getRequestTypeName()}</option>
                     </select>
                 </div>
-
-                <div class="form-group">
-                    <label for="depto" fmt:message key=”label.pvDep”>
-                        Proyecto Existente:
+                   
+                <div class="form-group proj">
+                    <label for="proj">
+                        <fmt:message key="label.nrPro" />
                     </label>
                     <select class="form-control" name="proj" id="proj" >
-                        <c:forEach items="${requestScope.proyectos}" var="projc">
-                            <option value="${projc.getProjectsId()}">${projc.getProjectName()}</option>
-                        </c:forEach>
+                            <option value="${proj.getProjectsId()}">${proj.getProjectName()}</option>
                     </select>
                 </div>
 
    <div class="form-group">
-                    <label for="description" fmt:message key=”label.npDesc”>
-                        Descripción:
+                    <label for="description">
+                        <fmt:message key="label.npDesc" />
                     </label>
-       <textarea class="form-control" id="description"  name="description"></textarea>
+                    <textarea class="form-control" id="description"  name="description">${request.getRequestDescription()}</textarea>
                 </div>
+                    
                 <div class="form-group">
-                    <label for="description" fmt:message key=”label.npDesc”>
-                        comentario:
+                    <label for="file">
+                        <fmt:message key="label.nrArchivo" />
                     </label>
-       <textarea class="form-control" id="description"  name="comentario"></textarea>
+                    <input type="file" class="form-control-file" placeholder="Seleccione el archivo a subir" id="file"  name="file">
                 </div>
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-primary"  name="Guardar" fmt:message key=”label.titleNP”> Guardar</button>
+                 <div class="form-row mt-5">
+                        <div class="mr-5 form-group">
+                            <button type="submit" class="btn btn-primary"  name="Guardar"> 
+                            <fmt:message key="label.aprobar" />
+                            </button>
                         </div>
+                     <div class=" form-group">
+                            <button type="submit" class="btn btn-danger"  name="Guardar"> 
+                            <fmt:message key="label.rechazar" />
+                            </button>
+                        </div>
+                     </div>
             </form>
         </div>
     </body>

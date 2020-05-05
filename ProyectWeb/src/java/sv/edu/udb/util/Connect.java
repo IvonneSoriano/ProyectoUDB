@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.sql.*;
 import java.util.Properties;
 import org.apache.log4j.Logger;
+import sv.edu.udb.models.Request;
 
 /**
  *
@@ -46,6 +47,26 @@ public class Connect {
         }
     }
 
+    public int setPreparedStatementFile(String sql, Request t) {
+        int r = 0;
+        try {
+            PreparedStatement ps = conexion.prepareStatement(sql);
+            ps.setInt(1, t.getIdTypeRequest());
+            ps.setTimestamp(2, t.getRequestDate());
+            ps.setString(3, t.getRequestDescription());
+            ps.setString(4, t.getRequestStatus());
+            ps.setInt(5, t.getProjectId());
+            ps.setInt(6, t.getDepartmentId());
+            ps.setInt(5, t.getProjectId());
+            ps.setBlob(7, t.getFileIS());
+            
+
+          r=  ps.executeUpdate();
+        } catch (Exception e) {
+            logger.error("Failed in prepared statement SQL! Message: " + e.getMessage());
+        }
+        return r;
+    }
     public ResultSet getRs() {
         return rs;
     }

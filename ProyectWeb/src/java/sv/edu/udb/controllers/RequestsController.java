@@ -10,26 +10,41 @@ import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import org.apache.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
+import sv.edu.udb.models.DeparmentDAO;
+import sv.edu.udb.models.Employee;
+import sv.edu.udb.models.Project;
 import sv.edu.udb.models.Request;
 import sv.edu.udb.models.RequestDAO;
-
+import sv.edu.udb.models.ProjectDAO;
+import sv.edu.udb.models.RequestType;
+import sv.edu.udb.models.RequestTypeDAO;
+import sv.edu.udb.models.FileRequestDAO;
+import sv.edu.udb.util.DAODefaults;
+import sv.edu.udb.util.RequestStatus;
 /**
  *
  * @author kiss_
  */
 @WebServlet(name = "RequestsController", urlPatterns = {"/requests.do"})
+@MultipartConfig(maxFileSize = 16177215)
 public class RequestsController extends HttpServlet {
  ArrayList<String> listaErrores = new ArrayList<>();
+ RequestTypeDAO rtd = new RequestTypeDAO();
     Request modelRequest = new Request();
     RequestDAO rqDAO = new RequestDAO();
     int id, typeId, projectId, departmentId;
+    ProjectDAO pd = new ProjectDAO();
     String description, status;
     Timestamp requestDate;
     private static Logger logger = Logger.getLogger(RequestsController.class);
@@ -55,15 +70,15 @@ public class RequestsController extends HttpServlet {
                 case "ver":
                     list(request,response);
                     break;
-                case "new":
-                    request.getRequestDispatcher("").forward(request, response);
+                case "crear":
+                    nuevo(request, response);
                     break;
                 case "insert":
                     insert(request,response);
                     break;
-                case "get":
-                     getRequest(request, response);
-                     break;
+                    case "modificar":
+                    obtener(request,response);
+                    break;
                 case "update":
                     update(request,response);
                     break;
@@ -116,60 +131,97 @@ public class RequestsController extends HttpServlet {
 
     
     
-     private void list(HttpServletRequest request, HttpServletResponse response){
+     private void list(HttpServletRequest request, HttpServletResponse response ){
+         HttpSession miSesion = (HttpSession) request.getSession();
         try {
-            List<Request> re =  rqDAO.getAll();
-            request.setAttribute("listRequest", re );
+            
+            Employee actual = (Employee) miSesion.getAttribute("employee");
+            departmentId = actual.getDepartmentId();
+            List<Request> re =  rqDAO.getRequestsByDepartmentId(departmentId);
+//            List<Request> re =  rqDAO.getAll();
+            if(re.size() != 0){
+                request.setAttribute("listRequest", re );
+            }
+            else{
+                request.setAttribute("listRequest", re );
+            }
+            
             request.getRequestDispatcher("/requestView/ListRequest.jsp").forward(request, response);
         } catch (ServletException | IOException ex) {
             logger.error("Error in list Requests method. Message: " + ex.getMessage());
         }
     }
-    private void insert(HttpServletRequest request, HttpServletResponse response){
+    private void insert(HttpServletRequest request, HttpServletResponse response) throws IllegalStateException, ServletException{
         try {
-            listaErrores.clear();
-            typeId = Integer.parseInt(request.getParameter("typeid"));
-            departmentId = Integer.parseInt(request.getParameter("departementid"));
-            projectId = Integer.parseInt(request.getParameter("projectid"));
-            requestDate = Timestamp.valueOf(request.getParameter("requestDate"));
-            modelRequest.setIdTypeRequest(typeId);
-            modelRequest.setDepartmentId(departmentId);
-            modelRequest.setProjectId(projectId);
-            modelRequest.setRequestDate(requestDate);
-            modelRequest.setRequestStatus(request.getParameter("status"));
-            modelRequest.setRequestDescription(request.getParameter("description"));
-            if(listaErrores.size() > 0){
-                request.setAttribute("request", modelRequest);
-                request.setAttribute("listaErrores", listaErrores);
-                request.getRequestDispatcher("request.do?op=list").forward(request, response);
-            }else{
-                if(rqDAO.save(modelRequest)){
-                    request.getSession().setAttribute("exito", "Solicitud registrado exitosamente");
-                    response.sendRedirect(request.getContextPath() + "/request.do?op=list");
-                }else{
-                    request.getSession().setAttribute("fracaso", "Solicitud no ha sido ingresado");
-                    response.sendRedirect(request.getContextPath() + "/request.do?op=list");
-                }
+            typeId = Integer.parseInt(request.getParameter("tsoli"));
+//            Aqui debe ir el depto del usuario actual
+            Employee actual = (Employee) request.getSession().getAttribute("employee");
+            departmentId = actual.getDepartmentId();
+//            terminar cometn]
+            requestDate = new Timestamp(System.currentTimeMillis());
+            
+            modelRequest.setIdTypeRequest(Integer.parseInt(request.getParameter("tsoli")));
+            if(typeId == 1){
+                modelRequest.setProjectId(0);
+            }
+            else{
+                modelRequest.setProjectId(Integer.parseInt(request.getParameter("proj")));
             }
             
-        } catch (IOException | ServletException ex) {
-            Logger.getLogger(RequestController.class.getName()).log(Level.SEVERE, null, ex);
+            modelRequest.setDepartmentId(departmentId);
+            modelRequest.setRequestDate(requestDate);         
+            modelRequest.setRequestStatus(RequestStatus.EN_ESPERA.toString());
+            modelRequest.setRequestDescription(request.getParameter("description"));
+            Part file = request.getPart("file");
+            
+           modelRequest.setFileIS(file.getInputStream());
+            
+                if(rqDAO.save(modelRequest)){
+                    request.getSession().setAttribute("exito", "Solicitud registrado exitosamente");
+                    response.sendRedirect(request.getContextPath() + "/requests.do?op=ver");
+                }else{
+                    request.getSession().setAttribute("fracaso", "Solicitud no ha sido ingresado");
+                    response.sendRedirect(request.getContextPath() + "/requests.do?op=ver");
+                }
+            
+        } catch (IOException ex) {
+             logger.error("Error in insert Requests method. Message: " + ex.getMessage());
         }
     }
-    private void getRequest(HttpServletRequest request, HttpServletResponse response){
-        try{
-            String idrq = request.getParameter("id");
-            int id = Integer.parseInt(idrq);
-            if (rqDAO.getOneById(id) != null) {
-                request.setAttribute("request", rqDAO.getOneById(id));
-                request.getRequestDispatcher("").forward(request, response);
-            }else{
-                response.sendRedirect("");
+     private void nuevo(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            List<Project> pro = pd.getAll();
+//            pd.getProjbyDepto(id);
+            List<RequestType> rt = rtd.getAll();
+            request.setAttribute("proyectos", pro);
+            request.setAttribute("rtypes", rt);
+            request.getRequestDispatcher("/requestView/newRequest.jsp").forward(request, response);
+        } catch (IOException | ServletException e) {
+            logger.error("Error in logIn method. Message: " + e.getMessage());
+        }
+    }
+     
+     public void obtener(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        try {
+
+            RequestDAO rd = new RequestDAO();
+            Request project = getRequestById(Integer.parseInt(request.getParameter("id")));
+            request.setAttribute("request", project);
+            RequestTypeController c = new RequestTypeController();
+            RequestType rto = c.findRequestTypeById(project.getIdTypeRequest());
+            request.setAttribute("rType", rto);
+            if(project.getProjectId() != 0){
+                ProjectsController pc = new ProjectsController();
+                Project p = pc.findById(project.getProjectId());
+            request.setAttribute("proj", p);    
             }
-        }catch(IOException | ServletException ex){
-            Logger.getLogger(RequestController.class.getName()).log(Level.SEVERE, null, ex);
+            request.getRequestDispatcher("/requestView/editRequest.jsp").forward(request, response);
+        } catch (IOException | ServletException e) {
+            logger.error("Error in Obtener Request method. Message: " + e.getMessage());
         }
+
     }
+     
     private void update(HttpServletRequest request, HttpServletResponse response){
         try {
             listaErrores.clear();
@@ -186,31 +238,32 @@ public class RequestsController extends HttpServlet {
             request.setAttribute("request", rqDAO.updateStatus(modelRequest) );
             request.getRequestDispatcher("").forward(request, response);
         } catch (IOException | ServletException ex) {
-            Logger.getLogger(RequestController.class.getName()).log(Level.SEVERE, null, ex);
+             logger.error("Error in update Requests method. Message: " + ex.getMessage());
         }
 
     }
     private void delete(HttpServletRequest request, HttpServletResponse response){
          try {
-            listaErrores.clear();
-            typeId = Integer.parseInt(request.getParameter("typeid"));
-            departmentId = Integer.parseInt(request.getParameter("departementid"));
-            projectId = Integer.parseInt(request.getParameter("projectid"));
-            requestDate = Timestamp.valueOf(request.getParameter("requestDate"));
-            modelRequest.setIdTypeRequest(typeId);
-            modelRequest.setDepartmentId(departmentId);
+            projectId = Integer.parseInt(request.getParameter("id"));
             modelRequest.setProjectId(projectId);
-            modelRequest.setRequestDate(requestDate);
-            modelRequest.setRequestStatus(request.getParameter("status"));
-            modelRequest.setRequestDescription(request.getParameter("description"));
-            if(rqDAO.delete(modelRequest)){
+           boolean r = rqDAO.delete(modelRequest);
+            if(r){
                 request.setAttribute("exito","Solicitud eliminada");
+                request.getRequestDispatcher(request.getContextPath() + "/request.do?op=ver").forward(request, response);
             }else{
                 request.setAttribute("fracaso","No se ha podido eliminar");
+                request.getRequestDispatcher(request.getContextPath() + "/request.do?op=ver").forward(request, response);
             }
-             request.getRequestDispatcher("/request.do?op=list").forward(request, response);
+             
         } catch (IOException | ServletException ex) {
-            Logger.getLogger(RequestController.class.getName()).log(Level.SEVERE, null, ex);
+               logger.error("Error in delete Requests method. Message: " + ex.getMessage());
         }
+    }
+    
+    
+       public Request getRequestById(int id) {
+        RequestDAO dao = new RequestDAO();
+        Optional<Request> req = dao.get(id);
+        return req.orElseGet(() -> new Request(DAODefaults.NO_REQUEST_FOUND.getDefaultValue()));
     }
 }

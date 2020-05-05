@@ -5,6 +5,7 @@
  */
 package sv.edu.udb.models;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -38,6 +39,7 @@ public class RequestDAO implements Dao<Request> {
                 lastRequest.setRequestStatus(requests.getString("REQUESTSTATUS"));
                 lastRequest.setProjectId(requests.getInt("PROJECTID"));
                 lastRequest.setDepartmentId(requests.getInt("DEPARTMENTID"));
+                lastRequest.setAttachmentFile(requests.getBytes("FILE"));
             }
         } catch (Exception e) {
             logger.error("Error processing ResultSet in get() method. Message: " + e.getMessage());
@@ -62,6 +64,8 @@ public class RequestDAO implements Dao<Request> {
                 request.setRequestDescription(requestSet.getString("REQUESTDESCRIPTION"));
                 request.setRequestStatus(requestSet.getString("REQUESTSTATUS"));
                 request.setProjectId(requestSet.getInt("PROJECTID"));
+                request.setDepartmentId(requestSet.getInt("DEPARTMENTID"));
+                request.setAttachmentFile(requestSet.getBytes("FILE"));
                 requestFound.add(request);
             }
         } catch (SQLException e) {
@@ -84,14 +88,10 @@ public class RequestDAO implements Dao<Request> {
 
             String sql = "INSERT INTO `gestion_tickets`.`requests`"
                     + " (`REQUESTTYPEID`, `REQUESTDATE`, `REQUESTDESCRIPTION`,"
-                    + " `REQUESTSTATUS`, `PROJECTID`, `DEPARTMENTID`) VALUES ("
-                    + t.getIdTypeRequest()
-                    + ", '" + t.getRequestDate()
-                    + "' , '" + t.getRequestDescription()
-                    + "', '" + t.getRequestStatus()
-                    + "', " + t.getProjectId()
-                    + ", " + t.getDepartmentId() + ");";
-            int result = connection.setQuery(sql);
+                    + " `REQUESTSTATUS`, `PROJECTID`, `DEPARTMENTID`, `FILE`) VALUES (?, ? , ?, ?, ?, ?, ?);";
+            
+            
+           int result = connection.setPreparedStatementFile(sql, t);
 
             if (result <= 0) {
                 logger.warn("INSERT query in Requests table has failed");

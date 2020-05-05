@@ -23,15 +23,16 @@
                    
                     <table class="table table-striped table-bordered table-hover table-sm"
                            id="tabla">
-                        <thead>
+                        <thead class="thead-dark">
                             <tr>
-                                <th> <fmt:message key="label.pvId"/>Codigo</th>
-                                <th> <fmt:message key="label.tituloLR"/>Tipo</th>
-                                <th> <fmt:message key="label.tituloLR"/>Fecha de solicitud</th>
-                                <th> <fmt:message key="label.tituloLR"/>Descripcion</th>
-                                <th> <fmt:message key="label.tituloLR"/>Estado</th>
-                                <th> <fmt:message key="label.tituloLR"/>Projecto</th>
-                                <th> <fmt:message key="label.tituloLR"/>Departamento</th>
+                                <th> <fmt:message key="label.pvId"/></th>
+                                <th> <fmt:message key="label.rvTipo"/></th>
+                                <th> <fmt:message key="label.rvDate"/></th>
+                                <th> <fmt:message key="label.npDesc"/></th>
+                                <th> <fmt:message key="label.rvState"/></th>
+                                <th> <fmt:message key="label.pvName"/></th>
+                                <th> <fmt:message key="label.pvDep"/></th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -46,9 +47,9 @@
                                     <td>${request.getProjectId()}</td>
                                     <td>${request.getDepartmentId()}</td>
                                     <td>
-                                        <a class="btn btn-danger"
-                                           href="javascript:delete('${request.getId()}')"><span class="glyphicon glyphicontrash"></span> Eliminar</a>
-                                    </td>
+                                        <a type="button" class="btn btn-secondary"
+                                           href="${pageContext.request.contextPath}/requests.do?op=modificar&id=${request.getId()}"><fmt:message key="label.Operar"/></a>
+                                    </td> 
                                 </tr>
                             </c:forEach>
                         </tbody>
@@ -57,20 +58,33 @@
 
             </div>
         </div>
+                            <!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+                            
+                            
+                            
+                            
         <script>
-            $(document).ready(function () {
-                $('#tabla').DataTable();
-            });
-            <c:if test="${not empty exito}">
-            alertify.success('${exito}');
-                <c:set var="exito" value="" scope="session" />
-            </c:if>
-            <c:if test="${not empty fracaso}">
-            alertify.error('${fracaso}');
-                <c:set var="fracaso" value="" scope="session" />
-            </c:if>
             function eliminar(id) {
-                alertify.confirm("¿Realmente decea eliminar esta solicitud?", function (e) {
+                alertify.confirm("¿Realmente desea eliminar esta solicitud?", function (e) {
                     if (e) {
                         location.href = "request.do?op=delete&id=" + id;
                     }

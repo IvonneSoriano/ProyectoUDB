@@ -5,6 +5,7 @@
  */
 package sv.edu.udb.models;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -21,6 +22,24 @@ public class Request {
     private Timestamp requestDate;
     private int departmentId;
     private List<Comment> commentsList = new ArrayList<>();
+
+    public byte[] getAttachmentFile() {
+        return attachmentFile;
+    }
+
+    public void setAttachmentFile(byte[] attachmentFile) {
+        this.attachmentFile = attachmentFile;
+    }
+
+    public InputStream getFileIS() {
+        return fileIS;
+    }
+
+    public void setFileIS(InputStream fileIS) {
+        this.fileIS = fileIS;
+    }
+    private byte[] attachmentFile;
+    private InputStream fileIS;
 
     public Request() {
     }

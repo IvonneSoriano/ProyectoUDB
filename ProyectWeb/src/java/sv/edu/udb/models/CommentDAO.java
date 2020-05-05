@@ -31,17 +31,17 @@ public class CommentDAO implements Dao<Comment> {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public List<Comment> getAllid(int id) {
+    public List<Comment> getAllByRequest(int requestID) {
 
         Connect connection = null;
         List<Comment> employeesFound = new ArrayList<>();
         try {
             connection = new Connect();
         } catch (SQLException ex) {
-            logger.error("Error creating conecction in getAll() method. Message: " + ex.getMessage());
+            logger.error("Error creating conecction in getAllByRequest() method. Message: " + ex.getMessage());
         }
         try {
-            connection.setRs("SELECT * FROM COMMENTS WHERE REQUESTID=" + id + ";");
+            connection.setRs("SELECT * FROM COMMENTS WHERE REQUESTID=" + requestID + ";");
             ResultSet employees = (ResultSet) connection.getRs();
 
             while (employees.next()) {
@@ -102,6 +102,37 @@ public class CommentDAO implements Dao<Comment> {
     @Override
     public boolean delete(Comment t) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public Optional<Comment> getLastCommentFromTicket(int id) {
+        Comment c = null;
+        try {
+            Connect connection = new Connect();
+
+            String sql = " SELECT * FROM `gestion_tickets`.`comments` "
+                    + "WHERE REQUESTID = " + id
+                    + " ORDER BY commentId DESC LIMIT 1;";
+
+            connection.setRs(sql);
+
+            ResultSet lastComment = (ResultSet) connection.getRs();
+
+            while (lastComment.next()) {
+                c = new Comment();
+                c.setCommentId(lastComment.getInt("COMMENTID"));
+                c.setEmployeeId(lastComment.getInt("EMPLOYEEID"));
+                c.setDepartmentId(lastComment.getInt("DEPARTMENTID"));
+                c.setRequestId(lastComment.getInt("REQUESTID"));
+                c.setCommentText(lastComment.getString("COMMENTTEXT"));
+                c.setCommentDate(lastComment.getTimestamp("COMMENTDATE"));
+            }
+
+        } catch (Exception e) {
+            logger.error("Error processing SELECT query in getLastCommentFromTicket() method. Message: " + e.getMessage());
+            return null;
+        }
+
+        return Optional.ofNullable(c);
     }
 
 }

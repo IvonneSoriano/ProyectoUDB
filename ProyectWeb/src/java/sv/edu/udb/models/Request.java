@@ -7,7 +7,6 @@ package sv.edu.udb.models;
 
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.sql.*;
 
@@ -97,7 +96,9 @@ public class Request {
     }
 
     public List<Comment> getCommentsList() {
-        return commentsList;
+        CommentDAO dao = new CommentDAO();
+        List<Comment> foundComments = dao.getAllByRequest(id);
+        return foundComments;
     }
 
     public void setCommentsList(List<Comment> commentsList) {

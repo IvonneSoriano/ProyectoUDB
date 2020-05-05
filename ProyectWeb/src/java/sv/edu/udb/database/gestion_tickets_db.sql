@@ -168,3 +168,20 @@ CREATE TABLE IF NOT EXISTS `gestion_tickets`.`tickets` (
         ON UPDATE NO ACTION)
 ENGINE = InnoDB
 AUTO_INCREMENT = 0;
+
+-- -----------------------------------------------------
+-- Table `gestion_tickets`.`attachments`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `gestion_tickets`.`attachments` ;
+
+CREATE TABLE IF NOT EXISTS `gestion_tickets`.`attachments` (
+  `CommentId` SMALLINT UNIQUE NOT NULL,
+  `AttachmentName` VARCHAR(64) NOT NULL,
+  `AttachmentSize` FLOAT NOT NULL,
+  `ContentType` VARCHAR(128) NOT NULL,
+  `Attachment` MEDIUMBLOB 
+);
+
+ALTER TABLE attachments
+ADD CONSTRAINT FK_Attachment_Comment FOREIGN KEY (`COMMENTID`)
+        REFERENCES `gestion_tickets`.`COMMENTS` (`COMMENTID`)

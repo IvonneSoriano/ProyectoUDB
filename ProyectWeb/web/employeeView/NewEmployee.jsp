@@ -95,7 +95,8 @@
         </div>
     </div>
  </div>
-     $(document).ready(function(){
+     <script>
+                            $(document).ready(function(){
                                 $('#tabla').DataTable(); 
                                 });
                                 <c:if test="${not empty exito}">
@@ -113,5 +114,9 @@
                                         }
                                     });
                                 }
+
+                                
+                            
+                        </script>
  </body>
 </html>

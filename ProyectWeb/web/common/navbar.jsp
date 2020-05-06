@@ -67,10 +67,10 @@
                    role="button" aria-haspopup="true" 
                    aria-expanded="false"><span class="caret"><fmt:message key="label.wordSolicitudes" /></span></a>
                 <div class="dropdown-menu" aria-labelledby="navbarPeticionesDropdown">
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/peticiones.do?op=crear">Crear peticiones</a>
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/peticiones.do?op=ver">Ver lista de peticiones</a>                      
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/peticiones.do?op=modificar">Modificar peticion</a>
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/peticiones.do?op=eliminar">Eliminar peticion</a>
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/requests.do?op=crear">Crear peticiones</a>
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/requests.do?op=ver">Ver lista de peticiones</a>                      
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/requests.do?op=modificar">Modificar peticion</a>
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/requests.do?op=eliminar">Eliminar peticion</a>
                 </div>
             </li>
 

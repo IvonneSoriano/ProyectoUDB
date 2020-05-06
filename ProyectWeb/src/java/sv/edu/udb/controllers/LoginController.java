@@ -121,6 +121,8 @@ public class LoginController extends HttpServlet {
                     session_actual.setAttribute("sessionEmpDeparmentId", e.getDepartmentId());
                     session_actual.setAttribute("username", e.getUsername());
                     session_actual.setAttribute("employee", e);
+                    session_actual.setAttribute("depto", e.getDepartmentId());
+                    session_actual.setAttribute("rol", e.getRolId());
                     session_actual.setAttribute("fullName", e.getFullName());
 
                     // welcome message

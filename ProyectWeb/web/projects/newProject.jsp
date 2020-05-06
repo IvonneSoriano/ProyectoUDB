@@ -70,6 +70,7 @@
                         </div>
             </form>
         </div>
+                        <script>
         $(document).ready(function(){
                                 $('#tabla').DataTable(); 
                                 });
@@ -88,6 +89,7 @@
                                         }
                                     });
                                 }
+                                </script>
     </body>
 
 </html>

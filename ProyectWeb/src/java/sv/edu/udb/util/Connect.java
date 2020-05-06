@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.sql.*;
 import java.util.Properties;
 import org.apache.log4j.Logger;
+import sv.edu.udb.models.Attachment;
 
 /**
  *
@@ -49,7 +50,7 @@ public class Connect {
     public ResultSet getRs() {
         return rs;
     }
-    
+
     //Metodo que permite fijar la tabla resultado de la pregunta
     //SQL realizada
     public void setRs(String consulta) {
@@ -59,10 +60,25 @@ public class Connect {
             logger.error("ERROR:No encuentro el driver de la BD: " + e2.getMessage() + " Sql: " + consulta);
         }
     }
-    //Metodo que recibe un sql como parametro que sea un update,insert.delete
 
+    //Metodo que recibe un sql como parametro que sea un update,insert.delete
     public int setQuery(String query) throws SQLException {
         return this.s.executeUpdate(query);
+    }
+
+    public void setPreparedStatement(String sql, Attachment t) {
+        try {
+            PreparedStatement ps = conexion.prepareStatement(sql);
+            ps.setInt(1, (int) t.getCommentId());
+            ps.setString(2, t.getAttachmentName());
+            ps.setFloat(3, t.getAttachmentSize());
+            ps.setString(4, t.getContentType());
+            ps.setBlob(5, t.getFileIS());
+
+            ps.executeUpdate();
+        } catch (Exception e) {
+            logger.error("Failed in prepared statement SQL! Message: " + e.getMessage());
+        }
     }
 
     //Metodo que cierra la conexion

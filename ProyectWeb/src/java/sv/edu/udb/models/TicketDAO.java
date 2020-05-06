@@ -46,6 +46,7 @@ public class TicketDAO implements Dao<Ticket> {
                 ticket.setInternalCode(ticketSet.getString("INTERNALCODE"));
                 ticket.setStartDate(ticketSet.getTimestamp("STARTDATE"));
                 ticket.setEndDate(ticketSet.getTimestamp("ENDDATE"));
+                ticket.setAvance(ticketSet.getFloat("AVANCE"));
                 ticketFound.add(ticket);
             }
         } catch (Exception e) {
@@ -111,7 +112,7 @@ public class TicketDAO implements Dao<Ticket> {
                 foundTicket.setInternalCode(ticket.getString("INTERNALCODE"));
                 foundTicket.setStartDate(ticket.getTimestamp("STARTDATE"));
                 foundTicket.setEndDate(ticket.getTimestamp("ENDDATE"));
-
+                foundTicket.setAvance(ticket.getFloat("AVANCE"));
             }
         } catch (Exception e) {
             logger.error("Error processing ResultSet in getOne() method. Message: " + e.getMessage());
@@ -131,7 +132,7 @@ public class TicketDAO implements Dao<Ticket> {
                 logger.error("UPDATE to Tickets table has failed");
                 return false;
             } else {
-                logger.info("UPDATE to Tickets table has successfully completed!");
+                logger.info("UPDATE to Tickets table (programmer column) has successfully completed!");
                 return true;
             }
         } catch (Exception e) {
@@ -193,7 +194,7 @@ public class TicketDAO implements Dao<Ticket> {
                     + " WHERE TICKETID = " + idTicket + ";"
             );
             if (result <= 0) {
-                logger.error("UPDATE query in Tickets table has failed");
+                logger.error("UPDATE query in Tickets (tester column) table has failed");
                 return false;
             } else {
                 return true;
@@ -213,7 +214,7 @@ public class TicketDAO implements Dao<Ticket> {
                     + "' WHERE TICKETID = " + idTicket + ";"
             );
             if (result <= 0) {
-                logger.error("UPDATE query in Tickets table has failed");
+                logger.error("UPDATE query in Tickets (status column) table has failed");
                 return false;
             } else {
                 return true;
@@ -227,20 +228,21 @@ public class TicketDAO implements Dao<Ticket> {
     public boolean updateAvance(int idTicket, float a) {
         try {
             Connect connection = new Connect();
-            float avance = 0;
 
+            // No need to sum values 
+            /*float avance = 0;
+            
             connection.setRs("SELECT AVANCE FROM `tickets` WHERE TICKETID = " + idTicket + ";");
             ResultSet isExist = connection.getRs();
             while (isExist.next()) {
                 avance = isExist.getFloat(1);
             }
-            avance = a + avance;
+            avance = a + avance; */
             int result = connection.setQuery("UPDATE `gestion_tickets`.`TICKETS` SET "
-                    + "AVANCE = " + avance
-                    + " WHERE TICKETID = " + idTicket + ";"
+                    + "AVANCE = " + a + " WHERE TICKETID = " + idTicket + ";"
             );
             if (result <= 0) {
-                logger.error("UPDATE query in Tickets table has failed");
+                logger.error("UPDATE query in Tickets (progress column) table has failed");
                 return false;
             } else {
                 return true;
@@ -326,6 +328,7 @@ public class TicketDAO implements Dao<Ticket> {
                 ticket.setInternalCode(ticketSet.getString("INTERNALCODE"));
                 ticket.setStartDate(ticketSet.getTimestamp("STARTDATE"));
                 ticket.setEndDate(ticketSet.getTimestamp("ENDDATE"));
+                ticket.setAvance(ticketSet.getFloat("AVANCE"));
                 ticketFound.add(ticket);
             }
         } catch (Exception e) {
@@ -334,4 +337,36 @@ public class TicketDAO implements Dao<Ticket> {
         return ticketFound;
     }
 
+    public boolean updateFechas(int id, Timestamp start, Timestamp end) {
+        try {
+            Connect connection = new Connect();
+            StringBuilder sql = new StringBuilder("UPDATE `gestion_tickets`.`TICKETS` SET ");
+
+            if (null == start && null == end) {
+                return false;
+            } else {
+                if (null != start && null != end) {
+                    sql = sql
+                            .append("STARTDATE = ").append(start)
+                            .append(", ENDDATE = ").append(end);
+                }
+                if (null != start) {
+                    sql = sql.append("STARTDATE = ").append(start);
+                }
+                if (null != end) {
+                    sql = sql.append("ENDDATE = ").append(end);
+                }
+            }
+
+            sql = sql.append("WHERE TICKETID = ").append(id).append(";");
+
+            int result = connection.setQuery(sql.toString());
+            
+            return result <= 0;
+
+        } catch (Exception e) {
+            logger.error("Error processing UPDATE query in updateFechas() method. Message: " + e.getMessage());
+            return false;
+        }
+    }
 }

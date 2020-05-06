@@ -60,8 +60,6 @@
                                         <a class="btn btn-primary"
                                            href="${pageContext.request.contextPath}/tickets.do?op=verTicket&id=${ticket.getIdTicket()}"><span
                                                 class="glyphicon glyphicon-edit"></span> Editar</a>
-                                        <a class="btn btn-danger"
-                                           href="javascript:delete('${employee.getIdTicket()}')"><span class="glyphicon glyphicontrash"></span> Eliminar</a>
                                     </td>
                                 </tr>
                             </c:forEach>

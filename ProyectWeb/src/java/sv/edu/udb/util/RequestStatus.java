@@ -19,5 +19,10 @@ public enum RequestStatus {
     DEVUELTO_CON_OBSERVACIONES,
     ESPERANDO_APROBACION_AREA_SOLICITANTE,
     SOLICITUD_ACEPTADA    ;
+    
+     public String getStatus(RequestStatus p){
+        return p.toString();
+    }
+
    
 }

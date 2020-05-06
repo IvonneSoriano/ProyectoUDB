@@ -62,7 +62,7 @@
                     </c:if>
                  <div class="form-row mt-5">
                         <div class="mr-5 form-group">
-                            <a type="submit" class="btn btn-primary" href="javascript:aprobar('${request.getId()}','${rType.getId()}')">
+                            <a type="submit" class="btn btn-primary" href="javascript:aprobar('${request.getId()}','${rType.getId()}','${proj.getProjectsId()}' )">
                             <fmt:message key="label.aprobar" />
                             </a>
                         </div>
@@ -78,10 +78,10 @@
                             
                             
                              <script>
-            function aprobar(id, so) {
+            function aprobar(id, so,p) {
                 alertify.confirm("¿Realmente desea aprobar esta solicitud?", function (e) {
                     if (e) {
-                        location.href = "requests.do?op=aprobar&id=" + id+"&tsoli="+so;
+                        location.href = "requests.do?op=aprobar&id=" + id+"&tsoli="+so+"&proj="+p;
                     }
                 });
             }

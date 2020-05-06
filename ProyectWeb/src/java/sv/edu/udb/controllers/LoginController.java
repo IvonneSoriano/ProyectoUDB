@@ -126,7 +126,7 @@ public class LoginController extends HttpServlet {
                     // welcome message
                     request.getSession().setAttribute("exito", "Login exitoso");
 
-                    response.sendRedirect(request.getContextPath() + "/index.jsp");
+                    request.getRequestDispatcher("/requests.do?op=listar").forward(request, response);
                     return;
                 }
                 request.setAttribute("error", "Password Incorrecto");

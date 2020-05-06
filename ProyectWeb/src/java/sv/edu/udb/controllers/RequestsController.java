@@ -5,10 +5,12 @@
  */
 package sv.edu.udb.controllers;
 
+import com.sun.org.apache.xerces.internal.dom.DeepNodeListImpl;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -21,15 +23,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
-import sv.edu.udb.models.DeparmentDAO;
+import sv.edu.udb.models.Deparment;
 import sv.edu.udb.models.Employee;
 import sv.edu.udb.models.Project;
 import sv.edu.udb.models.Request;
 import sv.edu.udb.models.RequestDAO;
 import sv.edu.udb.models.ProjectDAO;
 import sv.edu.udb.models.RequestType;
+import sv.edu.udb.models.Ticket;
 import sv.edu.udb.models.RequestTypeDAO;
-import sv.edu.udb.models.FileRequestDAO;
+import sv.edu.udb.models.TicketDAO;
 import sv.edu.udb.util.DAODefaults;
 import sv.edu.udb.util.RequestStatus;
 
@@ -72,6 +75,9 @@ public class RequestsController extends HttpServlet {
             switch (operacion) {
                 case "ver":
                     list(request, response);
+                    break;
+                        case "listar":
+                    listAwait(request, response);
                     break;
                 case "crear":
                     nuevo(request, response);
@@ -150,6 +156,26 @@ public class RequestsController extends HttpServlet {
             }
 
             request.getRequestDispatcher("/requestView/ListRequest.jsp").forward(request, response);
+        } catch (ServletException | IOException ex) {
+            logger.error("Error in list Requests method. Message: " + ex.getMessage());
+        }
+    }
+    
+     private void listAwait(HttpServletRequest request, HttpServletResponse response) throws ServletException {
+        HttpSession miSesion = (HttpSession) request.getSession();
+        try {
+
+            Employee actual = (Employee) miSesion.getAttribute("employee");
+            departmentId = actual.getDepartmentId();
+            List<Request> re = rqDAO.getRequestsByStatusAndDep(RequestStatus.EN_ESPERA.toString(),departmentId);
+//            List<Request> re =  rqDAO.getAll();
+            if (re.size() != 0) {
+                request.setAttribute("listRequest", re);
+            } else {
+                request.setAttribute("listRequest", re);
+            }
+
+            request.getRequestDispatcher("/index.jsp").forward(request, response);
         } catch (ServletException | IOException ex) {
             logger.error("Error in list Requests method. Message: " + ex.getMessage());
         }
@@ -236,6 +262,7 @@ public class RequestsController extends HttpServlet {
             modelRequest.setId(id);
             typeId = Integer.parseInt(request.getParameter("tsoli"));
             requestDate = new Timestamp(System.currentTimeMillis());
+            projectId = Integer.parseInt(request.getParameter("proj"));
             modelRequest.setRequestDate(requestDate);
             modelRequest.setRequestStatus(RequestStatus.SOLICITUD_ACEPTADA.toString());
             if (typeId == 1) {
@@ -247,7 +274,8 @@ public class RequestsController extends HttpServlet {
                 p.setProjectName("New Project R" + id);
                 if (np.insertProject(p)) {
                     Project npid = pd.getLastProjectId();
-                    modelRequest.setProjectId(npid.getProjectsId());
+                    projectId = npid.getProjectsId();
+                    modelRequest.setProjectId(projectId);
 
                     if (rqDAO.updateAprobadoP(modelRequest)) {
                         request.getSession().setAttribute("exito", "Request aprobado");
@@ -263,7 +291,27 @@ public class RequestsController extends HttpServlet {
                     request.getSession().setAttribute("Error", "Request no ha podido ser aprobado");
                 }
             }
-
+            
+              Employee actual = (Employee) request.getSession().getAttribute("employee");
+            departmentId = actual.getDepartmentId();
+            Ticket t = new Ticket();
+            t.setRequestId(id);
+            t.setStartDate(requestDate);
+            t.setEndDate(requestDate);
+            t.setProjectID(projectId);
+            t.setTicketStatus(status);
+            t.setIdProgrammer(0);
+            t.setIdTester(0);
+            DeparmentController d = new DeparmentController();
+            Deparment depto = d.showDeparment(departmentId);
+            t.setInternalCode(generateInternalCode(depto.getDepartmentName()));
+            TicketDAO td = new TicketDAO();
+            if(td.save(t)){
+                request.getSession().setAttribute("exito", "Ticket insertado");
+            }
+            else{
+                request.getSession().setAttribute("fracaso", "Ticket no insertado");
+            }
             response.sendRedirect(request.getContextPath() + "/requests.do?op=ver");
         } catch (IOException ex) {
             logger.error("Error in update Requests method. Message: " + ex.getMessage());
@@ -314,5 +362,29 @@ public class RequestsController extends HttpServlet {
         RequestDAO dao = new RequestDAO();
         Optional<Request> req = dao.get(id);
         return req.orElseGet(() -> new Request(DAODefaults.NO_REQUEST_FOUND.getDefaultValue()));
+    }
+    
+     public String generateInternalCode(String name) {
+        String code = "";
+        code = name.toUpperCase().substring(0, 3);
+        Calendar cal = Calendar.getInstance();
+        String a = Integer.toString(cal.get(1)).substring(0, 2);
+        code = code + a + ramdomNum();
+        return code;
+    }
+
+    public String ramdomNum() {
+        TicketDAO c = new TicketDAO();
+        String num = "";
+        int n;
+        for (int i = 0; i < 3; i++) {
+//        n = Math.floor(Math.random()*9);
+            n = (int) Math.floor(Math.random() * 6 + 1);
+            num += Integer.toString(n);
+        }
+        while (c.verifyInternalCode(num) > 0) {
+            num = ramdomNum();
+        }
+        return num;
     }
 }

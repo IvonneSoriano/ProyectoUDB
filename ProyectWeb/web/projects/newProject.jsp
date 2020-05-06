@@ -52,7 +52,7 @@
                     <label for="depto" >
                         <fmt:message key="label.pvDep" />
                     </label>
-                    <select class="form-control" name="depto" id="depto" >
+                    <select class="form-control" name="depto" id="depto" required>
                         <c:forEach items="${requestScope.departamentos}" var="dpto">
                             <option value="${dpto.getDepartmentId()}">${dpto.getDepartmentName()}</option>
                         </c:forEach>

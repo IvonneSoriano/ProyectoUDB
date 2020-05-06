@@ -20,8 +20,9 @@ public enum RequestStatus {
     ESPERANDO_APROBACION_AREA_SOLICITANTE,
     SOLICITUD_ACEPTADA    ;
     
-    public String getStatus(RequestStatus p){
+     public String getStatus(RequestStatus p){
         return p.toString();
     }
+
    
 }

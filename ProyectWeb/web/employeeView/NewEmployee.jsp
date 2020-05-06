@@ -32,14 +32,14 @@
 
            <label><fmt:message key="label.nombre"/></label> 
             <div class="input-group">
-                <input type="text" class="form-control" name="name" id="name"  placeholder="Ingresa el nombre" >
+                <input type="text" class="form-control" name="name" id="name"  placeholder="Ingresa el nombre" required>
                 <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
             </div>
             </div>
            <div class="col  mb-4">
             <label><fmt:message key="label.apellidos"/></label> 
             <div class="input-group">
-                <input type="text" class="form-control" name="lastname" id="lastname"  placeholder="Ingresa el apellido" >
+                <input type="text" class="form-control" name="lastname" id="lastname"  placeholder="Ingresa el apellido" required>
                 <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
             </div>
             </div>
@@ -70,14 +70,14 @@
            <div class="col  mb-4">
             <label><fmt:message key="label.nombreUsuario"/></label> 
             <div class="input-group">
-                <input type="text" class="form-control" id="username"  name="username" placeholder="Ingrese el username">
+                <input type="text" class="form-control" id="username"  name="username" placeholder="Ingrese el username" required>
                 <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
             </div>
             </div>
             <div class="col  mb-4">
             <label><fmt:message key="label.pass"/></label> 
             <div class="input-group">
-                <input type="password" class="form-control" id="password"  name="password" placeholder="Ingrese la contraseña">
+                <input type="password" class="form-control" id="password"  name="password" placeholder="Ingrese la contraseña" required>
                 <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
             </div>
             </div>
@@ -95,7 +95,7 @@
         </div>
     </div>
  </div>
-     <script>
+            <script>
                             $(document).ready(function(){
                                 $('#tabla').DataTable(); 
                                 });

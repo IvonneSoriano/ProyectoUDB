@@ -101,5 +101,25 @@
                 </div>
             </div>
         </div>
+        <script>
+                            $(document).ready(function(){
+                                $('#tabla').DataTable(); 
+                                });
+                                <c:if test="${not empty exito}">
+                                    alertify.success('${exito}');
+                                    <c:set var="exito" value="" scope="session" />
+                                </c:if>
+                                    <c:if test="${not empty fracaso}">
+                                        alertify.error('${fracaso}');
+                                        <c:set var="fracaso" value="" scope="session" />
+                                    </c:if>
+            
+                            $("#rol option[value="+ '${employee.getRolId()}' +"]").attr("selected",true);
+                            $("#department option[value="+ '${employee.getDepartmentId()}' +"]").attr("selected",true);
+                            
+
+                                
+                            
+                        </script>
     </body>
 </html>

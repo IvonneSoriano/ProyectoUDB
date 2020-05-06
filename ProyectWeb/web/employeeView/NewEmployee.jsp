@@ -48,7 +48,7 @@
             <div class="col  mb-4">
                 <label><fmt:message key="label.rol"/></label> 
                 <div class="input-group">
-                    <select name="rol" id="rol" class="form-control">
+                    <select name="rol" id="rol" class="form-control" required>
                         <c:forEach items="${requestScope.listRol}" var="rol">
                             <option value="${rol.getRolId()}">${rol.getRolName()}</option>
                         </c:forEach>
@@ -58,7 +58,7 @@
             <div class="col  mb-4">
                  <label><fmt:message key="label.departamento"/></label> 
                 <div class="input-group">
-                    <select name="department" id="department" class="form-control">
+                    <select name="department" id="department" class="form-control" required>
                         <c:forEach items="${requestScope.listDepartment}" var="department">
                             <option value="${department.getDepartmentId()}">${department.getDepartmentName()}</option>
                         </c:forEach>

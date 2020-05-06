@@ -299,7 +299,7 @@ public class RequestsController extends HttpServlet {
             t.setStartDate(requestDate);
             t.setEndDate(requestDate);
             t.setProjectID(projectId);
-            t.setTicketStatus(status);
+            t.setTicketStatus(RequestStatus.ASIGNAR_PROGRAMADOR.toString());
             t.setIdProgrammer(0);
             t.setIdTester(0);
             DeparmentController d = new DeparmentController();

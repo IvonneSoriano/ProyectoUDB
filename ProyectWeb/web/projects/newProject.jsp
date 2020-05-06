@@ -45,14 +45,14 @@
                     <label for="name" >
                         <fmt:message key="label.npName" />
                     </label>
-                    <input type="text" name="name" id="name" class="form-control"/>
+                    <input type="text" name="name" id="name" class="form-control" required/>
                 </div>
 
                 <div class="form-group">
                     <label for="depto" >
                         <fmt:message key="label.pvDep" />
                     </label>
-                    <select class="form-control" name="depto" id="depto" >
+                    <select class="form-control" name="depto" id="depto" required>
                         <c:forEach items="${requestScope.departamentos}" var="dpto">
                             <option value="${dpto.getDepartmentId()}">${dpto.getDepartmentName()}</option>
                         </c:forEach>
@@ -63,13 +63,33 @@
                     <label for="description" >
                         <fmt:message key="label.npDesc" />
                     </label>
-       <textarea class="form-control" id="description"  name="description"></textarea>
+       <textarea class="form-control" id="description"  name="description" required></textarea>
                 </div>
                         <div class="form-group">
                             <button type="submit" class="btn btn-primary"  id="Guardar" > <fmt:message key="label.save" /></button>
                         </div>
             </form>
         </div>
+                        <script>
+        $(document).ready(function(){
+                                $('#tabla').DataTable(); 
+                                });
+                                <c:if test="${not empty exito}">
+                                    alertify.success('${exito}');
+                                    <c:set var="exito" value="" scope="session" />
+                                </c:if>
+                                    <c:if test="${not empty fracaso}">
+                                        alertify.error('${fracaso}');
+                                        <c:set var="fracaso" value="" scope="session" />
+                                    </c:if>
+                                function eliminar(id){
+                                    alertify.confirm("¿Realmente decea eliminar este Proyecto?", function(e){
+                                        if(e){
+                                            location.href="proyectos.do?op=eliminar&id="+ id;
+                                        }
+                                    });
+                                }
+                                </script>
     </body>
 
 </html>

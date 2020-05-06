@@ -77,17 +77,25 @@
         </div>
 
         <script>
-//            $(document).ready(function () {
-//                $('#tabla').DataTable();
-//            });
-            
-            function eliminar(id) {
-                alertify.confirm("¿Realmente desea eliminar este proyecto?", function (e) {
-                    if (e) {
-                        location.href = "proyectos.do?op=eliminar&id=" + id;
-                    }
-                });
-            }
+            $(document).ready(function(){
+                                $('#tabla').DataTable(); 
+                                });
+                                <c:if test="${not empty exito}">
+                                    alertify.success('${exito}');
+                                    <c:set var="exito" value="" scope="session" />
+                                </c:if>
+                                    <c:if test="${not empty fracaso}">
+                                        alertify.error('${fracaso}');
+                                        <c:set var="fracaso" value="" scope="session" />
+                                    </c:if>
+                                function eliminar(id){
+                                    alertify.confirm("¿Realmente decea eliminar este Proyecto?", function(e){
+                                        if(e){
+                                            location.href="proyectos.do?op=eliminar&id="+ id;
+                                        }
+                                    });
+                                }
+
         </script>
     </body>
 

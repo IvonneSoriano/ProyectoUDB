@@ -32,7 +32,7 @@
                     <label for="tsoli" >
                         <fmt:message key="label.nrTsoli" />
                     </label>
-                    <select class="form-control" name="tsoli" id="tsoli" >
+                    <select class="form-control" name="tsoli" id="tsoli" required>
                         
                         <c:forEach items="${requestScope.rtypes}" var="tsol">
                             <option value="${tsol.getId()}"> ${tsol.getRequestTypeName()}</option>
@@ -55,7 +55,7 @@
                     <label for="description">
                         <fmt:message key="label.npDesc" />
                     </label>
-       <textarea class="form-control" id="description"  name="description"></textarea>
+       <textarea class="form-control" id="description"  name="description" required></textarea>
                 </div>
                     
                 <div class="form-group">

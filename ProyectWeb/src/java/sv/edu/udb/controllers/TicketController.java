@@ -67,7 +67,6 @@ public class TicketController extends HttpServlet {
             }
 
             String operacion = request.getParameter("op");
-            System.out.println("Operacion seleccionada: " + operacion);
 
             switch (operacion) {
                 case "agregarComentario":
@@ -206,7 +205,8 @@ public class TicketController extends HttpServlet {
             dao.updateAvance(ticketId, progress);
 
             // tester is optional - check before udpate since it might be null
-            if (null != request.getParameter("tester")) {
+            if (null != request.getParameter("tester") && request.getParameter("tester").length() > 0) {
+                System.out.println("Updating QA");
                 int testerId = Integer.parseInt(request.getParameter("tester"));
                 dao.updateQA(ticketId, testerId);
             }
@@ -219,13 +219,14 @@ public class TicketController extends HttpServlet {
                 dao.updateFechas(ticketId, new Timestamp(dateS.getTime()), new Timestamp(dateE.getTime()));
 
                 // regresar a la vista del ticket
+                request.setAttribute("msgUpdateTicket", "Ticket Actualizado Correctamente!");
                 request.getRequestDispatcher("/tickets.do?op=verTicket&id=" + ticketId).forward(request, response);
             } catch (Exception e) {
                 logger.warn("Error en formato al actualizar fechas! Mensaje: " + e.getMessage());
             }
-        } catch (Exception e) {            
-            e.printStackTrace();
-                logger.warn("Error actualizando ticket! Mensaje: " + e.getMessage());
+        } catch (Exception e) {
+            logger.warn("Error actualizando ticket! Mensaje: " + e.getMessage());
+            request.setAttribute("errorUpdateTicket", "Ticket no pudo ser actualizado!");
         }
 
     }

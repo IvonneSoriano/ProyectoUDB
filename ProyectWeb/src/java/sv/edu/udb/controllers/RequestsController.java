@@ -225,7 +225,9 @@ public class RequestsController extends HttpServlet {
 
     private void nuevo(HttpServletRequest request, HttpServletResponse response) {
         try {
-            List<Project> pro = pd.getAll();
+             Employee actual = (Employee) request.getSession().getAttribute("employee");
+            departmentId = actual.getDepartmentId();
+            List<Project> pro = pd.getProjbyDepto(departmentId);
 //            pd.getProjbyDepto(id);
             List<RequestType> rt = rtd.getAll();
             request.setAttribute("proyectos", pro);
@@ -263,11 +265,12 @@ public class RequestsController extends HttpServlet {
 
     private void update(HttpServletRequest request, HttpServletResponse response) {
         try {
+            Employee actual = (Employee) request.getSession().getAttribute("employee");
+            departmentId = actual.getDepartmentId();
             int id = Integer.parseInt(request.getParameter("id"));
             modelRequest.setId(id);
             typeId = Integer.parseInt(request.getParameter("tsoli"));
             requestDate = new Timestamp(System.currentTimeMillis());
-            projectId = Integer.parseInt(request.getParameter("proj"));
             modelRequest.setRequestDate(requestDate);
             modelRequest.setRequestStatus(RequestStatus.SOLICITUD_ACEPTADA.toString());
             if (typeId == 1) {
@@ -290,15 +293,14 @@ public class RequestsController extends HttpServlet {
                 }
 
             } else {
+                projectId = Integer.parseInt(request.getParameter("proj"));
+                modelRequest.setProjectId(projectId);
                 if (rqDAO.updateStatusD(modelRequest)) {
                     request.getSession().setAttribute("exito", "Request aprobado");
                 } else {
                     request.getSession().setAttribute("Error", "Request no ha podido ser aprobado");
                 }
             }
-
-            Employee actual = (Employee) request.getSession().getAttribute("employee");
-            departmentId = actual.getDepartmentId();
             Ticket t = new Ticket();
             t.setRequestId(id);
             t.setStartDate(requestDate);

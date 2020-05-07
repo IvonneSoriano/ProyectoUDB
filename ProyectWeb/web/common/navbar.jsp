@@ -43,13 +43,6 @@
                    aria-expanded="false"><fmt:message key="label.wordTickets" /> <span class="caret"></span>
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarTicketDropdown">
-
-                    <%                 if (de % 2 != 0) {
-                    %>
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/peticiones.do?op=crear">
-                        <fmt:message key="label.createTicket" /></a>
-                    <%                 }
-                    %>
                     <a class="dropdown-item" href="${pageContext.request.contextPath}/tickets.do?op=listar"><fmt:message key="label.titleLT"/></a> 
                     <!--div class="dropdown-divider"></div-->
                 </div>

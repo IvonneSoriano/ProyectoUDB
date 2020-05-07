@@ -225,7 +225,9 @@ public class RequestsController extends HttpServlet {
 
     private void nuevo(HttpServletRequest request, HttpServletResponse response) {
         try {
-            List<Project> pro = pd.getAll();
+             Employee actual = (Employee) request.getSession().getAttribute("employee");
+            departmentId = actual.getDepartmentId();
+            List<Project> pro = pd.getProjbyDepto(departmentId);
 //            pd.getProjbyDepto(id);
             List<RequestType> rt = rtd.getAll();
             request.setAttribute("proyectos", pro);
@@ -263,6 +265,8 @@ public class RequestsController extends HttpServlet {
 
     private void update(HttpServletRequest request, HttpServletResponse response) {
         try {
+            Employee actual = (Employee) request.getSession().getAttribute("employee");
+            departmentId = actual.getDepartmentId();
             int id = Integer.parseInt(request.getParameter("id"));
             modelRequest.setId(id);
             typeId = Integer.parseInt(request.getParameter("tsoli"));
@@ -298,8 +302,6 @@ public class RequestsController extends HttpServlet {
                 }
             }
 
-            Employee actual = (Employee) request.getSession().getAttribute("employee");
-            departmentId = actual.getDepartmentId();
             Ticket t = new Ticket();
             t.setRequestId(id);
             t.setStartDate(requestDate);

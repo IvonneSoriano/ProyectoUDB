@@ -7,6 +7,7 @@ package sv.edu.udb.models;
 
 import java.util.ArrayList;
 import java.util.List;
+import sv.edu.udb.util.Validations;
 
 /**
  *
@@ -26,6 +27,11 @@ public class Employee {
 
     public Employee(String username) {
         this.username = username;
+    }
+    
+    public Employee(String name, String surname) {
+        this.name = name;
+        this.lastname = surname;
     }
 
     public void setEmployeeId(int employeeID) {
@@ -105,5 +111,12 @@ public class Employee {
         String[] onlyName = f.split(" ");
         return onlyName[1];
     }
-
+    
+    public String getRolName(int id) {
+        return Validations.getDisplayRol(id);
+    }
+    
+    public String getDepartmentName(int id) {
+        return new DeparmentDAO().getOne(id).getDepartmentName();
+    }
 }

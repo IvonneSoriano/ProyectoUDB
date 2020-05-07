@@ -43,6 +43,7 @@
                    aria-expanded="false">Tickets <span class="caret"></span>
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarTicketDropdown">
+
                     <%                 if (de % 2 != 0) {
                     %>
                     <a class="dropdown-item" href="${pageContext.request.contextPath}/peticiones.do?op=crear">Crear ticket</a>

@@ -9,6 +9,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.*;
+import java.util.Optional;
+import sv.edu.udb.util.DAODefaults;
 
 /**
  *
@@ -112,4 +114,8 @@ public class Request {
     public void setDepartmentId(int departmentId) {
         this.departmentId = departmentId;
     }
+    
+     public String getDepartmentName(int id) {
+        return new DeparmentDAO().getOne(id).getDepartmentName();
+     }
 }

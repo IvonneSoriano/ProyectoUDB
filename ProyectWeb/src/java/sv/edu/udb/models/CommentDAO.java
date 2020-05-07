@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import org.apache.log4j.Logger;
 import sv.edu.udb.util.Connect;
+import sv.edu.udb.util.DAODefaults;
 
 /**
  *
@@ -42,17 +43,24 @@ public class CommentDAO implements Dao<Comment> {
         }
         try {
             connection.setRs("SELECT * FROM COMMENTS WHERE REQUESTID=" + requestID + ";");
-            ResultSet employees = (ResultSet) connection.getRs();
+            ResultSet comment = (ResultSet) connection.getRs();
 
-            while (employees.next()) {
-                Comment employee = new Comment();
-                employee.setCommentId(employees.getInt("COMMENTID"));
-                employee.setEmployeeId(employees.getInt("EMPLOYEEID"));
-                employee.setDepartmentId(employees.getInt("DEPARTMENTID"));
-                employee.setRequestId(employees.getInt("REQUESTID"));
-                employee.setCommentText(employees.getString("COMMENTTEXT"));
-                employee.setCommentDate(employees.getTimestamp("COMMENTDATE"));
-                employeesFound.add(employee);
+            while (comment.next()) {
+                Comment c = new Comment();
+                c.setCommentId(comment.getInt("COMMENTID"));
+                c.setEmployeeId(comment.getInt("EMPLOYEEID"));
+                c.setDepartmentId(comment.getInt("DEPARTMENTID"));
+                c.setRequestId(comment.getInt("REQUESTID"));
+                c.setCommentText(comment.getString("COMMENTTEXT"));
+                c.setCommentDate(comment.getTimestamp("COMMENTDATE"));
+
+                // Get associated attachment if present
+                Attachment att = new Attachment();
+                Optional<Attachment> attachment = this.getAssociatedAttachment(comment.getInt("COMMENTID"));
+                att = attachment.orElseGet(() -> new Attachment(DAODefaults.NO_ATTACHMENT_FOUND.getDefaultValue()));
+                c.setAssociatedAttachment(att);               
+                
+                employeesFound.add(c);
             }
 
         } catch (SQLException e) {
@@ -133,6 +141,10 @@ public class CommentDAO implements Dao<Comment> {
         }
 
         return Optional.ofNullable(c);
+    }
+
+    public Optional<Attachment> getAssociatedAttachment(int commentId) {
+        return new AttachmentDAO().get(commentId);
     }
 
 }

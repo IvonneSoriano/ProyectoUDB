@@ -69,4 +69,7 @@ public class Connect {
     public void cerrarConexion() throws SQLException {
         conexion.close();
     }
+    public Connection getConexion() throws  SQLException{
+        return conexion;
+     }
 }

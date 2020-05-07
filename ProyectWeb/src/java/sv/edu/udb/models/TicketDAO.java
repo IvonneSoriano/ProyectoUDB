@@ -335,6 +335,36 @@ public class TicketDAO implements Dao<Ticket> {
         }
         return ticketFound;
     }
+    
+      public List<Ticket> getAll(int dep, int id) {
+        Connect connection = null;
+        List<Ticket> ticketFound = new ArrayList<>();
+        try {
+            connection = new Connect();
+            connection.setRs("SELECT tickets.* FROM TICKETS "
+                    + "INNER JOIN requests ON tickets.REQUESTID = requests.REQUESTID "
+                    + "WHERE requests.DEPARTMENTID =" + dep + " AND tickets.ID_PROGRAMADOR = " + id +";");
+            ResultSet ticketSet = connection.getRs();
+
+            while (ticketSet.next()) {
+                Ticket ticket = new Ticket();
+                ticket.setIdTicket(ticketSet.getInt("TICKETID"));
+                ticket.setRequestId(ticketSet.getInt("REQUESTID"));
+                ticket.setProjectID(ticketSet.getInt("PROJECTID"));
+                ticket.setIdProgrammer(ticketSet.getInt("ID_PROGRAMADOR"));
+                ticket.setIdTester(ticketSet.getInt("ID_TESTER"));
+                ticket.setTicketStatus(ticketSet.getString("TICKET_STATUS"));
+                ticket.setInternalCode(ticketSet.getString("INTERNALCODE"));
+                ticket.setStartDate(ticketSet.getTimestamp("STARTDATE"));
+                ticket.setEndDate(ticketSet.getTimestamp("ENDDATE"));
+                ticket.setAvance(ticketSet.getFloat("AVANCE"));
+                ticketFound.add(ticket);
+            }
+        } catch (Exception e) {
+            logger.error("Error processing SELECT query in getAllBYID() method. Message: " + e.getMessage());
+        }
+        return ticketFound;
+    }
 
     public boolean updateFechas(int id, Timestamp start, Timestamp end) {
         try {

@@ -69,7 +69,8 @@
                                     <td>${request.getRequestDescription()}</td>
                                     <td>${request.getRequestStatus()}</td>
                                     <td>${request.getProjectId()}</td>
-                                    <td>${request.getDepartmentId()}</td>
+
+                                    <td>${request.getDepartmentName(request.getDepartmentId())}</td>
                                       <%
                                             if(de==3){
                                         %>

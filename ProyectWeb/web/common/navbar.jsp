@@ -43,6 +43,7 @@
                    aria-expanded="false"><fmt:message key="label.label.wordTickets" /> <span class="caret"></span>
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarTicketDropdown">
+
                     <%                 if (de % 2 != 0) {
                     %>
                     <a class="dropdown-item" href="${pageContext.request.contextPath}/peticiones.do?op=crear">Crear ticket</a>
@@ -118,7 +119,7 @@
                    role="button" aria-haspopup="true" 
                    aria-expanded="false"><span class="caret"><fmt:message key="label.wordReportes" /></span></a>
                 <div class="dropdown-menu" aria-labelledby="navbarPeticionesDropdown">
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/reportes.do?">Ver reporte A</a>
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/reports.jsp?">Ver reporte de solicitudes</a>
                     <a class="dropdown-item" href="${pageContext.request.contextPath}/reportes.do?">Ver reporte B</a>
                 </div>
             </li>                

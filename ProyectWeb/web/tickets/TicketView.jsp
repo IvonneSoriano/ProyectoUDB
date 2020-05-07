@@ -4,8 +4,11 @@
     Author     : Rick
 --%>
 
+<%@page import="java.util.Iterator"%>
+<%@page import="sv.edu.udb.models.Employee"%>
 <%@page import="sv.edu.udb.models.Ticket"%>
 <%@page import="sv.edu.udb.util.RequestStatus"%>
+<%@page import="sv.edu.udb.util.DAODefaults"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -146,6 +149,11 @@
                             <li class="list-group-item d-flex justify-content-between lh-condensed">
                                 <div>
                                     <h6 class="my-0">Comentario #<c:out value="${commentCount}"/></h6>
+
+                                    <!-- Conditionally display download link if attachment is present on the DB -->
+                                    <c:if test="${!comment.getAssociatedAttachment().getAttachmentName().equals('Did not find any attachment that matches your query') }">                                        
+                                        <p class="pull-right"><a href="${pageContext.request.contextPath}/tickets.do?op=descargarAdjuntoC&id=${comment.getCommentId()}&ticketId=${ticket.getIdTicket()}">Descargar Adjunto</a></p>
+                                    </c:if>
                                     <small class="text-muted"><c:out value="${comment.getCommentText()}"/></small>
                                 </div>
                             </li>
@@ -196,8 +204,12 @@
 
                                         <option value=""><fmt:message key="label.seleccionarItem"/>...</option>
                                         <%
-                                            RequestStatus[] list = RequestStatus.values();
+                                            Employee e = (Employee) request.getSession().getAttribute("employee");
+                                            
+                                            RequestStatus[] list = RequestStatus.VENCIDO.getStatusByRol(e.getRolId());
                                             for (RequestStatus status : list) {
+                                                System.out.println("Status: " + status);
+                                                if (null == status) break;
                                         %> 
                                         <option value="<%= status.name()%>" 
                                                 <%
@@ -206,8 +218,9 @@
 
                                                 %>
                                                 selected="selected"
-                                                <%                                                } // end-if
-                                                %> 
+                                                <%                                                
+                                                    } // end-if
+                                                 %> 
                                                 ><%= status.name()%></option>
                                         <%
                                             } // end-for
@@ -287,10 +300,10 @@
 
                             <!--h4 class="mb-3">Payment</h4-->
                             <div class="form-group">
-                                
-                            <button class="btn btn-primary btn-lg btn-block" type="submit">Guardar</button>
-                            <br>
-                            <a href="${pageContext.request.contextPath}/tickets.do?op=listar">Regresar</a>
+
+                                <button class="btn btn-primary btn-lg btn-block" type="submit">Guardar</button>
+                                <br>
+                                <a href="${pageContext.request.contextPath}/tickets.do?op=listar">Regresar</a>
 
                             </div>
                         </form>
@@ -306,5 +319,33 @@
         $('#fechaFin').datepicker({
             uiLibrary: 'bootstrap4'
         });
+
+        $(document).ready(function () {
+            $('#tabla').DataTable();
+        });
+
+        /** Alertas para actualizacion general del ticket*/
+        <c:if test="${not empty msgUpdateTicket}">
+        alertify.success('${msgUpdateTicket}');
+            <c:set var="msgUpdateTicket" value="" scope="request" />
+        </c:if>
+        <c:if test="${not empty errorUpdateTicket}">
+        alertify.error('${errorUpdateTicket}');
+            <c:set var="errorUpdateTicket" value="" scope="request" />
+        </c:if>
+
+        /** Alertas para comentarios agregados al ticket*/
+        <c:if test="${not empty addCommentToTicketSuccess}">
+        alertify.success('${addCommentToTicketSuccess}');
+            <c:set var="addCommentToTicketSuccess" value="" scope="request" />
+        </c:if>
+
+        /** Alertas para archivos adjuntados al ticket*/
+        <c:if test="${not empty addAttachmentToTicketSuccess}">
+        alertify.success('${addAttachmentToTicketSuccess}');
+            <c:set var="addAttachmentToTicketSuccess" value="" scope="request" />
+        </c:if>
+
     </script>
+
 </html>

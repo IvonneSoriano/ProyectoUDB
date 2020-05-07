@@ -6,6 +6,7 @@
 package sv.edu.udb.models;
 
 import java.io.InputStream;
+import java.sql.Blob;
 
 /**
  *
@@ -18,6 +19,15 @@ public class Attachment {
     private String contentType;
     private byte[] attachmentFile;
     private InputStream fileIS;
+    private Blob file;
+    
+    public Attachment() {
+        
+    }
+    
+    public Attachment(String daoDefault) {
+        this.attachmentName = daoDefault;
+    }
 
     public int getCommentId() {
         return commentId;
@@ -66,4 +76,13 @@ public class Attachment {
     public void setFileIS(InputStream fileIS) {
         this.fileIS = fileIS;
     }
+
+    public Blob getFile() {
+        return file;
+    }
+
+    public void setFile(Blob file) {
+        this.file = file;
+    }
+    
 }

@@ -64,4 +64,7 @@ public class Project {
         return creationDate;
     }
 
+    public String getDepartmentName(int id) {
+        return new DeparmentDAO().getOne(id).getDepartmentName();
+    }
 }

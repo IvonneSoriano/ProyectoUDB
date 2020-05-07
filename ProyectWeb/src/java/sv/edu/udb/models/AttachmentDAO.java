@@ -39,6 +39,7 @@ public class AttachmentDAO implements Dao<Attachment> {
 
                 // convert blob into bytes array
                 Blob blob = attachments.getBlob("ATTACHMENT");
+                fileRetrieved.setFile((Blob)attachments.getBlob("ATTACHMENT"));
                 int blobLength = (int) blob.length();
                 byte[] blobAsBytes = blob.getBytes(1, blobLength);
 

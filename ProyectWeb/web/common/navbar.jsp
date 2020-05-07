@@ -40,7 +40,7 @@
             <li class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" id="navbarTicketDropdown" data-toggle="dropdown" 
                    role="button" aria-haspopup="true" 
-                   aria-expanded="false"><fmt:message key="label.label.wordTickets" /> <span class="caret"></span>
+                   aria-expanded="false"><fmt:message key="label.wordTickets" /> <span class="caret"></span>
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarTicketDropdown">
 
@@ -119,7 +119,7 @@
                    role="button" aria-haspopup="true" 
                    aria-expanded="false"><span class="caret"><fmt:message key="label.wordReportes" /></span></a>
                 <div class="dropdown-menu" aria-labelledby="navbarPeticionesDropdown">
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/reports.jsp?">Ver reporte de solicitudes</a>
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}//ReportAllRequest">Ver reporte de solicitudes</a>
                     <a class="dropdown-item" href="${pageContext.request.contextPath}/reportes.do?">Ver reporte B</a>
                 </div>
             </li>                

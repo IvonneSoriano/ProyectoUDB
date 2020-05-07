@@ -7,7 +7,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:if test="${param['locale'] != null}">
-  <fmt:setLocale value="${param['locale']}" scope="session" />
+    <fmt:setLocale value="${param['locale']}" scope="session" />
 </c:if>
 <fmt:setBundle basename="AplicationResource"/>
 
@@ -27,19 +27,19 @@
                 <fmt:message key="label.tituloNR"/>
             </h1>
             <form class="form mt-5" role="form" action="${pageContext.request.contextPath}/requests.do?op=insert" method="POST" enctype="multipart/form-data">
-                
+
                 <div class="form-group">
                     <label for="tsoli" >
                         <fmt:message key="label.nrTsoli" />
                     </label>
-                    <select class="form-control" name="tsoli" id="tsoli" >
-                        
+                    <select class="form-control" name="tsoli" id="tsoli" required >
+
                         <c:forEach items="${requestScope.rtypes}" var="tsol">
                             <option value="${tsol.getId()}"> ${tsol.getRequestTypeName()}</option>
                         </c:forEach>
                     </select>
                 </div>
-                   
+
                 <div class="form-group proj">
                     <label for="proj">
                         <fmt:message key="label.nrPro" />
@@ -51,36 +51,38 @@
                     </select>
                 </div>
 
-   <div class="form-group">
+                <div class="form-group">
                     <label for="description">
                         <fmt:message key="label.npDesc" />
                     </label>
-       <textarea class="form-control" id="description"  name="description"></textarea>
+                    <textarea class="form-control" id="description"  name="description" required></textarea>
                 </div>
-                    
+
                 <div class="form-group">
                     <label for="file">
                         <fmt:message key="label.nrArchivo" />
                     </label>
                     <input type="file" class="form-control-file" placeholder="Seleccione el archivo a subir" id="file"  name="file">
                 </div>
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-primary"  name="Guardar"> 
-                            <fmt:message key="label.save" />
-                            </button>
-                        </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary"  name="Guardar"> 
+                        <fmt:message key="label.save" />
+                    </button>
+                </div>
             </form>
         </div>
-                            <script>
-                                    $( "#tsoli" ).change(function() {
-                                        if($(this).children("option:selected").val() !== 1){
-                                            $(".proj").show();
-                                        }
-                                        else{
-                                            $(".proj").hide();
-                                        }
-});
-                                </script>
+        <script>
+            $(document).ready(function () {
+                $("#tsoli").change(function () {
+                    console.log($(this).children("option:selected").val());
+                    if ($(this).children("option:selected").val() == 1) {
+                        $(".proj").hide();
+                    } else {
+                        $(".proj").show();
+                    }
+                });
+            });
+        </script>
     </body>
 
 </html>

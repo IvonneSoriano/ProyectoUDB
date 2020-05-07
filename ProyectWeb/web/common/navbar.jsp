@@ -3,8 +3,24 @@
     Created on : Apr 23, 2020, 11:11:26 PM
     Author     : Rick
 --%>
+<%@page import="sv.edu.udb.models.Employee"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ pagesession="true" %>
+<%
+    HttpSession sesionOk = request.getSession();
+    Employee empleado = (Employee) sesionOk.getAttribute("employee");
+    Integer de = (Integer) sesionOk.getAttribute("rol");
+    if (empleado == null) {
+%>
+<jsp:forwardpage="login/login.jsp">
+    <jsp:paramname="error" value="Es obligatorio identificarse"/>
+</jsp:forward>
+<%
+    } else {
+        empleado = (Employee) sesionOk.getAttribute("empleado");
+    }
+%>
 <c:if test="${param['locale'] != null}">
     <fmt:setLocale value="${param['locale']}" scope="session" />
 </c:if>
@@ -27,13 +43,21 @@
                    aria-expanded="false">Tickets <span class="caret"></span>
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarTicketDropdown">
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/requests.do?op=crear">Crear ticket</a>
+
+                    <%                 if (de % 2 != 0) {
+                    %>
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/peticiones.do?op=crear">Crear ticket</a>
+                    <%                 }
+                    %>
                     <a class="dropdown-item" href="${pageContext.request.contextPath}/tickets.do?op=listar">Ver lista de tickets</a> 
                     <!--div class="dropdown-divider"></div-->
                 </div>
             </li>
 
             <!-- Empleado Dropdown -->
+            <%
+                if (de % 2 != 0) {
+            %>
             <li class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" id="navbarEmpleadoDropdown" data-toggle="dropdown" 
                    role="button" aria-haspopup="true" 
@@ -41,13 +65,18 @@
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarEmpleadoDropdown">	
                     <a class="dropdown-item" href="${pageContext.request.contextPath}/empleados.do?op=crear">Crear empleado</a>	
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/empleados.do?op=ver">Ver lista de empleados</a>                      	
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/empleados.do?op=modificar">Modificar empleado</a>	
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/empleados.do?op=eliminar">Eliminar empleado</a>	
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/empleados.do?op=ver">Ver lista de empleados</a>
                 </div>
             </li>
+            <%
+                }
+            %>
+
 
             <!-- Proyecto Dropdown -->
+            <%
+                if (de % 2 != 0) {
+            %>
             <li class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" id="navbarProyectosDropdown" data-toggle="dropdown" 
                    role="button" aria-haspopup="true" 
@@ -56,23 +85,33 @@
                 <div class="dropdown-menu" aria-labelledby="navbarProyectosDropdown">
                     <a class="dropdown-item" href="${pageContext.request.contextPath}/proyectos.do?op=crear">Crear proyecto</a>
                     <a class="dropdown-item" href="${pageContext.request.contextPath}/proyectos.do?op=ver">Ver lista de proyectos</a>                      
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/proyectos.do?op=modificar">Modificar proyecto</a>
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/proyectos.do?op=eliminar">Eliminar proyecto</a>
                 </div>
             </li>
+            <%
+                }
+            %>
 
             <!-- Peticiones Dropdown -->
+            <%                 if (de % 2 != 0) {
+            %>
             <li class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" id="navbarPeticionesDropdown" data-toggle="dropdown" 
                    role="button" aria-haspopup="true" 
                    aria-expanded="false"><span class="caret"><fmt:message key="label.wordSolicitudes" /></span></a>
                 <div class="dropdown-menu" aria-labelledby="navbarPeticionesDropdown">
+                    <%
+                        if (de == 1) {
+                    %>
                     <a class="dropdown-item" href="${pageContext.request.contextPath}/requests.do?op=crear">Crear peticiones</a>
+                    <%
+                        }
+                    %>
                     <a class="dropdown-item" href="${pageContext.request.contextPath}/requests.do?op=ver">Ver lista de peticiones</a>                      
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/requests.do?op=modificar">Modificar peticion</a>
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/requests.do?op=eliminar">Eliminar peticion</a>
                 </div>
             </li>
+            <%
+                }
+            %>
 
             <!-- Reportes Dropdown -->
             <li class="nav-item dropdown">
@@ -80,7 +119,7 @@
                    role="button" aria-haspopup="true" 
                    aria-expanded="false"><span class="caret"><fmt:message key="label.wordReportes" /></span></a>
                 <div class="dropdown-menu" aria-labelledby="navbarPeticionesDropdown">
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/reportes.do?">Ver reporte A</a>
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/reports.jsp?">Ver reporte de solicitudes</a>
                     <a class="dropdown-item" href="${pageContext.request.contextPath}/reportes.do?">Ver reporte B</a>
                 </div>
             </li>                

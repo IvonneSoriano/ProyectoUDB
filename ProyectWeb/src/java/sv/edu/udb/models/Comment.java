@@ -6,6 +6,7 @@
 package sv.edu.udb.models;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -16,6 +17,7 @@ public class Comment {
     private int id, employeeId, departmentId, requestId;
     private String commentText;
     private Date commentDate;
+    private Attachment associatedAttachment;
 
     public Comment() {
     }
@@ -72,4 +74,11 @@ public class Comment {
         return commentDate;
     }
 
+    public Attachment getAssociatedAttachment() {
+        return associatedAttachment;
+    }
+
+    public void setAssociatedAttachment(Attachment associatedAttachment) {
+        this.associatedAttachment = associatedAttachment;
+    }    
 }

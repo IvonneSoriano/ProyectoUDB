@@ -6,9 +6,6 @@
 package sv.edu.udb.util;
 
 import java.awt.event.KeyEvent;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -36,6 +33,14 @@ public class Validations {
             }
         }
         return true;
-
+    }
+    
+    public static String getDisplayRol(int selectedRol) {
+        for (Roles rol : Roles.values()) {
+            if (selectedRol == rol.getRolId()) {
+                return rol.name();
+            }
+        }        
+        return "NONE";
     }
 }

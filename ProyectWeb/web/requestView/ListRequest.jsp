@@ -45,7 +45,7 @@
                                     <td>${request.getRequestDescription()}</td>
                                     <td>${request.getRequestStatus()}</td>
                                     <td>${request.getProjectId()}</td>
-                                    <td>${request.getDepartmentId()}</td>
+                                    <td>${request.getDepartmentName(request.getDepartmentId())}</td>
                                     <td>
                                         <a type="button" class="btn btn-secondary"
                                            href="${pageContext.request.contextPath}/requests.do?op=modificar&id=${request.getId()}"><fmt:message key="label.Operar"/></a>

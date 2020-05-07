@@ -211,7 +211,7 @@ public class EmployeeDAO implements Dao<Employee> {
     }
 
     public Employee getEmployeeById(int id) {
-        Employee foundEmployee = null;
+        Employee foundEmployee = new Employee("Sin", "Asignar");
         try {
             Connect connection = new Connect();
             connection.setRs("SELECT * FROM EMPLOYEES WHERE EMPLOYEEID=" + id + ";");
@@ -226,7 +226,6 @@ public class EmployeeDAO implements Dao<Employee> {
                 foundEmployee.setEmployeeLastname(employees.getString("EMPLOYEELASTNAME"));
                 foundEmployee.setUsername(employees.getString("USERNAME"));
                 foundEmployee.setPassword(employees.getString("PASSWORD"));
-
             }
         } catch (Exception e) {
             logger.error("Error processing ResultSet in getEmployeeById() method. Message: " + e.getMessage());

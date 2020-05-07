@@ -124,7 +124,7 @@ public class LoginController extends HttpServlet {
                     session_actual.setAttribute("fullName", e.getFullName());
 
                     // welcome message
-                    request.getSession().setAttribute("exito", "Login exitoso");
+                    request.setAttribute("exito", "Login exitoso");
 
                     request.getRequestDispatcher("/requests.do?op=listar").forward(request, response);
                     return;

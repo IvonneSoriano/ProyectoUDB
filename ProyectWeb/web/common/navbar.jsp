@@ -27,7 +27,7 @@
                    aria-expanded="false">Tickets <span class="caret"></span>
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarTicketDropdown">
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/peticiones.do?op=crear">Crear ticket</a>
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/requests.do?op=crear">Crear ticket</a>
                     <a class="dropdown-item" href="${pageContext.request.contextPath}/tickets.do?op=listar">Ver lista de tickets</a> 
                     <!--div class="dropdown-divider"></div-->
                 </div>

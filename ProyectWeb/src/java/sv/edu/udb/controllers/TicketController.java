@@ -5,16 +5,19 @@
  */
 package sv.edu.udb.controllers;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.sql.Blob;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Optional;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -28,10 +31,7 @@ import sv.edu.udb.models.AttachmentDAO;
 import sv.edu.udb.models.Comment;
 import sv.edu.udb.models.CommentDAO;
 import sv.edu.udb.models.EmployeeDAO;
-import sv.edu.udb.models.RequestType;
-import sv.edu.udb.models.Ticket;
 import sv.edu.udb.models.TicketDAO;
-import sv.edu.udb.util.Connect;
 import sv.edu.udb.util.DAODefaults;
 import sv.edu.udb.util.Roles;
 
@@ -43,6 +43,8 @@ import sv.edu.udb.util.Roles;
 @MultipartConfig(maxFileSize = 16177215)    // upload file's size up to 16MB
 public class TicketController extends HttpServlet {
 
+    // size of byte buffer to send file
+    private static final int BUFFER_SIZE = 16177215;
     private static final Logger logger = Logger.getLogger(TicketController.class);
     private final TicketDAO dao = new TicketDAO();
 
@@ -81,6 +83,8 @@ public class TicketController extends HttpServlet {
                 case "verTicket":
                     verTicket(request, response);
                     break;
+                case "descargarAdjuntoC":
+                    descargarAdjuntoC(request, response);
             }
 
         } catch (Exception ex) {
@@ -175,15 +179,16 @@ public class TicketController extends HttpServlet {
                         a.setFileIS(inputStream);
 
                         new AttachmentDAO().save(a);
-                        request.setAttribute("attachment_info", "Archivo agregado exitosamente!");
+                        request.setAttribute("addAttachmentToTicketSuccess", "Archivo adjunto agregado exitosamente!");
 
                     } else {
                         logger.warn("There was an error to store the comment! No attachment was added.");
-                        request.setAttribute("attachment_error", "Archivo no fue agregado. Porque hubo un problema previo con el comentario ntente mas tarde!");
+                        request.setAttribute("addAttachmentToTicketError", "Archivo no fue agregado. Porque hubo un problema previo con el comentario intente mas tarde!");
                     }
                 }
             }
 
+            request.setAttribute("addCommentToTicketSuccess", "Comentario agregado exitosamente!");
             request.getRequestDispatcher("/tickets.do?op=verTicket&id=" + ticketId).forward(request, response);
         } catch (IOException | NumberFormatException | ServletException e) {
             logger.error("Error in agregarComentario() method. Message: " + e.getMessage());
@@ -261,13 +266,50 @@ public class TicketController extends HttpServlet {
         }
     }
 
-    public boolean showStatusTicket(int p, String par) {
-        TicketDAO dao = new TicketDAO();
-        return dao.checkEmployee(p, par);
-    }
+    public void descargarAdjuntoC(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            int commentId = Integer.parseInt(request.getParameter("id"));
 
-    public int checkIC(String id) {
-        TicketDAO dao = new TicketDAO();
-        return dao.verifyInternalCode(id);
+            System.out.println("Comment ID: " + commentId);
+            AttachmentDAO dao = new AttachmentDAO();
+            Optional<Attachment> att = dao.get(commentId);
+            Attachment attachmentFound = att.orElseGet(() -> new Attachment(DAODefaults.NO_ATTACHMENT_FOUND.getDefaultValue()));
+
+            Blob fileData = attachmentFound.getFile();
+            InputStream is = fileData.getBinaryStream();
+            int fileLength = is.available();
+
+            System.out.println("fileLength = " + fileLength);
+
+            ServletContext context = getServletContext();
+
+            // sets MIME type for the file download
+            String mimeType = context.getMimeType(attachmentFound.getContentType());
+            if (mimeType == null) {
+                mimeType = "application/octet-stream";
+            }
+
+            // set content properties and header attributes for the response
+            response.setContentType(mimeType);
+            response.setContentLength(fileLength);
+            String headerKey = "Content-Disposition";
+            String headerValue = String.format("attachment; filename=\"%s\"", attachmentFound.getAttachmentName() + ".jpg");
+            response.setHeader(headerKey, headerValue);
+
+            // writes the file to the client
+            OutputStream outStream = response.getOutputStream();
+
+            byte[] buffer = new byte[BUFFER_SIZE];
+            int bytesRead = -1;
+
+            while ((bytesRead = is.read(buffer)) != -1) {
+                outStream.write(buffer, 0, bytesRead);
+            }
+
+            is.close();
+            outStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

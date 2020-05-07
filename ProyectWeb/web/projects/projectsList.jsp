@@ -10,25 +10,25 @@
 
 
 
-<%@ pagesession="true" %>
+<%@ page session="true" %>
 <%
- Employee empleado;
- HttpSession sesionOk = request.getSession();
- empleado = (Employee) sesionOk.getAttribute("employee");
- if (empleado == null) {
+    Employee empleado;
+    HttpSession sesionOk = request.getSession();
+    empleado = (Employee) sesionOk.getAttribute("employee");
+    if (empleado == null) {
 %>
-<jsp:forwardpage="../login/login.jsp">
-<jsp:paramname="error" value="Es obligatorio identificarse"/>
+<jsp:forward page="../login/login.jsp">
+    <jsp:param name="error" value="Es obligatorio identificarse"/>
 </jsp:forward>
 <%
- } else {
- empleado = (Employee) sesionOk.getAttribute("empleado");
- }
+    } else {
+        empleado = (Employee) sesionOk.getAttribute("empleado");
+    }
 %>
 
 
 <c:if test="${param['locale'] != null}">
-  <fmt:setLocale value="${param['locale']}" scope="session" />
+    <fmt:setLocale value="${param['locale']}" scope="session" />
 </c:if>
 <fmt:setBundle basename="AplicationResource"/>
 
@@ -62,7 +62,7 @@
                                 <tr>
                                     <td>${project.getProjectsId()}</td>
                                     <td>${project.getProjectName()}</td>
-                                    <td>${project.getDepartmentId()}</td>
+                                    <td>${project.getDepartmentName(project.getDepartmentId())}</td>
                                     <td>${project.getCreationDate()}</td>
 
                                     <td><a href="javascript:eliminar('${project.getProjectsId()}')"><button class="btn btn-danger" fmt:message key=”label.pvDelete”  >Eliminar</button></a></td>
@@ -77,24 +77,24 @@
         </div>
 
         <script>
-            $(document).ready(function(){
-                                $('#tabla').DataTable(); 
-                                });
-                                <c:if test="${not empty exito}">
-                                    alertify.success('${exito}');
-                                    <c:set var="exito" value="" scope="session" />
-                                </c:if>
-                                    <c:if test="${not empty fracaso}">
-                                        alertify.error('${fracaso}');
-                                        <c:set var="fracaso" value="" scope="session" />
-                                    </c:if>
-                                function eliminar(id){
-                                    alertify.confirm("¿Realmente decea eliminar este Proyecto?", function(e){
-                                        if(e){
-                                            location.href="proyectos.do?op=eliminar&id="+ id;
-                                        }
-                                    });
-                                }
+            $(document).ready(function () {
+                $('#tabla').DataTable();
+            });
+            <c:if test="${not empty exito}">
+            alertify.success('${exito}');
+                <c:set var="exito" value="" scope="session" />
+            </c:if>
+            <c:if test="${not empty fracaso}">
+            alertify.error('${fracaso}');
+                <c:set var="fracaso" value="" scope="session" />
+            </c:if>
+            function eliminar(id) {
+                alertify.confirm("¿Realmente decea eliminar este Proyecto?", function (e) {
+                    if (e) {
+                        location.href = "proyectos.do?op=eliminar&id=" + id;
+                    }
+                });
+            }
 
         </script>
     </body>

@@ -4,6 +4,7 @@ import java.util.*;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 import sv.edu.udb.util.DAODefaults;
+import sv.edu.udb.util.Validations;
 
 /**
  *
@@ -114,9 +115,27 @@ public class Ticket {
     public void setRequest(Request request) {
         this.request = request;
     }
-    
-      public String getFormattedDate(String type) {
+
+    public String getFormattedDate(String type) {
         Timestamp dateFromBD = type.equals("start") ? this.getStartDate() : this.getEndDate();
         return new SimpleDateFormat("MM/dd/yyyy").format(new java.sql.Date(dateFromBD.getTime()));
-    }    
+    }
+
+    public String getRolName(int id) {
+        return Validations.getDisplayRol(id);
+    }
+
+    public String getEmployeeName(int id) {
+        return new EmployeeDAO().getEmployeeById(id).getFullName();
+    }
+
+    public String getProjectName(int id) {
+        Optional<Project> pr = new ProjectDAO().get(id);
+        Project project = pr.orElseGet(() -> new Project(DAODefaults.NO_PROJECT_FOUND.getDefaultValue()));
+        if (project.getProjectName().equals(DAODefaults.NO_PROJECT_FOUND.getDefaultValue())) {
+            return "Sin Asignar";
+        } else {
+            return project.getProjectName();
+        }
+    }
 }

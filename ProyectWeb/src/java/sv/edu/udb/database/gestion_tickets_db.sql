@@ -43,13 +43,15 @@ CREATE TABLE IF NOT EXISTS `gestion_tickets`.`requests` (
   `REQUESTDESCRIPTION` VARCHAR(2048) NOT NULL,
   `REQUESTSTATUS` VARCHAR(48) NOT NULL,
   `PROJECTID` smallint DEFAULT NULL,
-`DEPARTMENTID` smallint DEFAULT NULL,
+  `DEPARTMENTID` smallint DEFAULT NULL,
+  `FILE` MEDIUMBLOB,
   PRIMARY KEY (`REQUESTID`),
   CONSTRAINT `FK_REL_TYPE_REQUEST`
         FOREIGN KEY (`REQUESTTYPEID`)
         REFERENCES `gestion_tickets`.`requesttypes` (`REQUESTTYPEID`)
         ON DELETE NO ACTION
         ON UPDATE NO ACTION)
+  
 ENGINE = InnoDB
 AUTO_INCREMENT = 0;
 -- -----------------------------------------------------

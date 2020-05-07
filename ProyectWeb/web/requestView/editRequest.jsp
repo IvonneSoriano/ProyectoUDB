@@ -62,7 +62,7 @@
                 </c:if>
                 <div class="form-row mt-5">
                     <div class="mr-5 form-group">
-                        <a type="submit" class="btn btn-primary" href="javascript:aprobar('${rType.getId()}','${proj.getProjectsId()}' )">
+                        <a type="submit" class="btn btn-primary" href="javascript:aprobar('${rType.getId()}','${rType.getId()}', '${proj.getProjectsId()}' )">
                             <fmt:message key="label.aprobar" />
                         </a>
                     </div>
@@ -75,20 +75,21 @@
             </form>
         </div>
         <script>
-            $(document).ready(function () {
-                if ($(this).children("option:selected").val() !== 1) {
-                    $(".proj").show();
-                } else {
-                    $(".proj").hide();
-                }
+           $(document).ready(function () {
+                    console.log($("#tsoli").children("option:selected").val());
+                    if ($("#tsoli").children("option:selected").val() == 1) {
+                        $(".proj").hide();
+                    } else {
+                        $(".proj").show();
+                    }
             });
 
 
 
-            function aprobar(id, so) {
+            function aprobar(id, so, t) {
                 alertify.confirm("¿Realmente desea aprobar esta solicitud?", function (e) {
                     if (e) {
-                        location.href = "requests.do?op=aprobar&id=" + id + "&tsoli=" + so;
+                        location.href = "requests.do?op=aprobar&id=" + id + "&tsoli=" + so+"&proj="+t;
                     }
                 });
             }

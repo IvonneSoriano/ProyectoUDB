@@ -267,7 +267,6 @@ public class RequestsController extends HttpServlet {
             modelRequest.setId(id);
             typeId = Integer.parseInt(request.getParameter("tsoli"));
             requestDate = new Timestamp(System.currentTimeMillis());
-            projectId = Integer.parseInt(request.getParameter("proj"));
             modelRequest.setRequestDate(requestDate);
             modelRequest.setRequestStatus(RequestStatus.SOLICITUD_ACEPTADA.toString());
             if (typeId == 1) {
@@ -290,6 +289,8 @@ public class RequestsController extends HttpServlet {
                 }
 
             } else {
+                projectId = Integer.parseInt(request.getParameter("proj"));
+                modelRequest.setProjectId(projectId);
                 if (rqDAO.updateStatusD(modelRequest)) {
                     request.getSession().setAttribute("exito", "Request aprobado");
                 } else {

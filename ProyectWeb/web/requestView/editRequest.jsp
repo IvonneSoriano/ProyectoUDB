@@ -21,6 +21,10 @@
     </head>
     <body>
         <jsp:include page="/common/navbar.jsp"/>
+        
+        <c:set var="request" value="${requestScope.request}"/>
+        <c:set var="rtypes" value="${requestScope.rtypes}"/>
+        <c:set var="proj" value="${requestScope.proj}"/>
         <div class="container mt-5">
             <h1>
                 <fmt:message key="label.tituloER"/>
@@ -62,7 +66,7 @@
                 </c:if>
                 <div class="form-row mt-5">
                     <div class="mr-5 form-group">
-                        <a type="submit" class="btn btn-primary" href="javascript:aprobar('${rType.getId()}','${rType.getId()}', '${proj.getProjectsId()}' )">
+                        <a type="submit" class="btn btn-primary" href="javascript:aprobar('${request.getId()}','${rType.getId()}', '${proj.getProjectsId()}' )">
                             <fmt:message key="label.aprobar" />
                         </a>
                     </div>

@@ -301,7 +301,6 @@ public class RequestsController extends HttpServlet {
                     request.getSession().setAttribute("Error", "Request no ha podido ser aprobado");
                 }
             }
-
             Ticket t = new Ticket();
             t.setRequestId(id);
             t.setStartDate(requestDate);

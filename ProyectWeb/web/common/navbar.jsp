@@ -122,7 +122,7 @@
                    aria-expanded="false"><span class="caret"><fmt:message key="label.wordReportes" /></span></a>
                 <div class="dropdown-menu" aria-labelledby="navbarPeticionesDropdown">
                     <a class="dropdown-item" href="${pageContext.request.contextPath}//ReportAllRequest"><fmt:message key="label.ReportesSolis" /> </a>
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/reportes.do?">Ver reporte B</a>
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/reports/reports.jsp">Ver reporte B</a>
                 </div>
             </li>                
 

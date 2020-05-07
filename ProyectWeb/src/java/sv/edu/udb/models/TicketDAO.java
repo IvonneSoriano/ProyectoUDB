@@ -132,7 +132,6 @@ public class TicketDAO implements Dao<Ticket> {
                 logger.error("UPDATE to Tickets table has failed");
                 return false;
             } else {
-                logger.info("UPDATE to Tickets table (programmer column) has successfully completed!");
                 return true;
             }
         } catch (Exception e) {
@@ -347,18 +346,16 @@ public class TicketDAO implements Dao<Ticket> {
             } else {
                 if (null != start && null != end) {
                     sql = sql
-                            .append("STARTDATE = ").append(start)
-                            .append(", ENDDATE = ").append(end);
+                            .append("STARTDATE = ").append("'").append(start).append("'")
+                            .append(", ENDDATE = ").append("'").append(end).append("'");
                 }
-                if (null != start) {
+                /* if (null != start) {
                     sql = sql.append("STARTDATE = ").append(start);
                 }
                 if (null != end) {
                     sql = sql.append("ENDDATE = ").append(end);
-                }
+                } */
             }
-
-            sql = sql.append("WHERE TICKETID = ").append(id).append(";");
 
             int result = connection.setQuery(sql.toString());
             

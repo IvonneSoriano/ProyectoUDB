@@ -8,15 +8,15 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ pagesession="true" %>
+<%@ page session="true" %>
 <%
     HttpSession sesionOk = request.getSession();
     Employee empleado = (Employee) sesionOk.getAttribute("employee");
     Integer de = (Integer) sesionOk.getAttribute("rol");
     if (empleado == null) {
 %>
-<jsp:forwardpage="login/login.jsp">
-    <jsp:paramname="error" value="Es obligatorio identificarse"/>
+<jsp:forward page="login/login.jsp">
+    <jsp:param name="error" value="Es obligatorio identificarse"/>
 </jsp:forward>
 <%
     } else {

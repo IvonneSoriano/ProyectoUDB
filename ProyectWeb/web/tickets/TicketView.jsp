@@ -225,7 +225,11 @@
                                         <option value=""><fmt:message key="label.seleccionarItem"/>...</option>
 
                                         <c:forEach items="${programmersAvailable}" var="programmer">
-                                            <option value="${programmer.getEmployeeId()}">${programmer.getFullName()}</option>
+                                            <option value="${programmer.getEmployeeId()}"
+                                                    <c:if test="${ticket.getIdProgrammer() == programmer.getEmployeeId()}">
+                                                        selected="selected"
+                                                    </c:if>
+                                                    >${programmer.getFullName()}</option>
                                         </c:forEach>
                                     </select>
                                     <div class="invalid-feedback">
@@ -233,14 +237,20 @@
                                     </div>
                                 </div>
 
+
+
                                 <!-- Dropdown: Testers -->
-                                <div class="col-md-3 mb-3" id="testerSection" hidden>
-                                    <label for="tester">QA:</label>
-                                    <select class="custom-select d-block w-100" id="tester" name="tester">
-                                        <option value=""><fmt:message key="label.seleccionarItem"/>...</option>
+                                <div class="col-md-3 mb-3" id="testerSection" <c:if test="${ticket.getIdTester() <= 0}">hidden</c:if> >
+                                        <label for="tester">QA:</label>
+                                        <select class="custom-select d-block w-100" id="tester" name="tester">
+                                            <option value=""><fmt:message key="label.seleccionarItem"/>...</option>
 
                                         <c:forEach items="${testersAvailable}" var="tester">
-                                            <option value="${programmer.getEmployeeId()}">${tester.getFullName()}</option>
+                                            <option value="${tester.getEmployeeId()}"
+                                                    <c:if test="${ticket.getIdTester() == tester.getEmployeeId()}">
+                                                        selected="selected"
+                                                    </c:if>
+                                                    >${tester.getFullName()}</option>
                                         </c:forEach>
                                     </select>
                                     <div class="invalid-feedback">
@@ -276,9 +286,15 @@
                             <hr class="mb-4">
 
                             <!--h4 class="mb-3">Payment</h4-->
+                            <div class="form-group">
+                                
                             <button class="btn btn-primary btn-lg btn-block" type="submit">Guardar</button>
+                            <br>
+                            <a href="${pageContext.request.contextPath}/tickets.do?op=listar">Regresar</a>
+
+                            </div>
                         </form>
-                    </form>
+
                 </div>
             </div>
         </div>

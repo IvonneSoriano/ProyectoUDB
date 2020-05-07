@@ -76,7 +76,7 @@ public class RequestsController extends HttpServlet {
                 case "ver":
                     list(request, response);
                     break;
-                        case "listar":
+                case "listar":
                     listAwait(request, response);
                     break;
                 case "crear":
@@ -147,7 +147,13 @@ public class RequestsController extends HttpServlet {
 
             Employee actual = (Employee) miSesion.getAttribute("employee");
             departmentId = actual.getDepartmentId();
-            List<Request> re = rqDAO.getRequestsByDepartmentId(departmentId);
+            List<Request> re = new ArrayList<>();
+            if (actual.getRolId() == 5) {
+                re = rqDAO.getAll();
+            } else {
+                re = rqDAO.getRequestsByDepartmentId(departmentId);
+            }
+
 //            List<Request> re =  rqDAO.getAll();
             if (re.size() != 0) {
                 request.setAttribute("listRequest", re);
@@ -160,14 +166,13 @@ public class RequestsController extends HttpServlet {
             logger.error("Error in list Requests method. Message: " + ex.getMessage());
         }
     }
-    
-     private void listAwait(HttpServletRequest request, HttpServletResponse response) throws ServletException {
+
+    private void listAwait(HttpServletRequest request, HttpServletResponse response) throws ServletException {
         HttpSession miSesion = (HttpSession) request.getSession();
         try {
 
-            Employee actual = (Employee) miSesion.getAttribute("employee");
-            departmentId = actual.getDepartmentId();
-            List<Request> re = rqDAO.getRequestsByStatusAndDep(RequestStatus.EN_ESPERA.toString(),departmentId);
+            Integer actual = (Integer) miSesion.getAttribute("depto");
+            List<Request> re = rqDAO.getRequestsByStatusAndDep(RequestStatus.EN_ESPERA.toString(), actual);
 //            List<Request> re =  rqDAO.getAll();
             if (re.size() != 0) {
                 request.setAttribute("listRequest", re);
@@ -291,8 +296,8 @@ public class RequestsController extends HttpServlet {
                     request.getSession().setAttribute("Error", "Request no ha podido ser aprobado");
                 }
             }
-            
-              Employee actual = (Employee) request.getSession().getAttribute("employee");
+
+            Employee actual = (Employee) request.getSession().getAttribute("employee");
             departmentId = actual.getDepartmentId();
             Ticket t = new Ticket();
             t.setRequestId(id);
@@ -306,10 +311,9 @@ public class RequestsController extends HttpServlet {
             Deparment depto = d.showDeparment(departmentId);
             t.setInternalCode(generateInternalCode(depto.getDepartmentName()));
             TicketDAO td = new TicketDAO();
-            if(td.save(t)){
+            if (td.save(t)) {
                 request.getSession().setAttribute("exito", "Ticket insertado");
-            }
-            else{
+            } else {
                 request.getSession().setAttribute("fracaso", "Ticket no insertado");
             }
             response.sendRedirect(request.getContextPath() + "/requests.do?op=ver");
@@ -363,8 +367,8 @@ public class RequestsController extends HttpServlet {
         Optional<Request> req = dao.get(id);
         return req.orElseGet(() -> new Request(DAODefaults.NO_REQUEST_FOUND.getDefaultValue()));
     }
-    
-     public String generateInternalCode(String name) {
+
+    public String generateInternalCode(String name) {
         String code = "";
         code = name.toUpperCase().substring(0, 3);
         Calendar cal = Calendar.getInstance();

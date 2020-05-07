@@ -32,7 +32,7 @@
                     <label for="tsoli" >
                         <fmt:message key="label.nrTsoli" />
                     </label>
-                    <select class="form-control" name="tsoli" id="tsoli" >
+                    <select class="form-control" name="tsoli" id="tsoli" required>
                         <option value="${rType.getId()}"> ${rType.getRequestTypeName()}</option>
                     </select>
                 </div>
@@ -50,7 +50,7 @@
                     <label for="description">
                         <fmt:message key="label.npDesc" />
                     </label>
-                    <textarea class="form-control" id="description"  name="description">${request.getRequestDescription()}</textarea>
+                    <textarea class="form-control" id="description"  name="description">${request.getRequestDescription()} required</textarea>
                 </div>
                 <c:if test="${request.getFileIS()}">
                     <div class="form-group">
@@ -62,7 +62,7 @@
                 </c:if>
                 <div class="form-row mt-5">
                     <div class="mr-5 form-group">
-                        <a type="submit" class="btn btn-primary" href="javascript:aprobar('${request.getId()}','${rType.getId()}','${proj.getProjectsId()}' )">
+                        <a type="submit" class="btn btn-primary" href="javascript:aprobar('${rType.getId()}','${proj.getProjectsId()}' )">
                             <fmt:message key="label.aprobar" />
                         </a>
                     </div>
@@ -74,14 +74,21 @@
                 </div>
             </form>
         </div>
-
-
-
         <script>
-            function aprobar(id, so, p) {
+            $(document).ready(function () {
+                if ($(this).children("option:selected").val() !== 1) {
+                    $(".proj").show();
+                } else {
+                    $(".proj").hide();
+                }
+            });
+
+
+
+            function aprobar(id, so) {
                 alertify.confirm("¿Realmente desea aprobar esta solicitud?", function (e) {
                     if (e) {
-                        location.href = "requests.do?op=aprobar&id=" + id + "&tsoli=" + so + "&proj=" + p;
+                        location.href = "requests.do?op=aprobar&id=" + id + "&tsoli=" + so;
                     }
                 });
             }
@@ -92,7 +99,12 @@
                     }
                 });
             }
+
         </script>
     </body>
 
 </html>
+
+
+
+

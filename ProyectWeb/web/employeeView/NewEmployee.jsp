@@ -87,7 +87,7 @@
                         <fmt:message key="label.save"/>
                     </button>
             <a class="btn btn-danger"
-           href="${pageContext.request.contextPath}/empleado.do?op=ver">
+           href="${pageContext.request.contextPath}/empleados.do?op=ver">
                 <fmt:message key="label.cancel"/>
             </a>
                 </div>

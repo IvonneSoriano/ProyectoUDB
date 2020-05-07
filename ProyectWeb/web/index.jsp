@@ -85,7 +85,7 @@
                         <path d="M4 1h5v1H4a1 1 0 00-1 1v10a1 1 0 001 1h8a1 1 0 001-1V6h1v7a2 2 0 01-2 2H4a2 2 0 01-2-2V3a2 2 0 012-2z"/>
                         <path d="M9 4.5V1l5 5h-3.5A1.5 1.5 0 019 4.5z"/>
                         </svg>
-                        <h4 class="my-0 font-weight-normal">Tickets</h4>
+                        <h4 class="my-0 font-weight-normal"><fmt:message key="label.wordTickets" /></h4>
                     </div>
                     <div class="card-body">
                         <!--h1 class="card-title pricing-card-title">$0 <small class="text-muted">/ mo</small></h1>
@@ -195,7 +195,9 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                <fmt:message key="label.close"/>
+                            </button>
                         </div>
                     </div>
                 </div>

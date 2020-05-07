@@ -47,6 +47,7 @@
                                     <td>${employee.getEmployeeName()}</td>
                                     <td>${employee.getEmployeeLastname()}</td>
                                     <td>${employee.getUsername()}</td>
+                                    
                                     <td>${employee.getDepartmentName(employee.getDepartmentId())}</td>
                                     <td>${employee.getRolName(employee.getRolId())}</td>
                                     <td class="text-center">

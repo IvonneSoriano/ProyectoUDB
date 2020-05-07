@@ -25,25 +25,27 @@
 
         <div class="container mt-5">
 
-            <h1 class="mb-5">Lista de tickets</h1>
+            <h1 class="mb-5">
+                <fmt:message key="label.titleLT"/></h1>
 
             <br>
             <div class="row">
                 <div class="table-responsive">
-                    <table class="table table-striped table-bordered table-hover" id="tabla">
+                    <table class="table table-striped table-bordered table-hover table-sm" id="tabla">
                         <thead class="thead-dark">
                             <tr>
-                                <th scope="col" class="col-md-2">Codigo</th>
-                                <th scope="col">Request Id</th>
-                                <th scope="col">Proyecto</th>
-                                <th scope="col">Programador</th>
-                                <th scope="col">Tester</th>
-                                <th scope="col" class="col-md-2">Ticket Status</th>
-                                <th scope="col">Internal Code</th>
-                                <th scope="col">Start Date</th>
-                                <th scope="col">End Date</th>
-                                <th scope="col">Avance</th>
-                                <th scope="col"><fmt:message key="label.operaciones"/></th>
+                                <th scope="col" class="col-md-2">
+                                    <fmt:message key="label.pvId"/></th>
+                                <th scope="col"><fmt:message key="label.rqId"/></th>
+                                <th scope="col"><fmt:message key="label.pvName"/></th>
+                                <th scope="col"><fmt:message key="label.programmer"/></th>
+                                <th scope="col"><fmt:message key="label.tester"/></th>
+                                <th scope="col" class="col-md-2"> <fmt:message key="label.rvState"/></th>
+                                <th scope="col"><fmt:message key="label.intCode"/></th>
+                                <th scope="col"><fmt:message key="label.dinicio"/></th>
+                                <th scope="col"><fmt:message key="label.dfin"/></th>
+                                <th scope="col"><fmt:message key="label.avance"/></th>
+                                <th scope="col"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -73,7 +75,7 @@
                                                 <td>
                                                     <a class="btn btn-primary"
                                                        href="${pageContext.request.contextPath}/tickets.do?op=verTicket&id=${ticket.getIdTicket()}"><span
-                                                            class="glyphicon glyphicon-edit"></span> Editar</a>
+                                                            class="glyphicon glyphicon-edit"></span><fmt:message key="label.Edit"/></a>
                                                 </td>
                                                 </tr>
                                             </c:forEach>

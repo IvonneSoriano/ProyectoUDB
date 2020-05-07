@@ -117,6 +117,8 @@ public class Employee {
     }
     
     public String getDepartmentName(int id) {
-        return new DeparmentDAO().getOne(id).getDepartmentName();
+        DeparmentDAO d = new DeparmentDAO();
+        Deparment de = d.getOne(id);
+        return de.getDepartmentName();
     }
 }

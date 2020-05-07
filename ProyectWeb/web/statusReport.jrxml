@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="statusReport" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="fec96f64-6597-40ca-a316-ef6a2b5e7bf8">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<parameter name="estado" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     requests.`REQUESTDATE` AS requests_REQUESTDATE,
+     requests.`REQUESTDESCRIPTION` AS requests_REQUESTDESCRIPTION,
+     requests.`REQUESTSTATUS` AS requests_REQUESTSTATUS,
+     requesttypes.`REQUESTTYPENAME` AS requesttypes_REQUESTTYPENAME
+FROM
+     `requesttypes` requesttypes INNER JOIN `requests` requests ON requesttypes.`REQUESTTYPEID` = requests.`REQUESTTYPEID`
+WHERE requests.`REQUESTSTATUS` = $P{estado}]]>
+	</queryString>
+	<field name="requests_REQUESTDATE" class="java.sql.Timestamp"/>
+	<field name="requests_REQUESTDESCRIPTION" class="java.lang.String"/>
+	<field name="requests_REQUESTSTATUS" class="java.lang.String"/>
+	<field name="requesttypes_REQUESTTYPENAME" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="70" splitType="Stretch">
+			<staticText>
+				<reportElement style="Title" x="0" y="13" width="263" height="33" uuid="71bae0dc-db18-42c9-89e3-89723e711c01"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Reporte de estados]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="Detail" x="133" y="46" width="130" height="24" uuid="f0b4f524-aafc-4489-aca3-6fd4a75759e5"/>
+				<textElement>
+					<font size="18" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{estado}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="36" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="35" width="555" height="1" uuid="9d4ab438-7021-4a96-87bb-25cfece9635e"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement style="Column header" x="0" y="20" width="111" height="15" uuid="1da52e28-dad1-4e66-8c77-229076b21ab0"/>
+				<text><![CDATA[Fecha]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="133" y="21" width="111" height="15" uuid="dcda74b2-923f-4a66-bf3d-b250d369051e"/>
+				<text><![CDATA[Descripcion]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="287" y="20" width="111" height="15" uuid="903c8ab7-e113-4d4c-8717-c7d1af5a83de"/>
+				<text><![CDATA[Estado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="433" y="20" width="111" height="15" uuid="660c80f9-22a4-4b82-91b7-baf701b432df"/>
+				<text><![CDATA[Tipo de solicitud]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="16" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="15" width="555" height="1" uuid="4a45895e-1c5b-4258-bb46-0a68353e4b2e"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement style="Detail" x="133" y="0" width="111" height="15" uuid="8d3b712d-536a-47b3-8d7e-1892f1181412"/>
+				<textFieldExpression><![CDATA[$F{requests_REQUESTDESCRIPTION}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="287" y="1" width="111" height="15" uuid="d9e6e727-42a3-4e2c-b6a4-a803c9681022"/>
+				<textFieldExpression><![CDATA[$F{requests_REQUESTSTATUS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="433" y="0" width="111" height="15" uuid="f33215b0-ac15-4e9a-b780-edd8f64aa821"/>
+				<textFieldExpression><![CDATA[$F{requesttypes_REQUESTTYPENAME}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="0" y="1" width="111" height="15" uuid="72f8f157-25b0-4f3b-a0fe-611e57445c9c"/>
+				<textFieldExpression><![CDATA[$F{requests_REQUESTDATE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="3" width="555" height="1" uuid="34e0d9c3-d80e-436c-a06b-47297b426cf0"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement style="Column header" x="433" y="0" width="80" height="20" uuid="3d16a9ee-6bd3-4652-b13d-c500a7ce160c"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement style="Column header" x="513" y="0" width="40" height="20" uuid="1fc74873-d453-4e37-bef3-eefcedea0ede"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement style="Column header" x="0" y="0" width="197" height="20" uuid="9078d255-6fb3-498e-a456-5c31623e9f02"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

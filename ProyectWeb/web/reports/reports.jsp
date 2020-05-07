@@ -23,7 +23,7 @@
                 <div class="col-8 text">
                     <p>
                         <fmt:message key="label.pR"/></p>
-                <form class="form" action="/ReportsStatus" method="POST" >
+                <form class="form" action="${pageContext.request.contextPath}/ReportsStatus" method="POST" >
                     <div class="form-group">
                 <select name="estado" class="form-control" >
                 <option value="VENCIDO">Vencido</option>

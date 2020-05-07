@@ -9,6 +9,14 @@ CREATE TABLE IF NOT EXISTS `gestion_tickets`.`requesttypes` (
 ENGINE = InnoDB
 AUTO_INCREMENT = 0;
 
+CREATE TABLE IF NOT EXISTS `gestion_tickets`.`fileRequests`( 
+     `ID` int not null auto_increment primary key,
+     `NOMBRE` varchar(50),
+     `CONTENIDO` mediumblob,
+     `TIPO` varchar(50))
+ENGINE = InnoDB
+AUTO_INCREMENT = 0;
+
 CREATE TABLE IF NOT EXISTS `gestion_tickets`.`requests` (
   `REQUESTID` SMALLINT NOT NULL AUTO_INCREMENT,
   `REQUESTTYPEID` SMALLINT NOT NULL,
@@ -17,14 +25,28 @@ CREATE TABLE IF NOT EXISTS `gestion_tickets`.`requests` (
   `REQUESTSTATUS` VARCHAR(48) NOT NULL,
   `PROJECTID` smallint DEFAULT NULL,
   `DEPARTMENTID` smallint DEFAULT NULL,
+  `FILE` int,
   PRIMARY KEY (`REQUESTID`),
   CONSTRAINT `FK_REL_TYPE_REQUEST`
         FOREIGN KEY (`REQUESTTYPEID`)
         REFERENCES `gestion_tickets`.`requesttypes` (`REQUESTTYPEID`)
         ON DELETE NO ACTION
+        ON UPDATE NO ACTION,
+  CONSTRAINT `FK_REL_FILE_REQUEST`
+        FOREIGN KEY (`FILE`)
+        REFERENCES `gestion_tickets`.`fileRequests` (`ID`)
+        ON DELETE NO ACTION
         ON UPDATE NO ACTION)
 ENGINE = InnoDB
 AUTO_INCREMENT = 0;
+
+ALTER TABLE `gestion_tickets`.`requests`
+ADD COLUMN `FILE` MEDIUMBLOB
+ALTER TABLE `gestion_tickets`.`requests`
+ADD COLUMN `FILE` int,
+ADD  CONSTRAINT `FK_REL_FILE_REQUEST`
+        FOREIGN KEY (`FILE`)
+        REFERENCES `gestion_tickets`.`fileRequests` (`ID`)
 
 CREATE TABLE IF NOT EXISTS `gestion_tickets`.`departments` (
   `DEPARTMENTID` SMALLINT NOT NULL AUTO_INCREMENT,
@@ -118,3 +140,6 @@ CREATE TABLE IF NOT EXISTS `gestion_tickets`.`tickets` (
         ON UPDATE NO ACTION)
 ENGINE = InnoDB
 AUTO_INCREMENT = 0;
+
+
+

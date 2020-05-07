@@ -14,7 +14,8 @@ public enum DAODefaults {
     NON_EXISTING_REQUEST_TYPE("Did not find any request type that matches your request"),
     NO_LAST_REQUEST_FOUND("No last request was found on the DB"),
     NO_REQUEST_FOUND("Did not find any request that matches your query"),
-    NO_PROJECT_FOUND("Did not find any project that matches your query");
+    NO_PROJECT_FOUND("Did not find any project that matches your query"),
+    NO_COMMENT_FOUND("Did not find any comment that matches your query");
 
     private String defaultValue;
 

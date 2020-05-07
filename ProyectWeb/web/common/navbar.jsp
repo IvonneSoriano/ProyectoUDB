@@ -27,12 +27,9 @@
                    aria-expanded="false">Tickets <span class="caret"></span>
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarTicketDropdown">
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/tickets.do?op=nuevo">Crear ticket</a>
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/tickets.do?op=listar">Ver lista de tickets</a>                    
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/tickets.do?op=modificar">Modificar ticket</a>
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/tickets.do?op=eliminar">Borrar ticket</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Something else here</a>
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/peticiones.do?op=crear">Crear ticket</a>
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/tickets.do?op=listar">Ver lista de tickets</a> 
+                    <!--div class="dropdown-divider"></div-->
                 </div>
             </li>
 
@@ -70,10 +67,10 @@
                    role="button" aria-haspopup="true" 
                    aria-expanded="false"><span class="caret"><fmt:message key="label.wordSolicitudes" /></span></a>
                 <div class="dropdown-menu" aria-labelledby="navbarPeticionesDropdown">
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/peticiones.do?op=crear">Crear peticiones</a>
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/peticiones.do?op=ver">Ver lista de peticiones</a>                      
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/peticiones.do?op=modificar">Modificar peticion</a>
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/peticiones.do?op=eliminar">Eliminar peticion</a>
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/requests.do?op=crear">Crear peticiones</a>
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/requests.do?op=ver">Ver lista de peticiones</a>                      
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/requests.do?op=modificar">Modificar peticion</a>
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/requests.do?op=eliminar">Eliminar peticion</a>
                 </div>
             </li>
 

@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.servlet.jsp.PageContext;
 import org.apache.log4j.Logger;
 import sv.edu.udb.models.Employee;
 import sv.edu.udb.models.EmployeeDAO;
@@ -117,18 +116,22 @@ public class LoginController extends HttpServlet {
                 if (!e.getPassword().equals(DAODefaults.NON_EXISTING_USER.getDefaultValue())) {
                     // crear sesion 
                     HttpSession session_actual = request.getSession(true);
+                    session_actual.setAttribute("sessionEmployeeId", e.getEmployeeId());
+                    session_actual.setAttribute("sessionEmpType", e.getRolId());
+                    session_actual.setAttribute("sessionEmpDeparmentId", e.getDepartmentId());
                     session_actual.setAttribute("username", e.getUsername());
                     session_actual.setAttribute("employee", e);
                     session_actual.setAttribute("fullName", e.getFullName());
 
                     // welcome message
                     request.getSession().setAttribute("exito", "Login exitoso");
-                    response.sendRedirect(request.getContextPath() + "/index.jsp");
+
+                    request.getRequestDispatcher("/requests.do?op=listar").forward(request, response);
                     return;
                 }
                 request.setAttribute("error", "Password Incorrecto");
                 request.getRequestDispatcher("/login.do").forward(request, response);
-                return;
+                return; 
             }
             request.setAttribute("error", "Usuario Incorrecto");
             request.getRequestDispatcher("/login.do").forward(request, response);

@@ -2,6 +2,8 @@ package sv.edu.udb.models;
 
 import java.util.*;
 import java.sql.*;
+import java.text.SimpleDateFormat;
+import sv.edu.udb.util.DAODefaults;
 
 /**
  *
@@ -9,10 +11,11 @@ import java.sql.*;
  */
 public class Ticket {
 
-    private int id, request, programmer, tester, projectID;
+    private int id, requestID, programmerID, testerID, projectID;
     private String ticketStatus, internalCode;
     private Timestamp startDate, endDate;
     private float avance;
+    private Request request;
 
     public Ticket() {
     }
@@ -26,27 +29,27 @@ public class Ticket {
     }
 
     public void setRequestId(int requestTicket) {
-        this.request = requestTicket;
+        this.requestID = requestTicket;
     }
 
     public int getRequestId() {
-        return request;
+        return requestID;
     }
 
     public void setIdProgrammer(int programmer) {
-        this.programmer = programmer;
+        this.programmerID = programmer;
     }
 
     public int getIdProgrammer() {
-        return programmer;
+        return programmerID;
     }
 
     public void setIdTester(int idTester) {
-        this.tester = idTester;
+        this.testerID = idTester;
     }
 
     public int getIdTester() {
-        return tester;
+        return testerID;
     }
 
     public void setTicketStatus(String status) {
@@ -57,8 +60,8 @@ public class Ticket {
         return ticketStatus;
     }
 
-    public void setAvance(float status) {
-        this.avance = status;
+    public void setAvance(float progress) {
+        this.avance = progress;
     }
 
     public float getAvance() {
@@ -101,4 +104,19 @@ public class Ticket {
     public void setProjectID(int projectID) {
         this.projectID = projectID;
     }
+
+    public Request getRequest() {
+        RequestDAO dao = new RequestDAO();
+        Optional<Request> foundReq = dao.get(this.requestID);
+        return foundReq.orElseGet(() -> new Request(DAODefaults.NO_REQUEST_FOUND.getDefaultValue()));
+    }
+
+    public void setRequest(Request request) {
+        this.request = request;
+    }
+    
+      public String getFormattedDate(String type) {
+        Timestamp dateFromBD = type.equals("start") ? this.getStartDate() : this.getEndDate();
+        return new SimpleDateFormat("MM/dd/yyyy").format(new java.sql.Date(dateFromBD.getTime()));
+    }    
 }

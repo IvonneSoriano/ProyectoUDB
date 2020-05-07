@@ -17,9 +17,9 @@ import sv.edu.udb.util.DAODefaults;
  */
 public class ProjectsController {
 
-    public List<Project> projectsByDepto() {
+    public List<Project> projectsByDepto(int id) {
         ProjectDAO dao = new ProjectDAO();
-        List<Project> projectsByDepto = dao.getProjbyDepto();
+        List<Project> projectsByDepto = dao.getProjbyDepto(id);
 
         return projectsByDepto;
     }

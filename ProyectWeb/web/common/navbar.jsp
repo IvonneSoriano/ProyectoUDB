@@ -46,10 +46,11 @@
 
                     <%                 if (de % 2 != 0) {
                     %>
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/peticiones.do?op=crear">Crear ticket</a>
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/peticiones.do?op=crear">
+                        <fmt:message key="label.createTicket" /></a>
                     <%                 }
                     %>
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/tickets.do?op=listar">Ver lista de tickets</a> 
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/tickets.do?op=listar"><fmt:message key="label.titleLT"/></a> 
                     <!--div class="dropdown-divider"></div-->
                 </div>
             </li>
@@ -64,8 +65,9 @@
                    aria-expanded="false"><fmt:message key="label.wordEmpleados" /><span class="caret"></span>
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarEmpleadoDropdown">	
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/empleados.do?op=crear">Crear empleado</a>	
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/empleados.do?op=ver">Ver lista de empleados</a>
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/empleados.do?op=crear">
+                       <fmt:message key="label.nEmpleado"/></a>	
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/empleados.do?op=ver"> <fmt:message key="label.tituloLE"/></a>
                 </div>
             </li>
             <%
@@ -83,8 +85,8 @@
                    aria-expanded="false"><fmt:message key="label.wordProyectos" /><span class="caret"></span>
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarProyectosDropdown">
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/proyectos.do?op=crear">Crear proyecto</a>
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/proyectos.do?op=ver">Ver lista de proyectos</a>                      
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/proyectos.do?op=crear"><fmt:message key="label.titleNP"/></a>
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/proyectos.do?op=ver"><fmt:message key="label.tituloLP"/></a>                      
                 </div>
             </li>
             <%
@@ -102,11 +104,11 @@
                     <%
                         if (de == 1) {
                     %>
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/requests.do?op=crear">Crear peticiones</a>
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/requests.do?op=crear"> <fmt:message key="label.tituloNR" /></a>
                     <%
                         }
                     %>
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/requests.do?op=ver">Ver lista de peticiones</a>                      
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/requests.do?op=ver"> <fmt:message key="label.tituloLR" /></a>                      
                 </div>
             </li>
             <%
@@ -119,7 +121,7 @@
                    role="button" aria-haspopup="true" 
                    aria-expanded="false"><span class="caret"><fmt:message key="label.wordReportes" /></span></a>
                 <div class="dropdown-menu" aria-labelledby="navbarPeticionesDropdown">
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}//ReportAllRequest">Ver reporte de solicitudes</a>
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}//ReportAllRequest"><fmt:message key="label.ReportesSolis" /> </a>
                     <a class="dropdown-item" href="${pageContext.request.contextPath}/reportes.do?">Ver reporte B</a>
                 </div>
             </li>                

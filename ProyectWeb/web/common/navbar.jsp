@@ -40,7 +40,7 @@
             <li class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" id="navbarTicketDropdown" data-toggle="dropdown" 
                    role="button" aria-haspopup="true" 
-                   aria-expanded="false">Tickets <span class="caret"></span>
+                   aria-expanded="false"><fmt:message key="label.label.wordTickets" /> <span class="caret"></span>
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarTicketDropdown">
                     <%                 if (de % 2 != 0) {

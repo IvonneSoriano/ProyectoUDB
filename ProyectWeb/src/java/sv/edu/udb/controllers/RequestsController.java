@@ -97,6 +97,9 @@ public class RequestsController extends HttpServlet {
                 case "delete":
                     delete(request, response);
                     break;
+                    case "run":
+                    runPDF(request, response);
+                    break;
             }
         } catch (Exception e) {
         }
@@ -167,6 +170,18 @@ public class RequestsController extends HttpServlet {
         }
     }
 
+    public void runPDF(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            RequestDAO rd = new RequestDAO();
+            int id = Integer.parseInt(request.getParameter("id"));
+            rd.ejecutar(id);
+            obtener(request, response);
+        } catch (IOException ex) {
+            logger.error("Error in list Requests method. Message: " + ex.getMessage());
+        }
+
+    }
+
     private void listAwait(HttpServletRequest request, HttpServletResponse response) throws ServletException {
         HttpSession miSesion = (HttpSession) request.getSession();
         try {
@@ -225,7 +240,7 @@ public class RequestsController extends HttpServlet {
 
     private void nuevo(HttpServletRequest request, HttpServletResponse response) {
         try {
-             Employee actual = (Employee) request.getSession().getAttribute("employee");
+            Employee actual = (Employee) request.getSession().getAttribute("employee");
             departmentId = actual.getDepartmentId();
             List<Project> pro = pd.getProjbyDepto(departmentId);
 //            pd.getProjbyDepto(id);
@@ -256,10 +271,6 @@ public class RequestsController extends HttpServlet {
         } catch (IOException | ServletException e) {
             logger.error("Error in Obtener Request method. Message: " + e.getMessage());
         }
-
-    }
-
-    private void abrirPDF(int id) {
 
     }
 

@@ -133,11 +133,11 @@ public class LoginController extends HttpServlet {
                     return;
                 }
                 request.setAttribute("error", "Password Incorrecto");
-                request.getRequestDispatcher("/login.do").forward(request, response);
+                request.getRequestDispatcher("login/login.do").forward(request, response);
                 return; 
             }
             request.setAttribute("error", "Usuario Incorrecto");
-            request.getRequestDispatcher("/login.do").forward(request, response);
+            request.getRequestDispatcher("login/login.do").forward(request, response);
         } catch (Exception e) {
             logger.error("Error in logIn method. Message: " + e.getMessage());
         }

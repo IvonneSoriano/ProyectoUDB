@@ -56,14 +56,11 @@
                     </label>
                     <textarea class="form-control" id="description"  name="description">${request.getRequestDescription()} required</textarea>
                 </div>
-                <c:if test="${request.getFileIS()}">
                     <div class="form-group">
-                        <label for="file">
-                            <fmt:message key="label.nrArchivo" />
-                        </label>
-                        <input type="file" class="form-control-file" placeholder="Seleccione el archivo a subir" id="file"  name="file">
+                              <a type="submit" class="btn btn-primary" href="javascript:run('${request.getId()}')">
+                            Ver Archivo
+                        </a>
                     </div>
-                </c:if>
                 <div class="form-row mt-5">
                     <div class="mr-5 form-group">
                         <a type="submit" class="btn btn-primary" href="javascript:aprobar('${request.getId()}','${rType.getId()}', '${proj.getProjectsId()}' )">
@@ -97,12 +94,19 @@
                     }
                 });
             }
+            
             function reject(id) {
                 alertify.confirm("¿Realmente desea rechazar esta solicitud?", function (e) {
                     if (e) {
                         location.href = "requests.do?op=reject&id=" + id;
                     }
                 });
+            }
+            
+             function run(id) {
+                
+                        location.href = "requests.do?op=run&id=" + id;
+              
             }
 
         </script>

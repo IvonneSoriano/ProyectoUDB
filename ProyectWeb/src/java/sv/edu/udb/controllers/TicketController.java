@@ -239,7 +239,14 @@ public class TicketController extends HttpServlet {
     public void listarTickets(HttpServletRequest request, HttpServletResponse response) {
         try {
             int depId = (int) request.getSession().getAttribute("sessionEmpDeparmentId");
+             int rol = (int)  request.getSession().getAttribute("rol");
+             int id= (int) request.getSession().getAttribute("id");
+            if(rol % 2 == 0){
+                request.setAttribute("ticketsList", dao.getAll(depId, id)); // setear los tickets filtrados por departamento
+            }
+            else{
             request.setAttribute("ticketsList", dao.getAll(depId)); // setear los tickets filtrados por departamento
+            }
             request.getRequestDispatcher("tickets/TicketList.jsp").forward(request, response);
         } catch (ServletException | IOException ex) {
             logger.error("Error in listarTickets() method. Message: " + ex.getMessage());

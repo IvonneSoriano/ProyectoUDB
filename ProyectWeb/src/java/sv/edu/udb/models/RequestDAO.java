@@ -5,9 +5,15 @@
  */
 package sv.edu.udb.models;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -295,6 +301,33 @@ public class RequestDAO implements Dao<Request> {
             return false;
         }
     }
+    public void ejecutar(int id) throws FileNotFoundException, IOException{
+        Statement stmt = null;
+        InputStream input = null;
+        FileOutputStream output = null;
+        try {
+            Connect connection = new Connect();
+            String sql = "SELECT FILE FROM requests WHERE REQUESTID = " + id + ";";
+            connection.setRs(sql);
+            ResultSet rs = (ResultSet)connection.getRs();
+
+            File file = new File("reporte_db.pdf");
+            output = new FileOutputStream(file);
+
+            if (rs.next()) {
+                input = rs.getBinaryStream("FILE");
+                System.out.println("Leyendo archivo desde la base de datos...");
+                byte[] buffer = new byte[1024];
+                while (input.read(buffer) > 0) {
+                    output.write(buffer);
+                }
+                
+                System.out.println("> Archivo guardado en : " + file.getAbsolutePath());
+            }
+        } catch (SQLException | IOException ex) {
+            System.err.println(ex.getMessage());
+        }
+    }
 
     public Request getOneById(int id) {
         Request request = null;
@@ -316,4 +349,6 @@ public class RequestDAO implements Dao<Request> {
         }
         return request;
     }
+    
+    
 }

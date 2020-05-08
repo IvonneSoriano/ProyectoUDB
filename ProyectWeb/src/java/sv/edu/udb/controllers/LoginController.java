@@ -121,6 +121,7 @@ public class LoginController extends HttpServlet {
                     session_actual.setAttribute("sessionEmpDeparmentId", e.getDepartmentId());
                     session_actual.setAttribute("username", e.getUsername());
                     session_actual.setAttribute("employee", e);
+                    session_actual.setAttribute("id", e.getEmployeeId());
                     session_actual.setAttribute("depto", e.getDepartmentId());
                     session_actual.setAttribute("rol", e.getRolId());
                     session_actual.setAttribute("fullName", e.getFullName());
@@ -132,11 +133,11 @@ public class LoginController extends HttpServlet {
                     return;
                 }
                 request.setAttribute("error", "Password Incorrecto");
-                request.getRequestDispatcher("/login.do").forward(request, response);
+                request.getRequestDispatcher("login/login.do").forward(request, response);
                 return; 
             }
             request.setAttribute("error", "Usuario Incorrecto");
-            request.getRequestDispatcher("/login.do").forward(request, response);
+            request.getRequestDispatcher("login/login.do").forward(request, response);
         } catch (Exception e) {
             logger.error("Error in logIn method. Message: " + e.getMessage());
         }
